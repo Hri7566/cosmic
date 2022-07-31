@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "allowJs": true,
+        "moduleResolution": "node",
+        "outDir": "../build/node/",
+        "baseUrl": "../"
+    },
+    "buildOptions": {
+        "verbose": true
+    },
+    "include": [
+        "src/**/*",
+    ],
+    "exclude": [
+        "node_modules",
+        "deno"
+    ]
+}

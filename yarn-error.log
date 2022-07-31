@@ -1,0 +1,58 @@
+Arguments: 
+  /home/hri7566/.nvm/versions/node/v17.1.0/bin/node /mnt/c/Users/hri75/AppData/Roaming/npm/node_modules/yarn/bin/yarn.js
+
+PATH: 
+  /home/hri7566/.deno/bin:/home/hri7566/.nimble/bin:/home/hri7566/.bun/bin:/home/hri7566/.nvm/versions/node/v17.1.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/Python310/Scripts/:/mnt/c/Python310/:/mnt/c/Program Files/Eclipse Adoptium/jdk-17.0.1.12-hotspot/bin:/mnt/c/Program Files/Eclipse Foundation/jdk-16.0.2.7-hotspot/bin:/mnt/f/Program Files (x86)/VMware/VMware Workstation/bin/:/mnt/c/Program Files/Common Files/Oracle/Java/javapath:/mnt/c/Python39/Scripts/:/mnt/c/Python39/:/mnt/c/Program Files (x86)/Common Files/Oracle/Java/javapath:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/Program Files/Git/cmd:/mnt/c/Program Files (x86)/Microsoft SQL Server/100/Tools/Binn/:/mnt/c/Program Files/Microsoft SQL Server/100/Tools/Binn/:/mnt/c/Program Files/Microsoft SQL Server/100/DTS/Binn/:/mnt/c/ProgramData/chocolatey/bin:/mnt/c/Program Files/NVIDIA Corporation/NVIDIA NvDLISR:/mnt/c/Program Files/Microsoft SQL Server/130/Tools/Binn/:/mnt/c/Program Files/RedHat/java-1.8.0-openjdk-1.8.0.275-1/bin:/mnt/c/Program Files/RedHat/java-1.8.0-openjdk-1.8.0.275-1/jre/bin:/mnt/c/Program Files/Intel/WiFi/bin/:/mnt/c/Program Files/Common Files/Intel/WirelessCommon/:/mnt/f/Strawberry/perl/bin:/mnt/f/Strawberry/perl/site/bin:/mnt/f/Strawberry/c/bin:/mnt/c/Program Files/CMake/bin:/mnt/f/Program Files/CraftOS-PC:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/Program Files (x86)/Certbot/bin:/mnt/c/Program Files/Mullvad VPN/resources:/mnt/c/Program Files/Microsoft SQL Server/150/Tools/Binn/:/mnt/c/Program Files/Microsoft SQL Server/Client SDK/ODBC/170/Tools/Binn/:/mnt/c/Program Files (x86)/NVIDIA Corporation/PhysX/Common:/mnt/c/Program Files/MATLAB/R2022a/bin:/mnt/c/Program Files/GitHub CLI/:/mnt/c/Program Files/Go/bin:/mnt/c/Program Files/Neovim/bin:/mnt/c/Program Files/Docker/Docker/resources/bin:/mnt/c/ProgramData/DockerDesktop/version-bin:/mnt/c/Program Files/dotnet/:/mnt/c/Program Files/nodejs/:/mnt/c/Program Files/platform-tools:/mnt/c/Ruby30-x64/bin:/mnt/c/Users/hri75/.cargo/bin:/mnt/c/Users/hri75/scoop/shims:/mnt/c/Users/hri75/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/hri75/AppData/Local/GitHubDesktop/bin:/mnt/c/Users/hri75/.dotnet/tools:/mnt/c/msys64/mingw64/bin:/mnt/c/Users/hri75/go/bin:/mnt/c/Program Files/Intel/WiFi/bin/:/mnt/c/Program Files/Common Files/Intel/WirelessCommon/:/mnt/c/Users/hri75/.deno/bin:/mnt/f/ffmpeg:/mnt/c/Program Files/JetBrains/IntelliJ IDEA Community Edition 2021.1.2/bin:/mnt/c/Users/hri75/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/hri75/AppData/Local/Programs/mongosh/:/mnt/c/Users/hri75/AppData/Local/Programs/Microsoft VS Code Insiders/bin:/mnt/c/Users/hri75/go/bin:/mnt/c/Users/hri75/.dotnet/tools:/mnt/c/Users/hri75/AppData/Roaming/npm:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl
+
+Yarn version: 
+  1.22.19
+
+Node version: 
+  17.1.0
+
+Platform: 
+  linux x64
+
+Trace: 
+  Error: ENOENT: no such file or directory, copyfile '/home/hri7566/.cache/yarn/v6/npm-ms-2.1.2-d09d1f357b443f493382a8eb3ccd183872ae6009-integrity/node_modules/ms/index.js' -> '/mnt/z/cosmic/node_modules/ffi-napi/node_modules/ms/index.js'
+
+npm manifest: 
+  {
+    "name": "cosmic",
+    "version": "1.0.0",
+    "description": "",
+    "main": "build/node/index.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "build": "yarn run build-node && yarn run build-nim && yarn run build-c && yarn run build-deno",
+      "build-node": "./scripts/build-node.sh",
+      "build-nim": "./scripts/build-nim.sh",
+      "build-c": "./scripts/build-c.sh",
+      "build-deno": "scripts/build-deno.sh",
+      "start": "build/deno/cosmic",
+      "dev": "yarn run build && yarn run start"
+    },
+    "keywords": [],
+    "author": "Hri7566 <hri7566@gmail.com>",
+    "license": "ISC",
+    "dependencies": {
+      "dotenv": "^16.0.1",
+      "ffi-napi": "^4.0.3",
+      "mpp-client": "^0.4.3483807882806744",
+      "mpp-client-xt": "^1.3.1",
+      "mppclone-client": "^1.0.0",
+      "ws": "^8.8.1"
+    },
+    "devDependencies": {
+      "@types/ffi-napi": "^4.0.5",
+      "@types/node": "^18.6.3",
+      "@types/ws": "^8.5.3",
+      "typescript": "^4.7.4"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

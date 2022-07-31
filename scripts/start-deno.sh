@@ -1,1 +1,0 @@
-deno run deno/index.ts
