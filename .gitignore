@@ -1,3 +1,7 @@
+# universal
 .env
 *.env
+build
+
+# node
 node_modules
