@@ -6,7 +6,7 @@ const proc = Deno.run({
     stderr: 'piped'
 });
 
-const { code } = await proc.status();
+// const { code } = await proc.status();
 const rawOutput = await proc.output();
 const rawError = await proc.stderrOutput();
 
