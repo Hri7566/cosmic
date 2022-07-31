@@ -1,5 +1,8 @@
 {
-    "deno.enable": false,
+    "deno.enable": true,
     "deno.unstable": true,
+    "deno.enablePaths": [
+        "./deno"
+    ],
     "cmake.configureOnOpen": false
 }

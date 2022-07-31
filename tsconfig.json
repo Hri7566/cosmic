@@ -3,8 +3,7 @@
         "module": "commonjs",
         "allowJs": true,
         "moduleResolution": "node",
-        "outDir": "../build/node/",
-        "baseUrl": "../"
+        "outDir": "build/node/"
     },
     "buildOptions": {
         "verbose": true
