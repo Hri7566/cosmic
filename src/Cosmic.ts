@@ -27,8 +27,21 @@ class Cosmic {
         this.alreadyBound = true;
 
         this.client.on('hi', msg => {
-            this.client.setChannel('GAY PEOPLE');
+            this.client.setChannel('✧𝓓𝓔𝓥 𝓡𝓸𝓸𝓶✧');
         });
+
+        setInterval(() => {
+            if (!this.client.isConnected()) return;
+            
+            let set = this.client.getOwnParticipant()._id;
+            
+            if (set.name !== this.desiredUser.name || set.color !== this.desiredUser.color) {
+                this.client.sendArray([{
+                    m: 'userset',
+                    set: this.desiredUser
+                }]);
+            }
+        }, 5000);
     }
 }
 
