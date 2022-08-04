@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 import { Cosmic } from './Cosmic';
-console.log("Starting Cosmic...");
+process.stdout.write("Starting Cosmic...");
 Cosmic.start();
 
 process.stdin.on('data', d => {
