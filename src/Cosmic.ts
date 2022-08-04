@@ -1,47 +1,43 @@
-import { CosmicFFI } from './CosmicFFI';
+import { CosmicFFI } from './CosmicFFI';;
+import { CosmicClientHandler } from './CosmicClientHandler';
+import { ChannelConstructionPreset } from './CosmicClient';
 
 const Client = require('mppclone-client');
+const fs = require('fs');
+const path = require('path');
+const YAML = require('yaml');
+
+const MPPCLONE_TOKEN = process.env.MPPCLONE_TOKEN;
+
+const channelsFile = fs.readFileSync(path.resolve(__dirname, '../../config/channels.yaml')).toString();
+const channels = YAML.parse(channelsFile);
 
 class Cosmic {
-    static client: typeof Client = new Client('wss://mppclone.com:8443', process.env.MPPCLONE_TOKEN);
-
-    static desiredUser = {
-        name: '. ✧ * Cosmic * ✧ .',
-        color: '#1d0054'
-    }
-
-    static start() {
-        this.client.start();
-
+    /**
+     * Start Cosmic
+     */
+    public static start() {
         this.bindEventListeners();
+
+        for (const uri of Object.keys(channels)) {
+            for (const ch of channels[uri]) {
+                CosmicClientHandler.startClient(uri, ch, );
+            }
+        }
     }
 
-    static stop() {
-        this.client.stop();
+    /**
+     * Stop Cosmic
+     */
+    public static stop() {
+
     }
 
-    static alreadyBound = false;
+    private static alreadyBound: boolean = false;
 
-    static bindEventListeners() {
+    private static bindEventListeners(): void {
         if (this.alreadyBound) return;
         this.alreadyBound = true;
-
-        this.client.on('hi', msg => {
-            this.client.setChannel('✧𝓓𝓔𝓥 𝓡𝓸𝓸𝓶✧');
-        });
-
-        setInterval(() => {
-            if (!this.client.isConnected()) return;
-            
-            let set = this.client.getOwnParticipant()._id;
-            
-            if (set.name !== this.desiredUser.name || set.color !== this.desiredUser.color) {
-                this.client.sendArray([{
-                    m: 'userset',
-                    set: this.desiredUser
-                }]);
-            }
-        }, 5000);
     }
 }
 
