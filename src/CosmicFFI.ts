@@ -4,7 +4,8 @@ const ref = require('ref-napi');
 
 class CosmicFFI {
     static clib = ffi.Library(path.resolve(__dirname, '../c/cosmic/libcosmic.so'), {
-        'test': [ref.types.CString, []]
+        'test': [ref.types.CString, []],
+        'red': [ref.types.void, [ref.types.CString]]
     });
 }
 

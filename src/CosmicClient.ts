@@ -51,11 +51,8 @@ class CosmicClient {
         this.alreadyBound = true;
 
         this.client.on('a', msg => {
-            process.stdout.write(`[${msg.p._id.substring(0, 6)}] ${msg.p.name}: ${msg.a}`);
-            if (msg.a == '*test') {
-                let str = CosmicFFI.clib.test();
-                this.sendChat(str);
-            }
+            process.stdout.write(`[${msg.p._id.substring(0, 6)}] ${msg.p.name}: ${msg.a}\n`);
+            CosmicFFI.clib.red(msg.a);
         });
 
         this.client.on('hi', msg => {
