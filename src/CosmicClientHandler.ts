@@ -1,4 +1,10 @@
-const { CosmicClient, ChannelConstructionPreset } = require('./CosmicClient');
+/**
+ * COSMIC PROJECT
+ * 
+ * Cosmic client handler
+ */
+
+const { CosmicClient, CosmicClientMPP, ChannelConstructionPreset } = require('./CosmicClient');
 
 const HARD_CLIENT_LIMIT: number = 4;
 const MPPCLONE_TOKEN: string = process.env.MPPCLONE_TOKEN;
@@ -8,12 +14,12 @@ type CosmicClientList = {
 }
 
 class CosmicClientHandler {
-    private static clients: typeof CosmicClient[] = [];
+    private static clients = [];
 
     public static startClient(uri: string, channel: typeof ChannelConstructionPreset): boolean {
         if (this.clients.length > HARD_CLIENT_LIMIT) return false;
 
-        let cl = new CosmicClient(uri, channel, MPPCLONE_TOKEN);
+        let cl = new CosmicClientMPP(uri, channel, MPPCLONE_TOKEN);
         this.clients.push();
         cl.start();
 

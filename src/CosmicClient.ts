@@ -1,27 +1,81 @@
+/**
+ * COSMIC PROJECT
+ * 
+ * Cosmic client module
+ */
+
+const normalize = require('normalize-strings');
 const Client = require('mppclone-client');
 const YAML = require('yaml');
-const { CosmicFFI } = require('./CosmicFFI');
+const { EventEmitter } = require('events');
 
-interface ChannelConstructionPreset {
+import { Cosmic } from './Cosmic';
+import { CosmicCommandHandler } from './CosmicCommandHandler';
+const { Token, ChatMessage } = require('./CosmicTypes');
+const { CosmicFFI } = require('./CosmicFFI');
+const { CosmicLogger, white, hex } = require('./CosmicLogger');
+const { CosmicForeignMessageHandler } = require('./CosmicForeignMessageHandler');
+
+export interface ChannelConstructionPreset {
     _id: string;
     set: {
         [key: string]: any;
     }
 }
 
-class CosmicClient {
+export abstract class CosmicClient {
+    public on = EventEmitter.prototype.on;
+    public off = EventEmitter.prototype.off;
+    public once = EventEmitter.prototype.once;
+    public emit = EventEmitter.prototype.emit;
+
+    public logger = new CosmicLogger("Cosmic Client", white);
+
+    constructor() {
+        
+    }
+
+    public alreadyBound: boolean = false;
+
+    public bindEventListeners() {
+        if (this.alreadyBound == true) return;
+        this.alreadyBound = true;
+
+        this.on('chat message', msg => {
+            // check all chat messages for commands
+            CosmicCommandHandler.checkCommand(msg, this);
+
+            // log messages to console
+            this.logger.log(`[${msg.sender._id.substring(0, 6)}] <${hex(msg.sender.color, `${normalize(msg.sender.name)}`)}> ${normalize(msg.message)}`);
+        });
+    }
+
+    public sendChat(str: string): void {
+
+    }
+}
+
+export abstract class CosmicClientToken extends CosmicClient {
+    private token: typeof Token;
+
+    constructor() {
+        super();
+    }
+}
+
+export class CosmicClientMPP extends CosmicClientToken {
     private started: boolean = false;
     private desiredChannel: ChannelConstructionPreset;
-    private alreadyBound: boolean = false;
     
     private desiredUser = {
         name: '. ✧ * Cosmic * ✧ .',
         color: '#1d0054'
-    }
+    };
     
     public client: typeof Client;
 
     constructor(uri: string, channel: ChannelConstructionPreset, token: string) {
+        super();
         this.client = new Client(uri, token);
         this.bindEventListeners();
         this.desiredChannel = channel;
@@ -46,13 +100,16 @@ class CosmicClient {
         this.client.stop();
     }
 
-    private bindEventListeners() {
-        if (this.alreadyBound == true) return;
-        this.alreadyBound = true;
+    public bindEventListeners() {
+        super.bindEventListeners();
 
         this.client.on('a', msg => {
-            process.stdout.write(`[${msg.p._id.substring(0, 6)}] ${msg.p.name}: ${msg.a}\n`);
-            CosmicFFI.clib.red(msg.a);
+            // process.stdout.write(`[${msg.p._id.substring(0, 6)}] ${msg.p.name}: ${msg.a}\n`);
+            // ffi broke :(
+            // console.log(CosmicFFI.clib.red(msg.a));
+
+            let newmsg = CosmicForeignMessageHandler.convertMessage('chat', msg);
+            this.emit('chat message', newmsg);
         });
 
         this.client.on('hi', msg => {
@@ -71,17 +128,25 @@ class CosmicClient {
                 }]);
             }
         }, 5000);
+
+        this.on('send chat message', msg => {
+            this.client.sendArray([{
+                m: 'a',
+                message: `\u034f${msg.message}`
+            }]);
+        });
     }
 
+    /**
+     * Send a chat message
+     * @param str Chat message
+     */
     public sendChat(str: string): void {
-        this.client.sendArray([{
-            m: 'a',
-            message: `\u034f${str}`
-        }]);
+        this.emit('send chat message', {
+            type: 'chat',
+            sender: this.client.getOwnParticipant(),
+            platform: 'mpp',
+            message: str
+        });
     }
-}
-
-export {
-    CosmicClient,
-    ChannelConstructionPreset
 }

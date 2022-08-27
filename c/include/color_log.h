@@ -4,6 +4,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void red(char* txt);
+#define BYTE char
+
+int getStringSize(char* arr, int stopPoint);
+char* red(char* txt);
+void freeString(char* str);
 
 #endif
