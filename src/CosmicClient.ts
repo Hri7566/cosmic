@@ -163,6 +163,16 @@ export class CosmicClientMPP extends CosmicClientToken {
                     set: this.desiredUser
                 }]);
             }
+
+            let ch = this.client.channel;
+
+            if (ch) {
+                if (ch._id !== this.desiredChannel._id) {
+                    this.client.setChannel(this.desiredChannel._id);
+                }
+            } else {
+                this.client.setChannel(this.desiredChannel._id);
+            }
         }, 5000);
 
         this.on('send chat message', msg => {
