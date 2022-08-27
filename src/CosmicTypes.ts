@@ -1,3 +1,9 @@
+/**
+ * COSMIC PROJECT
+ * 
+ * Type definitions
+ */
+
 type NoteStringOctave = -1 | -2 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
 type NoteStringTone = 'a' | 'b' | 'c' | 'd' | 'e' | 'f';
 type NoteString = `${NoteStringTone}${NoteStringOctave}`;

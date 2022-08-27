@@ -1,3 +1,9 @@
+/**
+ * COSMIC PROJECT
+ * 
+ * Foreign message handler module
+ */
+
 const { EventEmitter } = require('events');
 const { Message, ChatMessage } = require('./CosmicTypes');
 

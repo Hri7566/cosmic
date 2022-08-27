@@ -1,3 +1,9 @@
+/**
+ * COSMIC PROJECT
+ * 
+ * Foreign function interface module
+ */
+
 const path = require('path');
 const ffi = require('ffi-napi');
 const ref = require('ref-napi');

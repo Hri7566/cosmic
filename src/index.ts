@@ -31,9 +31,12 @@ process.stdin.on('data', d => {
 
 import { Cosmic } from './Cosmic';
 // process.stdout.write("Starting Cosmic...\n");
+
 const logger = new CosmicLogger('Cosmic Root', white);
+
 logger.log("Loading Cosmic...");
 Cosmic.start();
+
 setTimeout(() => {
     Cosmic.stop();
 });
