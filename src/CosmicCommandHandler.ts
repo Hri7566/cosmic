@@ -14,22 +14,29 @@ const { CosmicClient } = require('./CosmicClient');
 const { CosmicUtil } = require('./CosmicUtil');
 const { CosmicLogger, magenta } = require ('./CosmicLogger');
 
+export interface CommandGroup {
+    id: string;
+    displayName: string;
+}
+
 export class Command {
     public id: string;
     public accessors: string[];
     public usage: string;
     public description: string;
     public permissionGroups: Array<typeof PermissionGroupIdentifier>;
+    public commandGroup: string;
     public visible: boolean;
     public callback: (msg: typeof Message, cl: typeof CosmicClient) => string | undefined;
 
-    constructor(id: string, accessors: string[], usage: string = 'No usage', description: string | 'No description', permissionGroups: string[], visible: boolean, callback: (msg: typeof Message, cl: typeof CosmicClient) => string | undefined) {
+    constructor(id: string, accessors: string[], usage: string = 'No usage', description: string | 'No description', permissionGroups: string[], visible: boolean, commandGroup: string, callback: (msg: typeof Message, cl: typeof CosmicClient) => string | undefined) {
         this.id = id;
         this.accessors = accessors;
         this.usage = usage;
         this.description = description;
         this.permissionGroups = permissionGroups;
         this.visible = visible;
+        this.commandGroup = commandGroup;
         this.callback = callback;
     }
 
@@ -53,6 +60,11 @@ class CosmicCommandHandler {
     public static commands: Array<Command> = [];
 
     public static logger: typeof CosmicLogger = new CosmicLogger('Command Handler', magenta);
+
+    public static commandGroups: Array<CommandGroup> = [
+        { id: 'info', displayName: '🌠 Info Commands' },
+        { id: 'fun', displayName: '🎆 Fun Commands' }
+    ]
 
     /**
      * Check a chat message for commands
@@ -83,7 +95,7 @@ class CosmicCommandHandler {
 
             accessorLoop:
             for (let acc of cmd.accessors) {
-                console.debug('Comparing:', enteredCommand, acc);
+                // console.debug('Comparing:', enteredCommand, acc);
                 if (acc == enteredCommand) {
                     pass = true;
                     break accessorLoop;
@@ -101,8 +113,13 @@ class CosmicCommandHandler {
             try {
                 out = cmd.callback(msg, cl);
             } catch (err) {
-                this.logger.error(err);
-                out = 'The cosmos have misaligned and an error has occurred, sorry for the inconvenience.';
+                if (err == 'usage') {
+                    let usage = Command.replaceUsageVars(cmd.usage, msg.prefix.prefix);
+                    out = `Usage: ${usage}`;
+                } else {
+                    this.logger.error(err);
+                    out = 'The cosmos have misaligned and an error has occurred, sorry for the inconvenience.';
+                }
             }
 
             if (out) {
