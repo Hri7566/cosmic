@@ -149,6 +149,7 @@ export class CosmicClientMPP extends CosmicClientToken {
 
         this.client.on('hi', msg => {
             this.client.setChannel(this.desiredChannel._id, this.desiredChannel.set);
+            this.cursor.start();
         });
 
         setInterval(() => {
