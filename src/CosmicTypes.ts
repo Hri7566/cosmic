@@ -53,6 +53,7 @@ namespace Cosmic {
         message: string;
         platform: string;
         original_channel?: string; //* for discord
+        prefix?: Prefix;
     }
 
     export interface HeartbeatMessage extends Message {

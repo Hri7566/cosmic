@@ -11,10 +11,13 @@ const { EventEmitter } = require('events');
 
 import { Cosmic } from './Cosmic';
 import { CosmicCommandHandler } from './CosmicCommandHandler';
-const { Token, ChatMessage } = require('./CosmicTypes');
+const { Token, ChatMessage, Vector2 } = require('./CosmicTypes');
 const { CosmicFFI } = require('./CosmicFFI');
 const { CosmicLogger, white, hex } = require('./CosmicLogger');
 const { CosmicForeignMessageHandler } = require('./CosmicForeignMessageHandler');
+
+const CURSOR_SEND_RATE = 20;
+const CURSOR_UPDATE_RATE = 60;
 
 export interface ChannelConstructionPreset {
     _id: string;
@@ -63,6 +66,35 @@ export abstract class CosmicClientToken extends CosmicClient {
     }
 }
 
+class Cursor {
+    public cl: typeof Client;
+
+    public sendInterval: any;
+    public updateInterval: any;
+    public pos: typeof Vector2;
+
+    constructor(cl: CosmicClientMPP) {
+        this.cl = cl;
+        this.pos = { x: 50, y: 50 };
+    }
+
+    start() {
+        this.sendInterval = setInterval(() => {
+            this.cl.setCursorPos(this.pos.x, this.pos.y);
+        }, 1000 / CURSOR_SEND_RATE);
+
+        this.updateInterval = setInterval(() => {
+            this.pos.x = 50;
+            this.pos.y = 50;
+        }, 1000 / CURSOR_UPDATE_RATE);
+    }
+
+    stop() {
+        clearInterval(this.sendInterval);
+        clearInterval(this.updateInterval);
+    }
+}
+
 export class CosmicClientMPP extends CosmicClientToken {
     private started: boolean = false;
     private desiredChannel: ChannelConstructionPreset;
@@ -74,20 +106,23 @@ export class CosmicClientMPP extends CosmicClientToken {
     
     public client: typeof Client;
 
+    public cursor: Cursor;
+
     constructor(uri: string, channel: ChannelConstructionPreset, token: string) {
         super();
         this.client = new Client(uri, token);
         this.bindEventListeners();
         this.desiredChannel = channel;
+        this.cursor = new Cursor(this);
     }
-
+    
     /**
      * Start the client
      * @returns undefined
      */
     public start(): void {
         if (this.started == true) return;
-
+        
         this.started = true;
         this.client.start();
     }
@@ -148,5 +183,25 @@ export class CosmicClientMPP extends CosmicClientToken {
             platform: 'mpp',
             message: str
         });
+    }
+
+    private previousCursorPos: typeof Vector2 = {
+        x: 100,
+        y: 200
+    };
+    
+    /**
+     * Set the client's cursor position
+     * @param x X position
+     * @param y Y position
+     */
+    public setCursorPos(x: number, y: number) {
+        if (this.previousCursorPos.x !== x || this.previousCursorPos.y !== y) {
+            this.client.sendArray([{
+                m: 'm', x, y
+            }]);
+        }
+
+        this.previousCursorPos = { x, y };
     }
 }

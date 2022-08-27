@@ -20,7 +20,7 @@ import { CosmicLogger, white } from './CosmicLogger';
 
 process.stdin.on('data', d => {
     let str = d.toString().split('\n').join(' ').trim();
-    console.log(str);
+    // console.log(str);
 });
 
 // let logger = new CosmicLogger('Cosmic Root', white);

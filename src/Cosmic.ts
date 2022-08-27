@@ -28,8 +28,6 @@ const { Message, CommandMessage, ChatMessage, Prefix } = require('./CosmicTypes'
 const MPPCLONE_TOKEN = process.env.MPPCLONE_TOKEN;
 const channelsFile = fs.readFileSync(path.resolve(__dirname, '../../config/mpp_channels.yml')).toString();
 const channels = YAML.parse(channelsFile);
-const prefixConfigFile = fs.readFileSync(path.resolve(__dirname, '../../config/prefixes.yml'))
-
 
 class Cosmic {
     public static logger = new CosmicLogger('Cosmic', white);

@@ -4,7 +4,15 @@
  * Cosmic client handler
  */
 
+/**
+ * Local module imports
+ */
+
 const { CosmicClient, CosmicClientMPP, ChannelConstructionPreset } = require('./CosmicClient');
+
+/**
+ * Module-level declarations
+ */
 
 const HARD_CLIENT_LIMIT: number = 4;
 const MPPCLONE_TOKEN: string = process.env.MPPCLONE_TOKEN;
@@ -45,6 +53,10 @@ class CosmicClientHandler {
         }
     }
 }
+
+/**
+ * Module export
+ */
 
 export {
     CosmicClientHandler
