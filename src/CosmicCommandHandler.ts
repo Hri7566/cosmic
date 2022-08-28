@@ -111,7 +111,6 @@ class CosmicCommandHandler {
             if (cmd.platform !== cl.platform && cmd.platform !== 'all') break;
 
             // check permissions
-            // TODO
             const groups = await CosmicData.getGroups(msg.sender._id);
 
             let hasPerms = false;
