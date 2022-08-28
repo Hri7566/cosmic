@@ -11,10 +11,11 @@ const { EventEmitter } = require('events');
 
 import { Cosmic } from './Cosmic';
 import { CosmicCommandHandler } from './CosmicCommandHandler';
-const { Token, ChatMessage, Vector2 } = require('./CosmicTypes');
+const { Token, ChatMessage, Vector2, Participant } = require('./CosmicTypes');
 const { CosmicFFI } = require('./CosmicFFI');
-const { CosmicLogger, white, hex } = require('./CosmicLogger');
+const { CosmicLogger, white, blue, hex } = require('./CosmicLogger');
 const { CosmicForeignMessageHandler } = require('./CosmicForeignMessageHandler');
+const { CosmicData } = require('./CosmicData');
 
 const CURSOR_SEND_RATE = 20;
 const CURSOR_UPDATE_RATE = 60;
@@ -32,7 +33,9 @@ export abstract class CosmicClient {
     public once = EventEmitter.prototype.once;
     public emit = EventEmitter.prototype.emit;
 
-    public logger = new CosmicLogger("Cosmic Client", white);
+    public logger = new CosmicLogger("Cosmic Client", blue);
+
+    public platform: string;
 
     constructor() {
         
@@ -44,7 +47,14 @@ export abstract class CosmicClient {
         if (this.alreadyBound == true) return;
         this.alreadyBound = true;
 
-        this.on('chat message', msg => {
+        this.on('chat message', async msg => {
+            let res = await CosmicData.updateUser(msg.sender._id, msg.sender);
+            if (typeof res == 'object') {
+                if (res.upsertedId == null) {
+                    let res2 = await CosmicData.insertUser(msg.sender);
+                }
+            }
+
             // check all chat messages for commands
             CosmicCommandHandler.checkCommand(msg, this);
 
@@ -72,10 +82,15 @@ class Cursor {
     public sendInterval: any;
     public updateInterval: any;
     public pos: typeof Vector2;
+    public vel: typeof Vector2;
+    public angle: typeof Vector2;
+    public follow: string | undefined;
 
     constructor(cl: CosmicClientMPP) {
         this.cl = cl;
         this.pos = { x: 50, y: 50 };
+        this.vel = { x: 0, y: 0 };
+        this.angle = 0;
     }
 
     start() {
@@ -84,8 +99,22 @@ class Cursor {
         }, 1000 / CURSOR_SEND_RATE);
 
         this.updateInterval = setInterval(() => {
-            this.pos.x = 50;
-            this.pos.y = 50;
+            let followPos: typeof Vector2 = {
+                x: 50,
+                y: 50
+            }
+
+            if (this.follow) {
+                followPos = {
+                    x: this.cl.getPart(this.follow).x,
+                    y: this.cl.getPart(this.follow).y
+                }
+            }
+
+            this.angle += 1;
+            if (this.angle > 360) this.angle -= 360;
+            this.pos.y = (Math.cos(this.angle * (Math.PI/180)) * 10) + followPos.x;
+            this.pos.x = (Math.sin(this.angle * (Math.PI / 180) * 2) * 10) + followPos.y;
         }, 1000 / CURSOR_UPDATE_RATE);
     }
 
@@ -105,8 +134,8 @@ export class CosmicClientMPP extends CosmicClientToken {
     };
     
     public client: typeof Client;
-
     public cursor: Cursor;
+    public platform: string = 'mpp';
 
     constructor(uri: string, channel: ChannelConstructionPreset, token: string) {
         super();
@@ -123,6 +152,7 @@ export class CosmicClientMPP extends CosmicClientToken {
     public start(): void {
         if (this.started == true) return;
         
+        this.logger.log(`Starting in ${this.desiredChannel}...`);
         this.started = true;
         this.client.start();
     }
@@ -150,6 +180,8 @@ export class CosmicClientMPP extends CosmicClientToken {
         this.client.on('hi', msg => {
             this.client.setChannel(this.desiredChannel._id, this.desiredChannel.set);
             this.cursor.start();
+
+            this.logger.log(`Connected to ${this.client.uri}`);
         });
 
         setInterval(() => {
@@ -214,5 +246,14 @@ export class CosmicClientMPP extends CosmicClientToken {
         }
 
         this.previousCursorPos = { x, y };
+    }
+
+    public getPart(str: string) {
+        let p: typeof Participant;
+        for (p of Object.values(this.client.ppl)) {
+            if (p.name.toLowerCase().includes(str.toLowerCase()) || p._id.toLowerCase().includes(str.toLowerCase())) {
+                return p;
+            }
+        }
     }
 }
