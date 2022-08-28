@@ -12,7 +12,8 @@ const fs = require('fs');
 const { Message, CommandMessage, Prefix, PermissionGroupIdentifier } = require('./CosmicTypes');
 const { CosmicClient } = require('./CosmicClient');
 const { CosmicUtil } = require('./CosmicUtil');
-const { CosmicLogger, magenta } = require ('./CosmicLogger');
+const { CosmicLogger, magenta } = require('./CosmicLogger');
+const { CosmicData } = require('./CosmicData');
 
 export interface CommandGroup {
     id: string;
@@ -28,8 +29,9 @@ export class Command {
     public commandGroup: string;
     public visible: boolean;
     public callback: (msg: typeof Message, cl: typeof CosmicClient) => string | undefined;
+    public platform: string;
 
-    constructor(id: string, accessors: string[], usage: string = 'No usage', description: string | 'No description', permissionGroups: string[], visible: boolean, commandGroup: string, callback: (msg: typeof Message, cl: typeof CosmicClient) => string | undefined) {
+    constructor(id: string, accessors: string[], usage: string = 'No usage', description: string | 'No description', permissionGroups: string[], visible: boolean, commandGroup: string, callback: (msg: typeof Message, cl: typeof CosmicClient) => string | undefined, platform?: string) {
         this.id = id;
         this.accessors = accessors;
         this.usage = usage;
@@ -38,6 +40,7 @@ export class Command {
         this.visible = visible;
         this.commandGroup = commandGroup;
         this.callback = callback;
+        this.platform = platform || 'all';
     }
 
     /**
@@ -70,7 +73,7 @@ class CosmicCommandHandler {
      * Check a chat message for commands
      * @param cmsg Chat message
      */
-     public static checkCommand(cmsg: typeof Message, cl: typeof CosmicClient): void {
+     public static async checkCommand(cmsg: typeof Message, cl: typeof CosmicClient): Promise<void> {
         let msg: typeof CommandMessage = {
             type: 'command',
             argv: cmsg.message.split(' '),
@@ -85,6 +88,8 @@ class CosmicCommandHandler {
         }
 
         msg.prefix = prefix;
+
+        await CosmicData.createGroupProfile(msg.sender._id);
 
         // console.debug('--------DEBUG--------');
         for (let cmd of this.commands) {
@@ -102,16 +107,25 @@ class CosmicCommandHandler {
                 }
             }
 
+            // check platform
+            if (cmd.platform !== cl.platform && cmd.platform !== 'all') break;
+
             // check permissions
             // TODO
+            const groups = await CosmicData.getGroups(msg.sender._id);
 
+            let hasPerms = false;
+            
+            for (let g of cmd.permissionGroups) {
+                if (groups.groups.indexOf(g) !== -1) hasPerms = true;
+            }
 
-            if (!pass) continue;
+            if (!pass || !hasPerms) continue;
 
             let out;
             
             try {
-                out = cmd.callback(msg, cl);
+                out = await cmd.callback(msg, cl);
             } catch (err) {
                 if (err == 'usage') {
                     let usage = Command.replaceUsageVars(cmd.usage, msg.prefix.prefix);
