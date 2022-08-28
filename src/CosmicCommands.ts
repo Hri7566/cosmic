@@ -6,10 +6,11 @@
 
 const { Command, CosmicCommandHandler } = require('./CosmicCommandHandler');
 const { CosmicColor } = require('./CosmicColor');
+const { CosmicData } = require('./CosmicData');
 
 CosmicCommandHandler.registerCommand(new Command(
     'help',
-    ['help', 'h', 'cmds', 'cmd'],
+    [ 'help', 'h', 'cmds', 'cmd' ],
     `%PREFIX%help [command]`,
     `List all commands or get information about commands.`,
     [
@@ -55,12 +56,10 @@ CosmicCommandHandler.registerCommand(new Command(
 
 CosmicCommandHandler.registerCommand(new Command(
     'about',
-    ['about', 'a'],
+    [ 'about', 'a' ],
     `%PREFIX%about`,
     `Get information about the bot.`,
-    [
-        'default'
-    ],
+    [ 'default' ],
     true, // visible,
     'info',
     (msg, cl) => {
@@ -75,12 +74,10 @@ CosmicCommandHandler.registerCommand(new Command(
 
 CosmicCommandHandler.registerCommand(new Command(
     'color',
-    ['color', 'c'],
+    [ 'color', 'c' ],
     `%PREFIX%color [<r> <g> <b> | <hex>]`,
     `Get information about a color or the user's color.`,
-    [
-        'default'
-    ],
+    [ 'default' ],
     true, // visible,
     'info',
     (msg, cl) => {
@@ -128,9 +125,7 @@ CosmicCommandHandler.registerCommand(new Command(
     ['8ball', '8'],
     '%PREFIX%8ball <question>',
     `Ask the magic 8-ball a question.`,
-    [
-        'default'
-    ],
+    [ 'default' ],
     true,
     'fun',
     (msg, cl) => {
@@ -163,3 +158,18 @@ CosmicCommandHandler.registerCommand(new Command(
         return `${r}, ${msg.sender.name}.`;
     }
 ));
+
+CosmicCommandHandler.registerCommand(new Command(
+    'groups',
+    ['groups', 'g'],
+    '%PREFIX%groups',
+    `Lists the user's groups.`,
+    [ 'default' ],
+    true,
+    'info',
+    async (msg, cl) => {
+        const groups = await CosmicData.getGroups(msg.sender._id);
+        return `Groups: ${groups.groups.join(', ')}`;
+    }
+));
+
