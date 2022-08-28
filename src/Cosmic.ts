@@ -18,8 +18,10 @@ import { CosmicFFI } from './CosmicFFI';;
 import { CosmicClientHandler } from './CosmicClientHandler';
 import { ChannelConstructionPreset } from './CosmicClient';
 import { CosmicUtil } from './CosmicUtil';
-const { CosmicLogger, white } = require('./CosmicLogger');
+import { CosmicData } from './CosmicData';
+const { CosmicLogger, magenta } = require('./CosmicLogger');
 const { Message, CommandMessage, ChatMessage, Prefix } = require('./CosmicTypes');
+const { CosmicAPI } = require('./CosmicAPI');
 
 /**
  * Module-level declarations
@@ -30,7 +32,7 @@ const channelsFile = fs.readFileSync(path.resolve(__dirname, '../../config/mpp_c
 const channels = YAML.parse(channelsFile);
 
 class Cosmic {
-    public static logger = new CosmicLogger('Cosmic', white);
+    public static logger = new CosmicLogger('Cosmic', magenta);
 
     public static on = EventEmitter.prototype.on;
     public static off = EventEmitter.prototype.off;
@@ -40,23 +42,30 @@ class Cosmic {
     /**
      * Start Cosmic
      */
-    public static start() {
+    public static async start() {
         this.bindEventListeners();
 
-        this.logger.log('Starting channels...');
+        CosmicData.start();
+        
+        this.logger.log('Starting clients...');
 
         for (const uri of Object.keys(channels)) {
             for (const ch of channels[uri]) {
                 CosmicClientHandler.startClient(uri, ch);
             }
         }
+
+        CosmicAPI.start();
     }
 
     /**
      * Stop Cosmic
      */
     public static stop() {
+        this.logger.log("Stopping...");
         CosmicClientHandler.stopAllClients();
+        CosmicData.stop();
+        this.logger.log("Stopped.");
     }
 
     private static alreadyBound: boolean = false;
