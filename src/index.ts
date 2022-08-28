@@ -37,6 +37,11 @@ const logger = new CosmicLogger('Cosmic Root', white);
 logger.log("Loading Cosmic...");
 Cosmic.start();
 
-setTimeout(() => {
-    Cosmic.stop();
-});
+// setTimeout(() => {
+//     Cosmic.stop();
+// });
+
+// TODO fix sigint handle
+// process.on('SIGINT', () => {
+//     Cosmic.stop();
+// });
