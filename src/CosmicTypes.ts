@@ -16,14 +16,30 @@ export interface Note {
 }
 
 export interface Participant {
-    name: string;
     _id: string;
+    name: string;
     id?: string;
     color?: string;
 }
 
 export interface User extends Participant {
     //? pass
+}
+
+export interface Item {
+    id: string;
+    displayName: string;
+    count: number;
+}
+
+export interface FoodItem {
+    edible: true;
+}
+
+export interface Inventory {
+    _id: string; //* this should be the user id
+    items: Item[];
+    balance: number;
 }
 
 export interface ChannelSettings {
