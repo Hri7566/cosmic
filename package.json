@@ -5,11 +5,12 @@
   "main": "build/node/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "yarn run build-node && yarn run build-nim && yarn run build-c && yarn run build-deno",
-    "build-node": "scripts/build-node.sh",
-    "build-nim": "scripts/build-nim.sh",
-    "build-c": "scripts/build-c.sh",
-    "build-deno": "scripts/build-deno.sh",
+    "build": "yarn run build-node && yarn run esbuild",
+    "build-node": "scripts/sh/build-node.sh",
+    "build-nim": "scripts/sh/build-nim.sh",
+    "build-c": "scripts/sh/build-c.sh",
+    "build-deno": "scripts/sh/build-deno.sh",
+    "esbuild": "node scripts/js/esbuild.js",
     "start": "node .",
     "dev": "yarn run build && yarn run start"
   },
@@ -28,12 +29,16 @@
     "normalize-strings": "^1.1.1",
     "ref-napi": "^3.0.3",
     "ws": "^8.8.1",
-    "yaml": "^2.1.1"
+    "yaml": "^2.1.1",
+    "esbuild": "^0.15.5",
+    "esbuild-sass-plugin": "^2.3.2"
   },
   "devDependencies": {
     "@types/ffi-napi": "^4.0.5",
     "@types/node": "^18.6.3",
     "@types/ws": "^8.5.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "typescript": "^4.7.4"
   }
 }
