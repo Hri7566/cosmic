@@ -36,12 +36,12 @@ class CosmicClientHandler {
 
     public static stopClient(channel: string): boolean {
         for (let cl of this.clients) {
-            if (!cl.isConnected()) continue;
-            if (cl.channel._id == channel) {
+            // if (!cl.client.isConnected()) continue;
+            // if (cl.channel._id == channel) {
+                this.clients.splice(this.clients.indexOf(cl), 1);
                 cl.stop();
-                this.clients.splice(cl.channel, 1);
                 return true;
-            }
+            // }
         }
 
         return false;
