@@ -13,9 +13,7 @@ CosmicCommandHandler.registerCommand(new Command(
     [ 'help', 'h', 'cmds', 'cmd' ],
     `%PREFIX%help [command]`,
     `List all commands or get information about commands.`,
-    [
-        'default'
-    ],
+    [ 'default' ],
     true, // visible
     'info',
     (msg, cl) => {
@@ -122,7 +120,7 @@ CosmicCommandHandler.registerCommand(new Command(
 
 CosmicCommandHandler.registerCommand(new Command(
     '8ball',
-    ['8ball', '8'],
+    [ '8ball', '8' ],
     '%PREFIX%8ball <question>',
     `Ask the magic 8-ball a question.`,
     [ 'default' ],
@@ -161,7 +159,7 @@ CosmicCommandHandler.registerCommand(new Command(
 
 CosmicCommandHandler.registerCommand(new Command(
     'groups',
-    ['groups', 'g'],
+    [ 'groups', 'g' ],
     '%PREFIX%groups',
     `Lists the user's groups.`,
     [ 'default' ],
@@ -173,3 +171,82 @@ CosmicCommandHandler.registerCommand(new Command(
     }
 ));
 
+CosmicCommandHandler.registerCommand(new Command(
+    'bake',
+    [ 'bake', 'b' ],
+    '%PREFIX%bake',
+    `Bake a cake. (WIP)`,
+    [ 'default' ],
+    true,
+    'cake',
+    async (msg, cl) => {
+        return `This command is a stub.`;
+    }
+));
+
+CosmicCommandHandler.registerCommand(new Command(
+    'stopbaking',
+    [ 'stopbaking', 'stopbake', 'stop', 's' ],
+    '%PREFIX%stopbaking',
+    `Stop baking a cake. (WIP)`,
+    [ 'default' ],
+    true,
+    'cake',
+    async (msg, cl) => {
+        return `This command is a stub.`;
+    }
+));
+
+CosmicCommandHandler.registerCommand(new Command(
+    'inventory',
+    [ 'inventory', 'inv', 'i' ],
+    '%PREFIX%inventory',
+    `List all items in the user's inventory.`,
+    [ 'default' ],
+    true,
+    'cake',
+    async (msg, cl) => {
+        const inventory = await CosmicData.getInventory(msg.sender._id);
+        let items = [];
+
+        for (let it of inventory.items) {
+            if (it.count > 0) {
+                items.push(`${it.displayName}${it.count > 1 ? ` (x${it.count})` : ``}`);
+            }
+        }
+
+        if (items.length > 0) {
+            return `Inventory: ${items.join('')}`;
+        } else {
+            return `Inventory: (empty)`;
+        }
+    }
+));
+
+CosmicCommandHandler.registerCommand(new Command(
+    'balance',
+    [ 'balance', 'bal', 'b' ],
+    '%PREFIX%balance',
+    `Show the user's balance.`,
+    [ 'default' ],
+    true,
+    'cake',
+    async (msg, cl) => {
+        const inventory = await CosmicData.getInventory(msg.sender._id);
+        return `Balance: ${CosmicData.formatBalance(inventory.balance)}`;
+    }
+));
+
+CosmicCommandHandler.registerCommand(new Command(
+    'wipeinv',
+    [ 'wipeinv' ],
+    '%PREFIX%wipeinv',
+    `Wipe inventory data.`,
+    [ 'admin' ],
+    false,
+    'info',
+    async (msg, cl) => {
+        await CosmicData.purgeInventories();
+        return `Inventories purged successfully.`;
+    }
+));

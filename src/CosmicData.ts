@@ -7,10 +7,13 @@
 const { MongoClient } = require('mongodb');
 
 const { CosmicLogger, green } = require('./CosmicLogger');
-const { User, Inventory } = require('./CosmicTypes');
+const { User, Inventory, Item } = require('./CosmicTypes');
 
 const MONGODB_CONNECTION_URI = process.env.MONGODB_CONNECTION_URI;
 const MONGODB_DATABASE = process.env.MONGODB_DATABASE;
+
+const DEFAULT_BALANCE = 100;
+const DEFAULT_INVENTORY = [];
 
 class CosmicData {
     public static client = new MongoClient(MONGODB_CONNECTION_URI);
@@ -104,6 +107,16 @@ class CosmicData {
         }
     }
 
+    public static async getUser(_id: string) {
+        try {
+            const result = await this.users.findOne({ _id: _id });
+
+            return result;
+        } catch (err) {
+            return err;
+        }
+    }
+
     public static async createGroupProfile(_id: string, groups?: string[]) {
         try {
             const result = await this.permissions.insertOne({
@@ -143,6 +156,54 @@ class CosmicData {
 
     public static async getGroups(_id: string) {
         return await this.permissions.findOne({ _id });
+    }
+
+    public static async createInventory(_id: string, balance?: number, items?: Array<typeof Item>) {
+        try {
+            const result = await this.inventories.insertOne({
+                _id,
+                balance: balance || DEFAULT_BALANCE,
+                items: items || DEFAULT_INVENTORY
+            });
+
+            return result;
+        } catch (err) {
+            return err;
+        }
+    }
+
+    public static async addItem(_id: string, item: typeof Item) {
+        try {
+            const result = await this.inventories.updateOne({
+                $push: { "groups": item }
+            });
+
+            return result;
+        } catch (err) {
+            return err;
+        }
+    }
+
+    public static async removeItem(_id: string, item_id) {
+        // TODO
+    }
+
+    public static async getInventory(_id: string) {
+        try {
+            const result = await this.inventories.findOne({ _id: _id });
+            
+            return result;
+        } catch (err) {
+            return err;
+        }
+    }
+
+    public static formatBalance(bal: number, currency: string = " star bits", before: boolean = false, fixate: number = 0) {
+        if (before) {
+            return `${currency}${bal.toFixed(fixate)}`;
+        } else {
+            return `${bal.toFixed(fixate)}${currency}`;
+        }
     }
 }
 

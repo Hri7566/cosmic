@@ -66,7 +66,8 @@ class CosmicCommandHandler {
 
     public static commandGroups: Array<CommandGroup> = [
         { id: 'info', displayName: '🌠 Info Commands' },
-        { id: 'fun', displayName: '🎆 Fun Commands' }
+        { id: 'fun', displayName: '🎆 Fun Commands' },
+        { id: 'cake', displayName: '🎂 Cake Commands' }
     ]
 
     /**
@@ -90,6 +91,7 @@ class CosmicCommandHandler {
         msg.prefix = prefix;
 
         await CosmicData.createGroupProfile(msg.sender._id);
+        await CosmicData.createInventory(msg.sender._id);
 
         // console.debug('--------DEBUG--------');
         for (let cmd of this.commands) {

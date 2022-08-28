@@ -9,7 +9,7 @@
         "verbose": true
     },
     "include": [
-        "src/**/*.ts",
+        "src/**/*",
         "lib/**/*.ts"
     ],
     "exclude": [
