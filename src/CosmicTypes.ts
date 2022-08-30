@@ -30,6 +30,7 @@ export interface Item {
     id: string;
     displayName: string;
     count: number;
+    emoji?: string;
 }
 
 export interface FoodItem {
@@ -180,5 +181,11 @@ namespace Cosmic {
     export interface PermissionGroup {
         id: PermissionGroupIdentifier;
         permissions: Permission[];
+    }
+
+    export interface Cake extends FoodItem {
+        icing: string;
+        filling: string;
+        candy?: string;
     }
 }
