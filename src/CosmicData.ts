@@ -172,10 +172,48 @@ class CosmicData {
         }
     }
 
+    public static async hasItem(_id: string, item_id) {
+        try {
+            const response = await this.inventories.find({
+                _id,
+                items: {
+                    $in: [{
+                        $id: item_id
+                    }]
+                }
+            });
+
+            console.debug('--- has item debug');
+            console.debug(response);
+
+            return response.matchedCount > 0;
+        } catch (err) {
+            return err;
+        }
+    }
+
     public static async addItem(_id: string, item: typeof Item) {
         try {
-            const result = await this.inventories.updateOne({
-                $push: { "groups": item }
+            if (await this.hasItem(_id, item.id)) {
+                console.debug('already has item');
+                let res = await this.inventories.updateOne({
+                    _id,
+                    items: {
+                        id: item.id
+                    }
+                }, {
+                    $inc: {
+                        'items.$': {
+                            count: item.count
+                        }
+                    }
+                });
+                return res;
+            }
+            const result = await this.inventories.updateOne({ _id }, {
+                $push: {
+                    items: item
+                }
             });
 
             return result;
@@ -184,11 +222,23 @@ class CosmicData {
         }
     }
 
-    public static async removeItem(_id: string, item_id) {
-        // TODO
+    public static async removeItem(_id: string, item_id: string) {
+        try {
+            let inventory = await this.getInventory(_id);
+            
+            for (let it of inventory.items) {
+                if (it.id == item_id) {
+                    inventory.items.splice(inventory.items.indexOf(it), 1);
+                }
+            }
+
+            // return result;
+        } catch (err) {
+            return err;
+        }
     }
 
-    public static async getInventory(_id: string) {
+    public static async getInventory(_id: string): Promise<typeof Inventory | any> {
         try {
             const result = await this.inventories.findOne({ _id: _id });
             
@@ -203,6 +253,30 @@ class CosmicData {
             return `${currency}${bal.toFixed(fixate)}`;
         } else {
             return `${bal.toFixed(fixate)}${currency}`;
+        }
+    }
+
+    public static addBalance(_id: string, amount: number) {
+        try {
+            this.inventories.updateOne({ _id }, {
+                $inc: {
+                    balance: amount
+                }
+            })
+        } catch (err) {
+            return err;
+        }
+    }
+
+    public static subtractBalance(_id: string, amount: number) {
+        try {
+            this.inventories.updateOne({ _id }, {
+                $dec: {
+                    balance: amount
+                }
+            })
+        } catch (err) {
+            return err;
         }
     }
 }

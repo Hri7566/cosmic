@@ -4,6 +4,8 @@
  * Cosmic commands
  */
 
+import { CosmicCakeFactory } from "./CosmicCakeFactory";
+
 const { Command, CosmicCommandHandler } = require('./CosmicCommandHandler');
 const { CosmicColor } = require('./CosmicColor');
 const { CosmicData } = require('./CosmicData');
@@ -211,12 +213,13 @@ CosmicCommandHandler.registerCommand(new Command(
 
         for (let it of inventory.items) {
             if (it.count > 0) {
-                items.push(`${it.displayName}${it.count > 1 ? ` (x${it.count})` : ``}`);
+                let dn = (it.emoji ? it.emoji : '') + it.displayName
+                items.push(`${dn}${it.count > 1 ? ` (x${it.count})` : ``}`);
             }
         }
 
         if (items.length > 0) {
-            return `Inventory: ${items.join('')}`;
+            return `Inventory: ${items.join(', ')}`;
         } else {
             return `Inventory: (empty)`;
         }
@@ -241,12 +244,71 @@ CosmicCommandHandler.registerCommand(new Command(
     'wipeinv',
     [ 'wipeinv' ],
     '%PREFIX%wipeinv',
-    `Wipe inventory data.`,
+    `Wipe all inventory data.`,
     [ 'admin' ],
     false,
     'info',
     async (msg, cl) => {
         await CosmicData.purgeInventories();
         return `Inventories purged successfully.`;
+    }
+));
+
+CosmicCommandHandler.registerCommand(new Command(
+    'rcake',
+    [ 'rcake' ],
+    '%PREFIX%rcake',
+    `Generate a random cake.`,
+    [ 'admin' ],
+    false,
+    'cake',
+    async (msg, cl) => {
+        let c = CosmicCakeFactory.generateRandomCake();
+
+        let res = await CosmicData.addItem(msg.sender._id, c);
+        console.debug(res);
+
+        let displayName = (c.emoji ? `${c.emoji}` : '') + c.displayName;
+        return `Cake: ${displayName}`;
+    }
+));
+
+CosmicCommandHandler.registerCommand(new Command(
+    'addbal',
+    [ 'addbal' ],
+    '%PREFIX%addbal <userId> <amount>',
+    `Add an amount to a balance.`,
+    [ 'admin' ],
+    false,
+    'cake',
+    async (msg, cl) => {
+        if (msg.argv[2]) {
+            try {
+                await CosmicData.addBalance(msg.argv[1], parseInt(msg.argv[2]));
+                return `Successfully added to balance of account '${msg.argv[1]}'.`;
+            } catch (err) {
+                return `Addbal failed. (maybe NaN?)`;
+            }
+        }
+    }
+));
+
+CosmicCommandHandler.registerCommand(new Command(
+    'subbal',
+    [ 'subbal' ],
+    '%PREFIX%subbal <userId> <amount>',
+    `Add an amount to a balance.`,
+    [ 'admin' ],
+    false,
+    'cake',
+    async (msg, cl) => {
+        if (msg.argv[2]) {
+            try {
+                await CosmicData.removeBalance(msg.argv[1], parseInt(msg.argv[2]));
+                return `Successfully removed from balance of account '${msg.argv[1]}'.`;
+            } catch (err) {
+                return `Addbal failed. (maybe NaN?)`;
+            }
+        }
     }
 ));

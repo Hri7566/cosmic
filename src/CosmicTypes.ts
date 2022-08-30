@@ -31,6 +31,7 @@ export interface Item {
     displayName: string;
     count: number;
     emoji?: string;
+    value?: number;
 }
 
 export interface FoodItem {
@@ -186,6 +187,6 @@ namespace Cosmic {
     export interface Cake extends FoodItem {
         icing: string;
         filling: string;
-        candy?: string;
+        topping?: string;
     }
 }
