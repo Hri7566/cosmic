@@ -9,6 +9,7 @@ import { CosmicCakeFactory } from "./CosmicCakeFactory";
 const { Command, CosmicCommandHandler } = require('./CosmicCommandHandler');
 const { CosmicColor } = require('./CosmicColor');
 const { CosmicData } = require('./CosmicData');
+const crypto = require('crypto');
 
 CosmicCommandHandler.registerCommand(new Command(
     'help',
@@ -153,8 +154,11 @@ CosmicCommandHandler.registerCommand(new Command(
             'Very doubtful'
         ];
 
-        let r = magic8ballAnswers[Math.floor(Math.random()*magic8ballAnswers.length)];
-
+        let hash = crypto.createHash('sha256');
+        hash.update(msg.argv.join(' ').substring(msg.argv[1].length).trim());
+        let hex = hash.digest().toString('hex');
+        let lastChar = parseInt(hex[hex.length - 1], 16);
+        let r = magic8ballAnswers[lastChar % magic8ballAnswers.length];
         return `${r}, ${msg.sender.name}.`;
     }
 ));
@@ -285,7 +289,7 @@ CosmicCommandHandler.registerCommand(new Command(
         if (msg.argv[2]) {
             try {
                 await CosmicData.addBalance(msg.argv[1], parseInt(msg.argv[2]));
-                return `Successfully added to balance of account '${msg.argv[1]}'.`;
+                return `Successfully added ${parseInt(msg.argv[2])} to balance of account '${msg.argv[1]}'.`;
             } catch (err) {
                 return `Addbal failed. (maybe NaN?)`;
             }
@@ -305,10 +309,106 @@ CosmicCommandHandler.registerCommand(new Command(
         if (msg.argv[2]) {
             try {
                 await CosmicData.removeBalance(msg.argv[1], parseInt(msg.argv[2]));
-                return `Successfully removed from balance of account '${msg.argv[1]}'.`;
+                return `Successfully removed ${parseInt(msg.argv[2])} from balance of account '${msg.argv[1]}'.`;
             } catch (err) {
-                return `Addbal failed. (maybe NaN?)`;
+                return `Subbal failed. (maybe NaN?)`;
             }
         }
     }
+));
+
+CosmicCommandHandler.registerCommand(new Command(
+    'breatheonnose',
+    [ 'breatheonnose' ],
+    '%PREFIX%breatheonnose <user>',
+    `Breathe on another user's nose.`,
+    [ 'default' ],
+    false,
+    'fun',
+    async (msg, cl) => {
+        if (!msg.argv[1]) {
+            return `Please type a user's name or ID.`;
+        }
+        let p = cl.getPart(msg.argv[1]);
+        if (p) {
+            return `${msg.sender.name} breathes on ${p.name}'s nose`
+        } else {
+            return `User '${msg.argv[1]}' not found.`;
+        }
+    },
+    'mpp'
+));
+
+CosmicCommandHandler.registerCommand(new Command(
+    'js',
+    [ 'js', 'eval' ],
+    '%PREFIX%js <code>',
+    `Run JavaScript directly.`,
+    [ 'admin' ],
+    false,
+    'info',
+    async (msg, cl) => {
+        if (!msg.argv[1]) {
+            return `Please type some code to run.`;
+        }
+        
+        try {
+            let argcat = msg.argv.join(' ').substring(msg.argv[0].length).trim();
+            let out = eval(argcat);
+            return `👍 ${out}`;
+        } catch (err) {
+            return `👎 ${err}`;
+        }
+    },
+    'mpp'
+));
+
+CosmicCommandHandler.registerCommand(new Command(
+    'follow',
+    [ 'follow', 'f' ],
+    '%PREFIX%follow <userId>',
+    `Follow another user's cursor.`,
+    [ 'default' ],
+    true,
+    'fun',
+    async (msg, cl) => {
+        if (!msg.argv[1]) {
+            msg.argv[1] = msg.sender._id;
+        }
+
+        let p = cl.getPart(msg.argv[1]);
+
+        if (p) {
+            cl.cursor.follow = p._id;
+            cl.cursor.scale = 5;
+            cl.cursor.speed = 2;
+
+            return `Now following ${p.name}.`;
+        } else {
+            return `Could not find user '${msg.argv[1]}'.`;
+        }
+    },
+    'mpp'
+));
+
+CosmicCommandHandler.registerCommand(new Command(
+    'unfollow',
+    [ 'unfollow', 'uf' ],
+    '%PREFIX%unfollow',
+    `Stop the cursor from following somebody.`,
+    [ 'default' ],
+    true,
+    'fun',
+    async (msg, cl) => {
+        if (!cl.cursor.follow) {
+            return `The cursor is not following anybody.`;
+        }
+
+        cl.cursor.follow = undefined;
+        cl.cursor.scale = 10;
+        cl.cursor.speed = 1;
+
+        return `Stopped following.`;
+    },
+    'mpp'
 ));

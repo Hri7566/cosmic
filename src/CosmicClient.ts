@@ -85,12 +85,16 @@ class Cursor {
     public vel: typeof Vector2;
     public angle: typeof Vector2;
     public follow: string | undefined;
+    public scale: number;
+    public speed: number;
 
     constructor(cl: CosmicClientMPP) {
         this.cl = cl;
         this.pos = { x: 50, y: 50 };
         this.vel = { x: 0, y: 0 };
         this.angle = 0;
+        this.scale = 10;
+        this.speed = 1;
     }
 
     start() {
@@ -106,15 +110,15 @@ class Cursor {
 
             if (this.follow) {
                 followPos = {
-                    x: this.cl.getPart(this.follow).x,
-                    y: this.cl.getPart(this.follow).y
+                    x: parseFloat(this.cl.getPart(this.follow).x),
+                    y: parseFloat(this.cl.getPart(this.follow).y)
                 }
             }
 
-            this.angle += 1;
+            this.angle += this.speed;
             if (this.angle > 360) this.angle -= 360;
-            this.pos.y = (Math.cos(this.angle * (Math.PI/180)) * 10) + followPos.x;
-            this.pos.x = (Math.sin(this.angle * (Math.PI / 180) * 2) * 10) + followPos.y;
+            this.pos.y = (Math.cos(this.angle * (Math.PI/180) * 3) * this.scale) + followPos.y;
+            this.pos.x = (Math.sin(this.angle * (Math.PI / 180)) * this.scale) + followPos.x;
         }, 1000 / CURSOR_UPDATE_RATE);
     }
 
@@ -129,7 +133,7 @@ export class CosmicClientMPP extends CosmicClientToken {
     private desiredChannel: ChannelConstructionPreset;
     
     private desiredUser = {
-        name: '. ✧ * Cosmic * ✧ .',
+        name: `🟇 Cosmic (${CosmicCommandHandler.prefixes[0].prefix}help)`,
         color: '#1d0054'
     };
     
@@ -187,7 +191,7 @@ export class CosmicClientMPP extends CosmicClientToken {
         setInterval(() => {
             if (!this.client.isConnected()) return;
             
-            let set = this.client.getOwnParticipant()._id;
+            let set = this.client.getOwnParticipant();
             
             if (set.name !== this.desiredUser.name || set.color !== this.desiredUser.color) {
                 this.client.sendArray([{
