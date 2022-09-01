@@ -2,9 +2,13 @@
 
 This is currently a bot made for Multiplayer Piano.
 
+## Credits
+
+- Hri7566: Author
+
 ## Building
 
-*Please* only run this on linux/WSL. It's probably really hard to run on Windows.
+*Please* only run this on Linux/WSL. It's probably really hard to run on Windows.
 
 This project uses Node.js, Deno, C, and Nim. The decision to use such languages was a brave one.
 
