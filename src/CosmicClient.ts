@@ -9,7 +9,7 @@ const Client = require('mppclone-client');
 const YAML = require('yaml');
 const { EventEmitter } = require('events');
 
-import { Cosmic } from './Cosmic';
+const { Cosmic } = require('./Cosmic');
 import { CosmicCommandHandler } from './CosmicCommandHandler';
 const { Token, ChatMessage, Vector2, Participant } = require('./CosmicTypes');
 const { CosmicFFI } = require('./CosmicFFI');
@@ -108,17 +108,19 @@ class Cursor {
                 y: 50
             }
 
-            if (this.follow) {
-                followPos = {
-                    x: parseFloat(this.cl.getPart(this.follow).x),
-                    y: parseFloat(this.cl.getPart(this.follow).y)
+            try {
+                if (this.cl.getPart(this.follow)) {
+                    followPos = {
+                        x: parseFloat(this.cl.getPart(this.follow).x),
+                        y: parseFloat(this.cl.getPart(this.follow).y)
+                    }
                 }
+            } finally {
+                this.angle += this.speed;
+                if (this.angle > 360) this.angle -= 360;
+                this.pos.y = (Math.cos(this.angle * (Math.PI/180) * 3) * this.scale) + followPos.y;
+                this.pos.x = (Math.sin(this.angle * (Math.PI / 180)) * this.scale) + followPos.x;
             }
-
-            this.angle += this.speed;
-            if (this.angle > 360) this.angle -= 360;
-            this.pos.y = (Math.cos(this.angle * (Math.PI/180) * 3) * this.scale) + followPos.y;
-            this.pos.x = (Math.sin(this.angle * (Math.PI / 180)) * this.scale) + followPos.x;
         }, 1000 / CURSOR_UPDATE_RATE);
     }
 
@@ -156,7 +158,7 @@ export class CosmicClientMPP extends CosmicClientToken {
     public start(): void {
         if (this.started == true) return;
         
-        this.logger.log(`Starting in ${this.desiredChannel}...`);
+        this.logger.log(`Starting in ${this.desiredChannel._id}...`);
         this.started = true;
         this.client.start();
     }
@@ -167,6 +169,8 @@ export class CosmicClientMPP extends CosmicClientToken {
     public stop(): void {
         this.started = false;
         this.client.stop();
+        this.cursor.stop();
+        this.logger.log('Stopping...');
     }
 
     public bindEventListeners() {
@@ -254,10 +258,16 @@ export class CosmicClientMPP extends CosmicClientToken {
 
     public getPart(str: string) {
         let p: typeof Participant;
+        if (!str) return;
         for (p of Object.values(this.client.ppl)) {
             if (p.name.toLowerCase().includes(str.toLowerCase()) || p._id.toLowerCase().includes(str.toLowerCase())) {
                 return p;
             }
         }
     }
+}
+
+export class CosmicClientDiscord extends CosmicClientToken {
+    public platform: string = 'discord';
+    public previousChannel: string;
 }

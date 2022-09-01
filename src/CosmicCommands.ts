@@ -4,12 +4,25 @@
  * Cosmic commands
  */
 
-import { CosmicCakeFactory } from "./CosmicCakeFactory";
+/**
+ * Global module imports
+ */
 
+const crypto = require('crypto');
+
+/**
+ * Local module imports
+ */
+
+import { CosmicCakeFactory } from "./CosmicCakeFactory";
 const { Command, CosmicCommandHandler } = require('./CosmicCommandHandler');
 const { CosmicColor } = require('./CosmicColor');
 const { CosmicData } = require('./CosmicData');
-const crypto = require('crypto');
+const { Cosmic } = require('./Cosmic');
+
+/**
+ * Module-level declarations
+ */
 
 CosmicCommandHandler.registerCommand(new Command(
     'help',
@@ -186,7 +199,8 @@ CosmicCommandHandler.registerCommand(new Command(
     true,
     'cake',
     async (msg, cl) => {
-        return `This command is a stub.`;
+        const response = CosmicCakeFactory.startBaking(msg.sender, cl);
+        return response;
     }
 ));
 
@@ -199,7 +213,8 @@ CosmicCommandHandler.registerCommand(new Command(
     true,
     'cake',
     async (msg, cl) => {
-        return `This command is a stub.`;
+        const response = CosmicCakeFactory.stopBaking(msg.sender._id);
+        return response;
     }
 ));
 
@@ -393,7 +408,7 @@ CosmicCommandHandler.registerCommand(new Command(
 
 CosmicCommandHandler.registerCommand(new Command(
     'unfollow',
-    [ 'unfollow', 'uf' ],
+    [ 'unfollow', 'uf', 'unf', 'un' ],
     '%PREFIX%unfollow',
     `Stop the cursor from following somebody.`,
     [ 'default' ],

@@ -30,7 +30,7 @@ export const cakes: Array<typeof Cake> = [
         id: 'cupcake_strawberry',
         displayName: 'Strawberry Cupcake',
         emoji: '🧁',
-        count: 1,
+        count: 6,
         edible: true,
         icing: 'pink',
         filling: 'chocolate',
@@ -102,5 +102,12 @@ export const cakes: Array<typeof Cake> = [
         icing: 'chocolate',
         filling: 'chocolate',
         topping: 'candle'
+    }
+];
+
+export const bakingStages = [
+    {
+        displayName: 'Preheat',
+        
     }
 ];

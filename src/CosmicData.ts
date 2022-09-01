@@ -172,22 +172,42 @@ class CosmicData {
         }
     }
 
-    public static async hasItem(_id: string, item_id) {
+    public static async hasItem(_id: string, item_id: string) {
         try {
-            const response = await this.inventories.find({
-                _id,
-                items: {
-                    $in: [{
-                        $id: item_id
-                    }]
-                }
+            const response = await this.inventories.findOne({
+                _id
             });
 
-            console.debug('--- has item debug');
-            console.debug(response);
-
-            return response.matchedCount > 0;
+            if (response) {
+                for (let it of response.items) {
+                    if (it.id == item_id) {
+                        return true;
+                    }
+                }
+            } else {
+                return false;
+            }
         } catch (err) {
+            this.logger.error(err);
+            return err;
+        }
+    }
+
+    public static async findItem(_id: string, item_id: string) {
+        try {
+            const response = await this.inventories.findOne({
+                _id
+            });
+
+            if (response) {
+                for (let it of response.items) {
+                    if (it.id == item_id) {
+                        return it;
+                    }
+                }
+            }
+        } catch (err) {
+            this.logger.error(err);
             return err;
         }
     }
@@ -198,14 +218,10 @@ class CosmicData {
                 console.debug('already has item');
                 let res = await this.inventories.updateOne({
                     _id,
-                    items: {
-                        id: item.id
-                    }
+                    "items.id": item.id
                 }, {
                     $inc: {
-                        'items.$': {
-                            count: item.count
-                        }
+                        'items.$.count': item.count
                     }
                 });
                 return res;
@@ -218,6 +234,7 @@ class CosmicData {
 
             return result;
         } catch (err) {
+            this.logger.error(err);
             return err;
         }
     }

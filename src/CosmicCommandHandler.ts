@@ -139,8 +139,8 @@ class CosmicCommandHandler {
 
             if (out) {
                 if (typeof out !== 'string') return;
-                out = out.trim()
-                if (out.trim() == '') return;
+                out = out.trim();
+                if (out == '') return;
                 cl.emit('send chat message', {
                     type: 'chat',
                     sender: {
@@ -191,7 +191,7 @@ for (let pre of prefixes.global) {
     // TODO add the mpp-specific prefixes
 }
 
-const { CosmicCommands } = require('./CosmicCommands');
+require('./CosmicCommands');
 
 export {
     CosmicCommandHandler
