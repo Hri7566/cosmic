@@ -427,3 +427,17 @@ CosmicCommandHandler.registerCommand(new Command(
     },
     'mpp'
 ));
+
+CosmicCommandHandler.registerCommand(new Command(
+    'yousuckbitch',
+    [ 'yousuckbitch' ],
+    '%PREFIX%yousuckbitch',
+    `You suck bitch.`,
+    [ 'default' ],
+    false,
+    'fun',
+    async (msg, cl) => {
+        return `No, you suck, bitch!`;
+    }
+));
+
