@@ -441,3 +441,28 @@ CosmicCommandHandler.registerCommand(new Command(
     }
 ));
 
+CosmicCommandHandler.registerCommand(new Command(
+    'michael',
+    [ 'michael' ],
+    '%PREFIX%michael',
+    `https://youtube.com/michaelreeves`,
+    [ 'default' ],
+    false,
+    'fun',
+    async (msg, cl) => {
+        return `die forever bastard i hate you`
+    }
+));
+
+CosmicCommandHandler.registerCommand(new Command(
+    'hellothere',
+    [ 'hellothere' ],
+    '%PREFIX%hellothere',
+    `star wars`,
+    [ 'default' ],
+    false,
+    'fun',
+    async (msg, cl) => {
+        return `General Kenobi!`
+    }
+));
