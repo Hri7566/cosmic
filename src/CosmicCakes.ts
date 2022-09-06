@@ -14,7 +14,8 @@ export const cakes: Array<typeof Cake> = [
         count: 1,
         edible: true,
         icing: 'chocolate',
-        filling: 'chocolate'
+        filling: 'chocolate',
+        value: 15
     },
     {
         id: 'cake_vanilla',
@@ -24,7 +25,8 @@ export const cakes: Array<typeof Cake> = [
         edible: true,
         icing: 'white',
         filling: 'vanilla',
-        topping: 'cherry'
+        topping: 'cherry',
+        value: 18
     },
     {
         id: 'cupcake_strawberry',
@@ -34,7 +36,8 @@ export const cakes: Array<typeof Cake> = [
         edible: true,
         icing: 'pink',
         filling: 'chocolate',
-        topping: 'strawberry'
+        topping: 'strawberry',
+        value: 2
     },
     {
         id: 'cake_angel',
@@ -44,7 +47,8 @@ export const cakes: Array<typeof Cake> = [
         edible: true,
         icing: 'white',
         filling: 'vanilla',
-        topping: 'fruit'
+        topping: 'fruit',
+        value: 20
     },
     {
         id: 'cake_carrot',
@@ -53,7 +57,8 @@ export const cakes: Array<typeof Cake> = [
         count: 1,
         edible: true,
         icing: 'white',
-        filling: 'carrot'
+        filling: 'carrot',
+        value: 25
     },
     {
         id: 'cake_velvet',
@@ -62,7 +67,8 @@ export const cakes: Array<typeof Cake> = [
         count: 1,
         edible: true,
         icing: 'white',
-        filling: 'red'
+        filling: 'red',
+        value: 25
     },
     {
         id: 'cake_sponge',
@@ -71,7 +77,8 @@ export const cakes: Array<typeof Cake> = [
         count: 1,
         edible: true,
         icing: 'none',
-        filling: 'lemon'
+        filling: 'lemon',
+        value: 20
     },
     {
         id: 'cake_pineapple',
@@ -81,7 +88,8 @@ export const cakes: Array<typeof Cake> = [
         edible: true,
         icing: 'none',
         filling: 'pineapple',
-        topping: 'pineapple'
+        topping: 'pineapple',
+        value: 15
     },
     {
         id: 'cake_fruit',
@@ -91,7 +99,8 @@ export const cakes: Array<typeof Cake> = [
         edible: true,
         icing: 'none',
         filling: 'fruit',
-        topping: 'nuts'
+        topping: 'nuts',
+        value: 5
     },
     {
         id: 'cake_birthday',
@@ -101,7 +110,8 @@ export const cakes: Array<typeof Cake> = [
         edible: true,
         icing: 'chocolate',
         filling: 'chocolate',
-        topping: 'candle'
+        topping: 'candle',
+        value: 30
     }
 ];
 
