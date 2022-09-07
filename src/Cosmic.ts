@@ -39,6 +39,8 @@ class Cosmic {
     public static once = EventEmitter.prototype.once;
     public static emit = EventEmitter.prototype.emit;
 
+    public static startTime;
+
     /**
      * Start Cosmic
      */
@@ -56,6 +58,8 @@ class Cosmic {
         }
 
         CosmicAPI.start();
+
+        this.startTime = Date.now();
     }
 
     /**
@@ -74,13 +78,19 @@ class Cosmic {
         if (this.alreadyBound) return;
         this.alreadyBound = true;
     }
+
+    public static getUptime() {
+        return Date.now() - this.startTime;
+    }
 }
 
 /**
  * Module-level script
  */
 
-
+/**
+ * Module-level exports
+ */
 
 export {
     Cosmic

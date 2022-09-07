@@ -466,3 +466,38 @@ CosmicCommandHandler.registerCommand(new Command(
         return `General Kenobi!`
     }
 ));
+
+CosmicCommandHandler.registerCommand(new Command(
+    'sh',
+    [ 'sh' ],
+    '%PREFIX%sh',
+    `shell`,
+    [ 'default' ],
+    false,
+    'fun',
+    async (msg, cl) => {
+        return `there is no shell access`
+    }
+));
+
+CosmicCommandHandler.registerCommand(new Command(
+    'uptime',
+    [ 'uptime', 'u' ],
+    '%PREFIX%uptime',
+    `Check the uptime of the bot.`,
+    [ 'default' ],
+    false,
+    'info',
+    async (msg, cl) => {
+        const ms = Cosmic.getUptime();
+        const s = ms / 1000;
+        const m = s / 60;
+        const h = m / 60;
+        
+        const hh = Math.floor(h);
+        const mm = Math.floor(m) % 60;
+        const ss = Math.floor(s) % 60;
+
+        return `Uptime: ${hh}h ${mm}m ${ss}s`;
+    }
+));
