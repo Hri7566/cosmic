@@ -260,7 +260,7 @@ CosmicCommandHandler.registerCommand(new Command(
 
 CosmicCommandHandler.registerCommand(new Command(
     'balance',
-    [ 'balance', 'bal', 'b' ],
+    [ 'balance', 'bal', 'money' ],
     '%PREFIX%balance',
     `Show the user's balance.`,
     [ 'default' ],
