@@ -88,7 +88,7 @@ CosmicCommandHandler.registerCommand(new Command(
 
 CosmicCommandHandler.registerCommand(new Command(
     'color',
-    [ 'color', 'c' ],
+    [ 'color', 'c', 'colour' ],
     `%PREFIX%color [<r> <g> <b> | <hex>]`,
     `Get information about a color or the user's color.`,
     [ 'default' ],
@@ -480,6 +480,8 @@ CosmicCommandHandler.registerCommand(new Command(
     }
 ));
 
+const startTime = Date.now();
+
 CosmicCommandHandler.registerCommand(new Command(
     'uptime',
     [ 'uptime', 'u' ],
@@ -489,7 +491,7 @@ CosmicCommandHandler.registerCommand(new Command(
     false,
     'info',
     async (msg, cl) => {
-        const ms = Cosmic.getUptime();
+        const ms = Date.now() - startTime;
         const s = ms / 1000;
         const m = s / 60;
         const h = m / 60;
@@ -499,5 +501,44 @@ CosmicCommandHandler.registerCommand(new Command(
         const ss = Math.floor(s) % 60;
 
         return `Uptime: ${hh}h ${mm}m ${ss}s`;
+    }
+));
+
+CosmicCommandHandler.registerCommand(new Command(
+    'eat',
+    [ 'eat', 'e' ],
+    '%PREFIX%eat [item]',
+    `Eat an edible item.`,
+    [ 'default' ],
+    true,
+    'cake',
+    async (msg, cl) => {
+        return `This command is a stub.`;
+    }
+));
+
+CosmicCommandHandler.registerCommand(new Command(
+    'removeitem',
+    [ 'removeitem', 'rmitem', 'rmi', 'rm' ],
+    '%PREFIX%removeitem <inventory> <item>',
+    `Remove an item from an inventory.`,
+    [ 'admin' ],
+    false,
+    'cake',
+    async (msg, cl) => {
+        return `This command is a stub.`
+    }
+));
+
+CosmicCommandHandler.registerCommand(new Command(
+    'memory',
+    [ 'memory', 'mem' ],
+    '%PREFIX%memory',
+    `View memory usage.`,
+    [ 'admin' ],
+    false,
+    'info',
+    async (msg, cl) => {
+        return `Usage: ${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MB`;
     }
 ));

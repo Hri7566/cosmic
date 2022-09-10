@@ -41,9 +41,19 @@ class CosmicCakeFactory {
     public static stopBaking(_id: string) {
         let user = this.bakingUsers.find(u => u._id == _id);
         if (user) {
-            return `${user.name} stopped baking`;
+            this.bakingUsers.splice(this.bakingUsers.indexOf(user), 1);
+            return `${user.name} stopped baking.`;
         } else {
-            return `I don't think you're baking.`;
+            let replies = [
+                `I don't think you're baking.`,
+                `No matter how hard you try, you can't stop doing something when you haven't started doing it in the first place.`,
+                `Baking is not a thing you're doing.`,
+                `Maybe starting is a good thing to do before you stop.`,
+                `Stopping... wait, you haven't started.`,
+                `Error: start baking first`,
+                `Have you ever even baked before?`
+            ];
+            return replies[Math.floor(Math.random() * replies.length)];
         }
     }
     
