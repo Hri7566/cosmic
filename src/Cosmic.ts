@@ -32,8 +32,10 @@ const channelsFile = fs.readFileSync(path.resolve(__dirname, '../../config/mpp_c
 const channels = YAML.parse(channelsFile);
 
 class Cosmic {
+    // magenta is beautiful
     public static logger = new CosmicLogger('Cosmic', magenta);
 
+    // event emitter prototypal
     public static on = EventEmitter.prototype.on;
     public static off = EventEmitter.prototype.off;
     public static once = EventEmitter.prototype.once;

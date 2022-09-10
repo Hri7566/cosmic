@@ -13,7 +13,7 @@ const { Cosmic } = require('./Cosmic');
 import { CosmicCommandHandler } from './CosmicCommandHandler';
 const { Token, ChatMessage, Vector2, Participant } = require('./CosmicTypes');
 const { CosmicFFI } = require('./CosmicFFI');
-const { CosmicLogger, white, blue, hex } = require('./CosmicLogger');
+const { CosmicLogger, white, magenta, hex } = require('./CosmicLogger');
 const { CosmicForeignMessageHandler } = require('./CosmicForeignMessageHandler');
 const { CosmicData } = require('./CosmicData');
 
@@ -33,7 +33,7 @@ export abstract class CosmicClient {
     public once = EventEmitter.prototype.once;
     public emit = EventEmitter.prototype.emit;
 
-    public logger = new CosmicLogger("Cosmic Client", blue);
+    public logger = new CosmicLogger("Cosmic Client", magenta);
 
     public platform: string;
 

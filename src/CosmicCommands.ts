@@ -634,7 +634,7 @@ CosmicCommandHandler.registerCommand(new Command(
             }
         }
 
-        console.log(total);
+        await CosmicData.addBalance(msg.argv[1], total);
 
         return `You ate all of your cake and gained ${CosmicData.formatBalance(total)}${total > 15 ? ' and lots of weight' : ''}.`;
     }

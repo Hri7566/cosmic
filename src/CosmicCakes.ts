@@ -209,7 +209,7 @@ export const uncommon_cakes: Array<typeof Cake> = [
         icing: 'white',
         filling: 'vanilla',
         topping: 'cherries',
-        value: 20
+        value: 25
     },
     {
         id: 'cake_matcha',
@@ -241,6 +241,16 @@ export const uncommon_cakes: Array<typeof Cake> = [
         icing: 'chocolate',
         filling: 'peanut butter',
         topping: 'reese\'s peanut butter cups',
+        value: 50
+    },
+    {
+        id: 'cake_ice_cream',
+        displayName: 'Ice Cream Cake',
+        emoji: '🍦',
+        count: 1,
+        edible: true,
+        icing: 'ice cream',
+        filling: 'ice cream',
         value: 50
     }
 ];
