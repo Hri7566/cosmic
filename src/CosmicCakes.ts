@@ -265,12 +265,32 @@ export const rare_cakes: Array<typeof Cake> = [
         icing: 'white',
         filling: 'vanilla',
         topping: 'cherries',
-        value: 20
+        value: 50
+    },
+    {
+        id: 'cake_cremeschnitte',
+        displayName: 'Merope\'s Cremeschnitte Cake',
+        emoji: '🍥',
+        count: 1,
+        edible: true,
+        icing: 'none',
+        filling: 'custard',
+        topping: 'powdered sugar',
+        value: 75
     }
 ];
 
 export const ultra_rare_cakes: Array<typeof Cake> = [
-
+    {
+        id: 'cake_bowling',
+        displayName: 'Bowling Ball Cake',
+        emoji: '🎳',
+        count: 1,
+        edible: true,
+        icing: 'black',
+        filling: 'black velvet',
+        value: 100
+    }
 ];
 
 export const secret_cakes: Array<typeof Cake> = [

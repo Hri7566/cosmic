@@ -9,7 +9,7 @@ import { CosmicData } from "./CosmicData";
 import { User } from "./CosmicTypes";
 const { Cake, FoodItem, Item } = require('./CosmicTypes');
 
-const { cakes } = require('./CosmicCakes');
+const { cakes, uncommon_cakes, rare_cakes, ultra_rare_cakes, secret_cakes } = require('./CosmicCakes');
 
 const CHECK_INTERVAL = 500;
 const RANDOM_CHANCE = 0.005;
@@ -19,7 +19,17 @@ class CosmicCakeFactory {
     public static DEFAULT_CAKE_VALUE = 15;
 
     public static generateRandomCake() {
+        const rarity = Math.random();
         let c = cakes[Math.floor(Math.random() * cakes.length)];
+        if (rarity < 0.01) {
+            c = uncommon_cakes[Math.floor(Math.random() * uncommon_cakes.length)];
+        }
+        if (rarity < 0.001) {
+            c = rare_cakes[Math.floor(Math.random() * rare_cakes.length)];
+        }
+        if (rarity < 0.0001) {
+            c = ultra_rare_cakes[Math.floor(Math.random() * ultra_rare_cakes.length)]
+        }
         return c;
     }
 
@@ -60,7 +70,7 @@ class CosmicCakeFactory {
     
     public static async finishBaking(_id: string): Promise<void> {
         let user = this.bakingUsers.find(u => u._id == _id);
-        
+
         let cake = this.generateRandomCake();
         await CosmicData.addItem(user._id, cake);
 
