@@ -4,10 +4,20 @@
  * Data module
  */
 
+/**
+ * Global module imports
+ */
 const { MongoClient } = require('mongodb');
 
+/**
+ * Local module imports
+ */
 const { CosmicLogger, green } = require('./CosmicLogger');
 const { User, Inventory, Item } = require('./CosmicTypes');
+
+/**
+ * Module-level declarations
+ */
 
 const MONGODB_CONNECTION_URI = process.env.MONGODB_CONNECTION_URI;
 const MONGODB_DATABASE = process.env.MONGODB_DATABASE;
@@ -351,6 +361,10 @@ class CosmicData {
         }
     }
 }
+
+/**
+ * Module-level exports
+ */
 
 export {
     CosmicData
