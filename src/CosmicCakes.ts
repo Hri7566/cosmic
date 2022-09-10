@@ -114,10 +114,3 @@ export const cakes: Array<typeof Cake> = [
         value: 30
     }
 ];
-
-export const bakingStages = [
-    {
-        displayName: 'Preheat',
-        
-    }
-];

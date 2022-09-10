@@ -11,11 +11,12 @@ const { Cake, FoodItem, Item } = require('./CosmicTypes');
 
 const { cakes } = require('./CosmicCakes');
 
-const CHECK_INTERVAL = 200;
+const CHECK_INTERVAL = 500;
 const RANDOM_CHANCE = 0.005;
 
 class CosmicCakeFactory {
     public static bakingUsers = [];
+    public static DEFAULT_CAKE_VALUE = 15;
 
     public static generateRandomCake() {
         let c = cakes[Math.floor(Math.random() * cakes.length)];
@@ -57,7 +58,7 @@ class CosmicCakeFactory {
         }
     }
     
-    public static async finishBaking(_id: string) {
+    public static async finishBaking(_id: string): Promise<void> {
         let user = this.bakingUsers.find(u => u._id == _id);
         
         let cake = this.generateRandomCake();
@@ -68,7 +69,7 @@ class CosmicCakeFactory {
         user.cl.sendChat(`${user.name} finished baking and got: ${cake.emoji || ''}${cake.displayName} (x${cake.count})`, user.channel);
     }
 
-    public static isAlreadyBaking(_id: string) {
+    public static isAlreadyBaking(_id: string): boolean {
         return typeof this.bakingUsers.find(u => u._id == _id) !== 'undefined';
     }
 }

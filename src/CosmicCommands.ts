@@ -87,6 +87,19 @@ CosmicCommandHandler.registerCommand(new Command(
 ));
 
 CosmicCommandHandler.registerCommand(new Command(
+    'id',
+    [ 'id' ],
+    '%PREFIX%id',
+    `Get the user's own ID.`,
+    [ 'default' ],
+    true,
+    'info',
+    async (msg, cl) => {
+        return `ID: ${msg.sender._id}`;
+    }
+));
+
+CosmicCommandHandler.registerCommand(new Command(
     'color',
     [ 'color', 'c', 'colour' ],
     `%PREFIX%color [<r> <g> <b> | <hex>]`,
@@ -313,18 +326,18 @@ CosmicCommandHandler.registerCommand(new Command(
 ));
 
 CosmicCommandHandler.registerCommand(new Command(
-    'subbal',
-    [ 'subbal' ],
-    '%PREFIX%subbal <userId> <amount>',
-    `Remove an amount from an account's balance.`,
+    'setbal',
+    [ 'setbal' ],
+    '%PREFIX%setbal <userId> <amount>',
+    `Set an account's balance.`,
     [ 'admin' ],
     false,
     'cake',
     async (msg, cl) => {
         if (msg.argv[2]) {
             try {
-                await CosmicData.removeBalance(msg.argv[1], parseInt(msg.argv[2]));
-                return `Successfully removed ${parseInt(msg.argv[2])} from balance of account '${msg.argv[1]}'.`;
+                await CosmicData.setBalance(msg.argv[1], parseInt(msg.argv[2]));
+                return `Successfully set account ${msg.argv[1]}'s balance to ${parseInt(msg.argv[2])}`;
             } catch (err) {
                 return `Subbal failed. (maybe NaN?)`;
             }
@@ -476,7 +489,7 @@ CosmicCommandHandler.registerCommand(new Command(
     false,
     'fun',
     async (msg, cl) => {
-        return `there is no shell access`
+        return `There is no shell access, go away.`
     }
 ));
 
@@ -487,7 +500,7 @@ CosmicCommandHandler.registerCommand(new Command(
     [ 'uptime', 'u' ],
     '%PREFIX%uptime',
     `Check the uptime of the bot.`,
-    [ 'default' ],
+    [ 'default', 'mod' ],
     false,
     'info',
     async (msg, cl) => {
@@ -513,20 +526,118 @@ CosmicCommandHandler.registerCommand(new Command(
     true,
     'cake',
     async (msg, cl) => {
-        return `This command is a stub.`;
+        if (!msg.argv[1]) return `Please specify an item to eat.`;
+        const inv = await CosmicData.getInventory(msg.sender._id);
+        let argcat = msg.argv.join(' ').substring(msg.argv[0].length).trim();
+
+        if (!inv) CosmicData.createInventory(msg.sender._id);
+
+        let mod_it;
+        let amount_to_remove;
+
+        try {
+            amount_to_remove = parseInt(msg.argv[msg.argv.length - 1]);
+
+            argcat = argcat.substring(0, argcat.length - msg.argv[msg.argv.length - 1].length).trim();
+        } finally {};
+
+        
+        for (const it of inv.items) {
+            if (it.displayName.toLowerCase().includes(argcat.toLowerCase())) {
+                mod_it = it;
+                break;
+            }
+        }
+
+        if (amount_to_remove) {
+            if (amount_to_remove < 1) {
+                return `1 < Amount to eat < 100`;
+            }
+        } else {
+            amount_to_remove = 1;
+        }
+
+        if (amount_to_remove > mod_it.count) {
+            return `Sadly, you can't eat more than you have.`;
+        }
+
+        if (mod_it) {
+            const res1 = await CosmicData.removeOneItem(msg.sender._id, mod_it.id, amount_to_remove || 1);
+            CosmicCommandHandler.logger.debug(res1);
+            if (mod_it.id.startsWith('cake') || mod_it.id.startsWith('cupcake')) {
+                let bal_add = (mod_it.value || CosmicCakeFactory.DEFAULT_CAKE_VALUE) * amount_to_remove;
+                await CosmicData.addBalance(msg.sender._id, bal_add);
+                CosmicCommandHandler.logger.debug(`addbal: ${bal_add}`);
+                CosmicCommandHandler.logger.debug(`amount: ${amount_to_remove}`);
+                return `You ate ${amount_to_remove == 1 ? (/^[aeiou]/).test(mod_it.displayName) ? 'an' : 'a' : amount_to_remove + ' of'} ${mod_it.displayName} and got ${CosmicData.formatBalance(bal_add)}.`
+            }
+            return `You ate a ${mod_it.displayName}.`;
+        } else {
+            return `Could not find the item '${argcat}' in your inventory. Do you have one?`;
+        }
+    }
+));
+
+CosmicCommandHandler.registerCommand(new Command(
+    'eatallcakes',
+    [ 'eatallcakes', 'eatall', 'eac', 'ea' ],
+    '%PREFIX%eatallcakes',
+    `Consume all cakes in the user's inventory.`,
+    [ 'default' ],
+    true,
+    'cake',
+    async (msg, cl) => {
+        const inv = await CosmicData.getInventory(msg.sender._id);
+        let total = 0;
+
+        let has_cakes = typeof inv.items.find(it => it.id.startsWith('cake') || it.id.startsWith('cupcake')) !== 'undefined';
+
+        if (!has_cakes) {
+            const sad_answers = [
+                `You are sad because you have no cake.`,
+                `There is no cake in your inventory.`,
+                `Cake is missing from your inventory.`,
+                `Cake is something you don't have.`,
+                `Where is your cake?`,
+                `What happened to your cake?`,
+                `Did you forget to bake?`,
+                `From the looks of things, cake is 0.`,
+                `Cake? What cake?`,
+                `Cake?`,
+                `What cake?`,
+                `There is no cake for you to eat.`,
+                `No cake.`
+            ]
+            return sad_answers[Math.floor(Math.random() * sad_answers.length)];
+        }
+
+        for (let it of inv.items) {
+            if (it.id.startsWith('cake') || it.id.startsWith('cupcake')) {
+                total += it.count * (it.value || CosmicCakeFactory.DEFAULT_CAKE_VALUE);
+                await CosmicData.removeItem(msg.sender._id, it.id);
+            }
+        }
+
+        console.log(total);
+
+        return `You ate all of your cake and gained ${CosmicData.formatBalance(total)}${total > 15 ? ' and lots of weight' : ''}.`;
     }
 ));
 
 CosmicCommandHandler.registerCommand(new Command(
     'removeitem',
     [ 'removeitem', 'rmitem', 'rmi', 'rm' ],
-    '%PREFIX%removeitem <inventory> <item>',
+    '%PREFIX%removeitem <inventory id> <item id>',
     `Remove an item from an inventory.`,
     [ 'admin' ],
     false,
     'cake',
     async (msg, cl) => {
-        return `This command is a stub.`
+        if (!msg.argv[1]) return `Please specify a user ID and an item ID.`;
+        if (!msg.argv[2]) return `Please specify an item ID.`;
+
+        let res = await CosmicData.removeItem(msg.argv[1], msg.argv[2]);
+        return `Removed item with ID '${msg.argv[2]}' successfuly.`;
     }
 ));
 
@@ -535,7 +646,7 @@ CosmicCommandHandler.registerCommand(new Command(
     [ 'memory', 'mem' ],
     '%PREFIX%memory',
     `View memory usage.`,
-    [ 'admin' ],
+    [ 'admin', 'mod' ],
     false,
     'info',
     async (msg, cl) => {

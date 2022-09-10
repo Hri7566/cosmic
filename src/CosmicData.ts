@@ -12,7 +12,7 @@ const { User, Inventory, Item } = require('./CosmicTypes');
 const MONGODB_CONNECTION_URI = process.env.MONGODB_CONNECTION_URI;
 const MONGODB_DATABASE = process.env.MONGODB_DATABASE;
 
-const DEFAULT_BALANCE = 100;
+const DEFAULT_BALANCE = 10;
 const DEFAULT_INVENTORY = [];
 
 class CosmicData {
@@ -24,6 +24,7 @@ class CosmicData {
     public static permissions;
     public static inventories;
     public static items;
+    public static util;
 
     public static async start(): Promise<void> {
         this.logger.log("Connecting to database...");
@@ -40,6 +41,7 @@ class CosmicData {
             this.inventories = await this.db.collection("inventories");
             this.items = await this.db.collection("items");
             this.permissions = await this.db.collection("permissions");
+            this.util = await this.db.collection("util");
 
             this.logger.log(`Connected to database '${MONGODB_DATABASE}'`);
         } catch (err) {
@@ -215,7 +217,7 @@ class CosmicData {
     public static async addItem(_id: string, item: typeof Item) {
         try {
             if (await this.hasItem(_id, item.id)) {
-                console.debug('already has item');
+                // console.debug('already has item');
                 let res = await this.inventories.updateOne({
                     _id,
                     "items.id": item.id
@@ -241,15 +243,44 @@ class CosmicData {
 
     public static async removeItem(_id: string, item_id: string) {
         try {
-            let inventory = await this.getInventory(_id);
-            
-            for (let it of inventory.items) {
-                if (it.id == item_id) {
-                    inventory.items.splice(inventory.items.indexOf(it), 1);
+            let result = await this.inventories.updateOne({
+                _id
+            }, {
+                $pull: {
+                    items: {
+                        id: item_id
+                    }
                 }
-            }
+            });
 
-            // return result;
+            return result;
+        } catch (err) {
+            return err;
+        }
+    }
+
+    public static async removeOneItem(_id: string, item_id: string, amount: number = 1) {
+        try {
+            if (await this.hasItem(_id, item_id)) {
+                let it = await this.findItem(_id, item_id);
+                if (it.count > 1) {
+                    let res = await this.inventories.updateOne({
+                        _id,
+                        "items.id": item_id
+                    }, {
+                        $inc: {
+                            'items.$.count': -amount
+                        }
+                    });
+
+                    return res;
+                } else {
+                    let res = await this.removeItem(_id, item_id);
+                    return res;
+                }
+            } else {
+                throw new Error(`Inventory does not have item`);
+            }
         } catch (err) {
             return err;
         }
@@ -285,13 +316,36 @@ class CosmicData {
         }
     }
 
-    public static subtractBalance(_id: string, amount: number) {
+    public static setBalance(_id: string, amount: number) {
         try {
-            this.inventories.updateOne({ _id }, {
-                $dec: {
+            let res = this.inventories.updateOne({ _id }, {
+                $set: {
                     balance: amount
                 }
-            })
+            });
+            return res;
+        } catch (err) {
+            return err;
+        }
+    }
+
+    public static utilSet(key: string, value: any, _id: string = 'util') {
+        try {
+            let res = this.util.updateOne({ _id }, {
+                $set: {
+                    [key]: value
+                }
+            });
+            return res;
+        } catch (err) {
+            return err;
+        }
+    }
+
+    public static utilGet(key: string) {
+        try {
+            let res = this.util.findOne({ key: { $exists: true } });
+            return res[key];
         } catch (err) {
             return err;
         }
