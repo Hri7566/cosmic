@@ -34,9 +34,71 @@ export const cakes: Array<typeof Cake> = [
         emoji: '🧁',
         count: 6,
         edible: true,
-        icing: 'pink',
+        icing: 'strawberry',
         filling: 'chocolate',
-        topping: 'strawberry',
+        value: 2
+    },
+    {
+        id: 'cupcake_vanilla',
+        displayName: 'Vanilla Cupcake',
+        emoji: '🧁',
+        count: 6,
+        edible: true,
+        icing: 'white',
+        filling: 'vanilla',
+        value: 2
+    },
+    {
+        id: 'cupcake_strawberry',
+        displayName: 'Chocolate Cupcake',
+        emoji: '🧁',
+        count: 6,
+        edible: true,
+        icing: 'chocolate',
+        filling: 'chocolate',
+        topping: '',
+        value: 2
+    },
+    {
+        id: 'cupcake_halloween',
+        displayName: 'Strawberry Cupcake',
+        emoji: '🧁',
+        count: 6,
+        edible: true,
+        icing: 'purple',
+        filling: 'chocolate',
+        topping: 'plastic',
+        value: 2
+    },
+    {
+        id: 'cupcake_valentines',
+        displayName: 'Valentine\'s Cupcake',
+        emoji: '🧁',
+        count: 6,
+        edible: true,
+        icing: 'pink',
+        filling: 'velvet',
+        topping: 'strawberries',
+        value: 2
+    },
+    {
+        id: 'cupcake_gender_boy',
+        displayName: 'Gender Reveal Cupcake (Boy)',
+        emoji: '🧁',
+        count: 6,
+        edible: true,
+        icing: 'blue',
+        filling: 'chocolate',
+        value: 2
+    },
+    {
+        id: 'cupcake_gender_girl',
+        displayName: 'Gender Reveal Cupcake (Girl)',
+        emoji: '🧁',
+        count: 6,
+        edible: true,
+        icing: 'pink',
+        filling: 'vanilla',
         value: 2
     },
     {
@@ -101,6 +163,17 @@ export const cakes: Array<typeof Cake> = [
         filling: 'fruit',
         topping: 'nuts',
         value: 5
+    },
+    {
+        id: 'cake_cheese',
+        displayName: 'Cheesecake',
+        emoji: '🍰',
+        count: 1,
+        edible: true,
+        icing: 'none',
+        filling: 'cream',
+        topping: 'graham',
+        value: 10
     }
 ];
 
@@ -137,11 +210,53 @@ export const uncommon_cakes: Array<typeof Cake> = [
         filling: 'vanilla',
         topping: 'cherries',
         value: 20
+    },
+    {
+        id: 'cake_matcha',
+        displayName: 'Matcha Green Tea Cake',
+        emoji: '🍵',
+        count: 1,
+        edible: true,
+        icing: 'green',
+        filling: 'matcha',
+        value: 50
+    },
+    {
+        id: 'cake_oreo',
+        displayName: 'Oreo Cake',
+        emoji: '🍪',
+        count: 1,
+        edible: true,
+        icing: 'white',
+        filling: 'chocolate',
+        topping: 'oreos',
+        value: 50
+    },
+    {
+        id: 'cake_peanut_candy',
+        displayName: 'Reese\'s Peanut Butter Cup Cake',
+        emoji: '🥜',
+        count: 1,
+        edible: true,
+        icing: 'chocolate',
+        filling: 'peanut butter',
+        topping: 'reese\'s peanut butter cups',
+        value: 50
     }
 ];
 
 export const rare_cakes: Array<typeof Cake> = [
-
+    {
+        id: 'cake_party',
+        displayName: 'Party Cake',
+        emoji: '🎉',
+        count: 1,
+        edible: true,
+        icing: 'white',
+        filling: 'vanilla',
+        topping: 'cherries',
+        value: 20
+    }
 ];
 
 export const ultra_rare_cakes: Array<typeof Cake> = [
@@ -149,5 +264,15 @@ export const ultra_rare_cakes: Array<typeof Cake> = [
 ];
 
 export const secret_cakes: Array<typeof Cake> = [
-
+    {
+        id: 'cake_cosmic',
+        displayName: 'Cosmic Cake',
+        emoji: '🟇',
+        count: 1,
+        edible: true,
+        icing: 'space',
+        filling: 'galaxies',
+        topping: 'stars',
+        value: 1_000_000
+    }
 ];
