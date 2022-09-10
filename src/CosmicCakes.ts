@@ -101,7 +101,10 @@ export const cakes: Array<typeof Cake> = [
         filling: 'fruit',
         topping: 'nuts',
         value: 5
-    },
+    }
+];
+
+export const uncommon_cakes: Array<typeof Cake> = [
     {
         id: 'cake_birthday',
         displayName: 'Birthday Cake',
@@ -112,5 +115,39 @@ export const cakes: Array<typeof Cake> = [
         filling: 'chocolate',
         topping: 'candle',
         value: 30
+    },
+    {
+        id: 'cake_crab',
+        displayName: 'Crab Cake',
+        emoji: '🦀',
+        count: 2,
+        edible: true,
+        icing: 'bread',
+        filling: 'crab',
+        topping: 'garlic',
+        value: 10
+    },
+    {
+        id: 'cake_party',
+        displayName: 'Party Cake',
+        emoji: '🎉',
+        count: 1,
+        edible: true,
+        icing: 'white',
+        filling: 'vanilla',
+        topping: 'cherries',
+        value: 20
     }
+];
+
+export const rare_cakes: Array<typeof Cake> = [
+
+];
+
+export const ultra_rare_cakes: Array<typeof Cake> = [
+
+];
+
+export const secret_cakes: Array<typeof Cake> = [
+
 ];

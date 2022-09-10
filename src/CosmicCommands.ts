@@ -298,7 +298,7 @@ CosmicCommandHandler.registerCommand(new Command(
         let c = CosmicCakeFactory.generateRandomCake();
 
         let res = await CosmicData.addItem(msg.sender._id, c);
-        console.debug(res);
+        // console.debug(res);
 
         let displayName = (c.emoji ? `${c.emoji}` : '') + c.displayName;
         return `Cake: ${displayName}`;
@@ -549,6 +549,15 @@ CosmicCommandHandler.registerCommand(new Command(
             }
         }
 
+        if (!mod_it) {
+            const no_item_answers = [
+                `You don't have ${(/^[aeiou]/).test(argcat) ? 'an' : 'a'} '${argcat}' that you can eat.`,
+                `There is not ${(/^[aeiou]/).test(argcat) ? 'an' : 'a'} '${argcat}' here.`,
+                `You don't have any '${argcat}'.`
+            ]
+            return no_item_answers[Math.floor(Math.random() * no_item_answers.length)];
+        }
+
         if (amount_to_remove) {
             if (amount_to_remove < 1) {
                 return `1 < Amount to eat < 100`;
@@ -558,17 +567,24 @@ CosmicCommandHandler.registerCommand(new Command(
         }
 
         if (amount_to_remove > mod_it.count) {
-            return `Sadly, you can't eat more than you have.`;
+            const not_enough_answers = [
+                `Sadly, you can't eat more than you have.`,
+                `It turns out you don't have that many.`,
+                `Did you want to eat less?`,
+                `There is not ${amount_to_remove} of that here.`
+            ]
+            // console.debug(amount_to_remove, mod_it.count);
+            return not_enough_answers[Math.floor(Math.random() * not_enough_answers.length)];
         }
 
         if (mod_it) {
             const res1 = await CosmicData.removeOneItem(msg.sender._id, mod_it.id, amount_to_remove || 1);
-            CosmicCommandHandler.logger.debug(res1);
+            // CosmicCommandHandler.logger.debug(res1);
             if (mod_it.id.startsWith('cake') || mod_it.id.startsWith('cupcake')) {
                 let bal_add = (mod_it.value || CosmicCakeFactory.DEFAULT_CAKE_VALUE) * amount_to_remove;
                 await CosmicData.addBalance(msg.sender._id, bal_add);
-                CosmicCommandHandler.logger.debug(`addbal: ${bal_add}`);
-                CosmicCommandHandler.logger.debug(`amount: ${amount_to_remove}`);
+                // CosmicCommandHandler.logger.debug(`addbal: ${bal_add}`);
+                // CosmicCommandHandler.logger.debug(`amount: ${amount_to_remove}`);
                 return `You ate ${amount_to_remove == 1 ? (/^[aeiou]/).test(mod_it.displayName) ? 'an' : 'a' : amount_to_remove + ' of'} ${mod_it.displayName} and got ${CosmicData.formatBalance(bal_add)}.`
             }
             return `You ate a ${mod_it.displayName}.`;
