@@ -1,30 +1,30 @@
 Arguments: 
-  /home/hri7566/.nvm/versions/node/v17.1.0/bin/node /mnt/c/Users/hri75/AppData/Roaming/npm/node_modules/yarn/bin/yarn.js add esbuild-pug-plugin
+  /home/hri7566/.nvm/versions/node/v18.4.0/bin/node /home/hri7566/.nvm/versions/node/v18.4.0/bin/yarn
 
 PATH: 
-  /home/hri7566/.deno/bin:/home/hri7566/.nimble/bin:/home/hri7566/.bun/bin:/home/hri7566/.nvm/versions/node/v17.1.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/devkitPro/msys2/usr/bin:/mnt/c/Python310/Scripts/:/mnt/c/Python310/:/mnt/c/Program Files/Eclipse Adoptium/jdk-17.0.1.12-hotspot/bin:/mnt/c/Program Files/Eclipse Foundation/jdk-16.0.2.7-hotspot/bin:/mnt/f/Program Files (x86)/VMware/VMware Workstation/bin/:/mnt/c/Program Files/Common Files/Oracle/Java/javapath:/mnt/c/Python39/Scripts/:/mnt/c/Python39/:/mnt/c/Program Files (x86)/Common Files/Oracle/Java/javapath:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/Program Files/Git/cmd:/mnt/c/Program Files (x86)/Microsoft SQL Server/100/Tools/Binn/:/mnt/c/Program Files/Microsoft SQL Server/100/Tools/Binn/:/mnt/c/Program Files/Microsoft SQL Server/100/DTS/Binn/:/mnt/c/ProgramData/chocolatey/bin:/mnt/c/Program Files/NVIDIA Corporation/NVIDIA NvDLISR:/mnt/c/Program Files/Microsoft SQL Server/130/Tools/Binn/:/mnt/c/Program Files/RedHat/java-1.8.0-openjdk-1.8.0.275-1/bin:/mnt/c/Program Files/RedHat/java-1.8.0-openjdk-1.8.0.275-1/jre/bin:/mnt/c/Program Files/Intel/WiFi/bin/:/mnt/c/Program Files/Common Files/Intel/WirelessCommon/:/mnt/f/Strawberry/perl/bin:/mnt/f/Strawberry/perl/site/bin:/mnt/f/Strawberry/c/bin:/mnt/c/Program Files/CMake/bin:/mnt/f/Program Files/CraftOS-PC:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/Program Files (x86)/Certbot/bin:/mnt/c/Program Files/Mullvad VPN/resources:/mnt/c/Program Files/Microsoft SQL Server/150/Tools/Binn/:/mnt/c/Program Files/Microsoft SQL Server/Client SDK/ODBC/170/Tools/Binn/:/mnt/c/Program Files (x86)/NVIDIA Corporation/PhysX/Common:/mnt/c/Program Files/MATLAB/R2022a/bin:/mnt/c/Program Files/GitHub CLI/:/mnt/c/Program Files/Go/bin:/mnt/c/Program Files/Neovim/bin:/mnt/c/Program Files/Docker/Docker/resources/bin:/mnt/c/ProgramData/DockerDesktop/version-bin:/mnt/c/Program Files/dotnet/:/mnt/c/Program Files/nodejs/:/mnt/c/Program Files/platform-tools:/mnt/c/Ruby30-x64/bin:/mnt/c/Users/hri75/.cargo/bin:/mnt/c/Users/hri75/scoop/shims:/mnt/c/Users/hri75/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/hri75/AppData/Local/GitHubDesktop/bin:/mnt/c/Users/hri75/.dotnet/tools:/mnt/c/msys64/mingw64/bin:/mnt/c/Users/hri75/go/bin:/mnt/c/Program Files/Intel/WiFi/bin/:/mnt/c/Program Files/Common Files/Intel/WirelessCommon/:/mnt/c/Users/hri75/.deno/bin:/mnt/f/ffmpeg:/mnt/c/Program Files/JetBrains/IntelliJ IDEA Community Edition 2021.1.2/bin:/mnt/c/Users/hri75/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/hri75/AppData/Local/Programs/mongosh/:/mnt/c/Users/hri75/AppData/Local/Programs/Microsoft VS Code Insiders/bin:/mnt/c/Users/hri75/go/bin:/mnt/c/Users/hri75/.dotnet/tools:/mnt/c/Users/hri75/AppData/Roaming/npm:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl
+  /home/hri7566/.nvm/versions/node/v18.4.0/bin:/usr/local/bin:/usr/bin:/bin:/usr/games
 
 Yarn version: 
   1.22.19
 
 Node version: 
-  17.1.0
+  18.4.0
 
 Platform: 
-  linux x64
+  linux arm64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/esbuild-pug-plugin: Not found
-      at Request.params.callback [as _callback] (/mnt/c/Users/hri75/AppData/Roaming/npm/node_modules/yarn/lib/cli.js:66145:18)
-      at Request.self.callback (/mnt/c/Users/hri75/AppData/Roaming/npm/node_modules/yarn/lib/cli.js:140890:22)
-      at Request.emit (node:events:390:28)
-      at Request.<anonymous> (/mnt/c/Users/hri75/AppData/Roaming/npm/node_modules/yarn/lib/cli.js:141862:10)
-      at Request.emit (node:events:390:28)
-      at IncomingMessage.<anonymous> (/mnt/c/Users/hri75/AppData/Roaming/npm/node_modules/yarn/lib/cli.js:141784:12)
-      at Object.onceWrapper (node:events:509:28)
-      at IncomingMessage.emit (node:events:402:35)
-      at endReadableNT (node:internal/streams/readable:1340:12)
-      at processTicksAndRejections (node:internal/process/task_queues:83:21)
+  Error: connect ENETUNREACH 2606:4700::6810:1823:443 - Local (:::0)
+      at internalConnect (node:net:999:16)
+      at defaultTriggerAsyncIdScope (node:internal/async_hooks:464:18)
+      at emitLookup (node:net:1145:9)
+      at /home/hri7566/.nvm/versions/node/v18.4.0/lib/node_modules/yarn/lib/cli.js:103587:28
+      at /home/hri7566/.nvm/versions/node/v18.4.0/lib/node_modules/yarn/lib/cli.js:103496:13
+      at module.exports.RawTask.call (/home/hri7566/.nvm/versions/node/v18.4.0/lib/node_modules/yarn/lib/cli.js:79584:19)
+      at flush (/home/hri7566/.nvm/versions/node/v18.4.0/lib/node_modules/yarn/lib/cli.js:79666:29)
+      at processTicksAndRejections (node:internal/process/task_queues:77:11)
+      at runNextTicks (node:internal/process/task_queues:64:3)
+      at process.processImmediate (node:internal/timers:442:9)
 
 npm manifest: 
   {
