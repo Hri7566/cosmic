@@ -537,8 +537,9 @@ CosmicCommandHandler.registerCommand(new Command(
 
         try {
             amount_to_remove = parseInt(msg.argv[msg.argv.length - 1]);
-
-            argcat = argcat.substring(0, argcat.length - msg.argv[msg.argv.length - 1].length).trim();
+            if (typeof amount_to_remove !== 'undefined') {
+                argcat = argcat.substring(0, argcat.length - msg.argv[msg.argv.length - 1].length).trim();
+            }
         } finally {};
 
         
