@@ -87,7 +87,7 @@ class Cursor {
     public follow: string | undefined;
     public scale: number;
     public speed: number;
-
+    
     constructor(cl: CosmicClientMPP) {
         this.cl = cl;
         this.pos = { x: 50, y: 50 };
@@ -96,8 +96,12 @@ class Cursor {
         this.scale = 10;
         this.speed = 1;
     }
-
+    
+    public started: boolean = false;
+    
     start() {
+        if (this.started) return;
+        this.started = true;
         this.sendInterval = setInterval(() => {
             this.cl.setCursorPos(this.pos.x, this.pos.y);
         }, 1000 / CURSOR_SEND_RATE);

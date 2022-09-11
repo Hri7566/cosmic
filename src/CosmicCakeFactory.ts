@@ -36,7 +36,12 @@ class CosmicCakeFactory {
     public static startBaking(user: User, cl: CosmicClient): string {
         let response: string = `${user.name} started baking.`;
 
-        if (this.isAlreadyBaking(user._id)) return `You are already baking.`;
+        if (this.isAlreadyBaking(user._id)) {
+            const already_answers = [
+                `You are already baking.`
+            ]
+            return already_answers[Math.floor(Math.random() * already_answers.length)];
+        }
 
         this.bakingUsers.push({
             _id: user._id,
