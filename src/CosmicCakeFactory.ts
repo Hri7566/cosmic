@@ -21,13 +21,13 @@ class CosmicCakeFactory {
     public static generateRandomCake() {
         const rarity = Math.random();
         let c = cakes[Math.floor(Math.random() * cakes.length)];
-        if (rarity < 0.01) {
+        if (rarity < 0.1) {
             c = uncommon_cakes[Math.floor(Math.random() * uncommon_cakes.length)];
         }
-        if (rarity < 0.001) {
+        if (rarity < 0.05) {
             c = rare_cakes[Math.floor(Math.random() * rare_cakes.length)];
         }
-        if (rarity < 0.0001) {
+        if (rarity < 0.01) {
             c = ultra_rare_cakes[Math.floor(Math.random() * ultra_rare_cakes.length)]
         }
         return c;
