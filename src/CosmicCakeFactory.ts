@@ -11,8 +11,8 @@ const { Cake, FoodItem, Item } = require('./CosmicTypes');
 
 const { cakes, uncommon_cakes, rare_cakes, ultra_rare_cakes, secret_cakes } = require('./CosmicCakes');
 
-const CHECK_INTERVAL = 500;
-const RANDOM_CHANCE = 0.005;
+const CHECK_INTERVAL = 5000;
+const RANDOM_CHANCE = 0.02;
 
 class CosmicCakeFactory {
     public static bakingUsers = [];
@@ -91,7 +91,7 @@ class CosmicCakeFactory {
 
 setInterval(() => {
     let r = Math.random();
-    if (r < RANDOM_CHANCE) {
+    if (r < RANDOM_CHANCE * CosmicCakeFactory.bakingUsers.length) {
         let u = CosmicCakeFactory.bakingUsers[Math.floor(Math.random() * CosmicCakeFactory.bakingUsers.length)];
         if (u) {
             CosmicCakeFactory.finishBaking(u._id);
