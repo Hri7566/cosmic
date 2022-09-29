@@ -28,6 +28,8 @@ const { CosmicAPI } = require('./CosmicAPI');
  */
 
 const MPPCLONE_TOKEN = process.env.MPPCLONE_TOKEN;
+const ENABLE_MPP = process.env.ENABLE_MPP || 'true';
+
 const channelsFile = fs.readFileSync(path.resolve(__dirname, '../../config/mpp_channels.yml')).toString();
 const channels = YAML.parse(channelsFile);
 
@@ -53,11 +55,15 @@ class Cosmic {
         
         this.logger.log('Starting clients...');
 
-        for (const uri of Object.keys(channels)) {
-            for (const ch of channels[uri]) {
-                CosmicClientHandler.startClient(uri, ch);
+        if (ENABLE_MPP == 'true') {
+            for (const uri of Object.keys(channels)) {
+                for (const ch of channels[uri]) {
+                    CosmicClientHandler.startMPPClient(uri, ch);
+                }
             }
         }
+        
+        CosmicClientHandler.startDiscordClient();
 
         CosmicAPI.start();
 
