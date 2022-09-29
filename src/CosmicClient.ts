@@ -4,10 +4,19 @@
  * Cosmic client module
  */
 
+/**
+ * Global module imports
+ */
+
 const normalize = require('normalize-strings');
 const Client = require('mppclone-client');
 const YAML = require('yaml');
 const { EventEmitter } = require('events');
+const Discord = require('discord.js');
+
+/**
+ * Local module imports
+ */
 
 const { Cosmic } = require('./Cosmic');
 import { CosmicCommandHandler } from './CosmicCommandHandler';
@@ -16,6 +25,10 @@ const { CosmicFFI } = require('./CosmicFFI');
 const { CosmicLogger, white, magenta, hex } = require('./CosmicLogger');
 const { CosmicForeignMessageHandler } = require('./CosmicForeignMessageHandler');
 const { CosmicData } = require('./CosmicData');
+
+/**
+ * Module-level declarations
+ */
 
 const CURSOR_SEND_RATE = 20;
 const CURSOR_UPDATE_RATE = 60;
@@ -54,7 +67,7 @@ export abstract class CosmicClient {
                     let res2 = await CosmicData.insertUser(msg.sender);
                 }
             }
-
+            
             // check all chat messages for commands
             CosmicCommandHandler.checkCommand(msg, this);
 
@@ -274,4 +287,82 @@ export class CosmicClientMPP extends CosmicClientToken {
 export class CosmicClientDiscord extends CosmicClientToken {
     public platform: string = 'discord';
     public previousChannel: string;
+    
+    public client: typeof Discord.Client;
+
+    constructor() {
+        super();
+        this.client = new Discord.Client({
+            intents: [
+                Discord.GatewayIntentBits.Guilds,
+                Discord.GatewayIntentBits.GuildMessages,
+                Discord.GatewayIntentBits.MessageContent,
+                Discord.GatewayIntentBits.GuildMembers
+            ]
+        });
+        this.bindEventListeners();
+    }
+
+    public start(token: string) {
+        this.client.login(token);
+    }
+
+    public async sendChat(str: string, channel?: string) {
+        if (!str) return;
+
+        let special_chars = [
+            '/',
+            '\\',
+            '*',
+            '_',
+            '>',
+            '-'
+        ];
+        
+        for (const char of special_chars) {
+            str = str.split(char).join(`\\${char}`);
+        }
+
+        try {
+            if (channel) {
+                (await this.client.channels.cache.get(channel)).send(`\u034f${str}`);
+            } else {
+                if (this.previousChannel) {
+                    (await this.client.channels.cache.get(this.previousChannel)).send(`\u034f${str}`);
+                }
+            }
+        } catch (err) {
+            this.logger.error(err);
+        }
+    }
+    
+    public bindEventListeners(): void {
+        super.bindEventListeners();
+
+        this.client.on('ready', () => {
+            this.logger.log('Online on Discord');
+        });
+
+        this.client.on('messageCreate', msg => {
+            let newmsg = CosmicForeignMessageHandler.convertMessage('chat', {
+                a: msg.content,
+                p: {
+                    name: msg.author.username,
+                    _id: msg.author.id,
+                    color: msg.member.displayHexColor
+                }
+            });
+            
+            this.previousChannel = msg.channel.id;
+            this.emit('chat message', newmsg);
+        });
+
+        this.on('send chat message', msg => {
+            let channel = this.previousChannel;
+            if (msg.channel) channel = msg.channel;
+
+            console.log(msg);
+            this.sendChat(msg.message, channel);
+        });
+    }
 }
