@@ -109,9 +109,6 @@ class CosmicCommandHandler {
                 }
             }
 
-            // check platform
-            if (cmd.platform !== cl.platform && cmd.platform !== 'all') break;
-
             // check permissions
             const groups = await CosmicData.getGroups(msg.sender._id);
 
@@ -122,6 +119,9 @@ class CosmicCommandHandler {
             }
 
             if (!pass || !hasPerms) continue;
+
+            // check platform
+            if (cmd.platform !== cl.platform && cmd.platform !== 'all') continue;
 
             let out;
             
