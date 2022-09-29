@@ -4,6 +4,7 @@
  * Cosmic client handler
  */
 
+import { CosmicClientDiscord } from "./CosmicClient";
 import { CosmicLogger, red } from "./CosmicLogger";
 
 /**
@@ -16,8 +17,9 @@ const { CosmicClient, CosmicClientMPP, ChannelConstructionPreset } = require('./
  * Module-level declarations
  */
 
-const HARD_CLIENT_LIMIT: number = 4;
+const MPP_HARD_CLIENT_LIMIT: number = 4;
 const MPPCLONE_TOKEN: string = process.env.MPPCLONE_TOKEN;
+const DISCORD_TOKEN: string = process.env.DISCORD_TOKEN;
 
 type CosmicClientList = {
     [key: string]: typeof CosmicClient;
@@ -27,11 +29,11 @@ class CosmicClientHandler {
     private static clients = [];
     public static logger = new CosmicLogger('Client Handler', red);
 
-    public static startClient(uri: string, channel: typeof ChannelConstructionPreset): boolean {
-        if (this.clients.length > HARD_CLIENT_LIMIT) return false;
+    public static startMPPClient(uri: string, channel: typeof ChannelConstructionPreset): boolean {
+        if (this.clients.length > MPP_HARD_CLIENT_LIMIT) return false;
 
         let cl = new CosmicClientMPP(uri, channel, MPPCLONE_TOKEN);
-        this.clients.push();
+        this.clients.push(cl);
         cl.start();
 
         return true;
@@ -43,6 +45,12 @@ class CosmicClientHandler {
         for (let cl of this.clients) {
             cl.stop();
         }
+    }
+
+    public static startDiscordClient(): void {
+        let cl = new CosmicClientDiscord();
+        
+        cl.start(DISCORD_TOKEN);
     }
 }
 
