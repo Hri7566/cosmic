@@ -39,6 +39,10 @@ CosmicCommandHandler.registerCommand(new Command(
                 let out = `${group.displayName}:`;
 
                 for (let cmd of CosmicCommandHandler.commands) {
+                    if (cmd.platform) {
+                        if (cmd.platform !== cl.platform && cmd.platform !== 'all') continue;
+                    }
+                    
                     if (cmd.commandGroup !== group.id) continue;
                     if (cmd.visible == false) continue;
                     out += ` ${msg.prefix.prefix}${cmd.accessors[0]}, `;
@@ -55,6 +59,10 @@ CosmicCommandHandler.registerCommand(new Command(
             
             bigLoop:
             for (let cmd of CosmicCommandHandler.commands) {
+                if (cmd.platform) {
+                    if (cmd.platform !== cl.platform && cmd.platform !== 'all') continue;
+                }
+
                 littleLoop:
                 for (let acc of cmd.accessors) {
                     if (msg.argv[1] == acc) {
