@@ -15,8 +15,10 @@ const crypto = require('crypto');
  */
 
 import { CosmicCakeFactory } from "./CosmicCakeFactory";
+import { CosmicShop } from "./CosmicShop";
+import { CosmicUtil } from "./CosmicUtil";
+import { Cosmic as CosmicColor } from './CosmicColor';
 const { Command, CosmicCommandHandler } = require('./CosmicCommandHandler');
-const { CosmicColor } = require('./CosmicColor');
 const { CosmicData } = require('./CosmicData');
 const { Cosmic } = require('./Cosmic');
 
@@ -48,8 +50,7 @@ CosmicCommandHandler.registerCommand(new Command(
                     out += ` ${msg.prefix.prefix}${cmd.accessors[0]}, `;
                 }
 
-                out = out.trim();
-                out = out.substring(0, out.length - 1);
+                out = CosmicUtil.trimListString(out);
                 cl.sendChat(out);
             }
 
@@ -130,7 +131,7 @@ CosmicCommandHandler.registerCommand(new Command(
                 if (r > 255 || g > 255 || b > 255) throw 'too large';
                 if (r < 0 || g < 0 || b < 0) throw 'too small';
                 
-                let c = new CosmicColor(r, g, b);
+                let c = new CosmicColor.Color(r, g, b);
                 let outc = `${c.getName().replace('A', 'a')} [${c.toHexa()}]`;
                 return `The RGB color ${r}, ${g}, ${b} is ${outc}`;
             } catch (e) {
@@ -139,7 +140,7 @@ CosmicCommandHandler.registerCommand(new Command(
         } else if (msg.argv[1]) {
             if (msg.argv[1].match(/#[0-9a-f]{6}/ig) !== null) {
                 // definitely a hex string
-                let c = new CosmicColor(msg.argv[1]);
+                let c = new CosmicColor.Color(msg.argv[1]);
                 let outc = `${c.getName().replace('A', 'a')} [${c.toHexa()}]`;
                 return `The hex color '${msg.argv[1]}' is ${outc}`;
             } else {
@@ -147,7 +148,7 @@ CosmicCommandHandler.registerCommand(new Command(
             }
         } else {
             if (msg.sender.color) {
-                let c = new CosmicColor(msg.sender.color);
+                let c = new CosmicColor.Color(msg.sender.color);
                 let outc = `${c.getName().replace('A', 'a')} [${c.toHexa()}]`;
                 return `${msg.sender.name}, your color is ${outc}`;
             }
@@ -227,7 +228,7 @@ CosmicCommandHandler.registerCommand(new Command(
 
 CosmicCommandHandler.registerCommand(new Command(
     'stopbaking',
-    [ 'stopbaking', 'stopbake', 'stop', 's' ],
+    [ 'stopbaking', 'stopbake', 'stop' ],
     '%PREFIX%stopbaking',
     `Stop baking a cake. (WIP)`,
     [ 'default' ],
@@ -395,8 +396,7 @@ CosmicCommandHandler.registerCommand(new Command(
         } catch (err) {
             return `👎 ${err}`;
         }
-    },
-    'mpp'
+    }
 ));
 
 CosmicCommandHandler.registerCommand(new Command(
@@ -676,5 +676,31 @@ CosmicCommandHandler.registerCommand(new Command(
     'info',
     async (msg, cl) => {
         return `Usage: ${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MB`;
+    }
+));
+
+CosmicCommandHandler.registerCommand(new Command(
+    'shop',
+    [ 'shop', 's' ],
+    '%PREFIX%shop',
+    'Show items in the shop.',
+    [ 'default' ],
+    false,
+    'info',
+    async (msg, cl) => {
+        let out = `Items:`;
+        let shopItems = CosmicShop.getListings();
+
+        if (shopItems.length > 0) {
+            for (let ls of shopItems) {
+                out += ` ${ls.item.displayName}: ${CosmicShop.getItemPrice(ls.item.id)} | `;
+            }
+
+            out = CosmicUtil.trimListString(out);
+        } else {
+            out += ` (none)`;
+        }
+
+        return out;
     }
 ));
