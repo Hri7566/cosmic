@@ -29,6 +29,7 @@ const { CosmicAPI } = require('./CosmicAPI');
 
 const MPPCLONE_TOKEN = process.env.MPPCLONE_TOKEN;
 const ENABLE_MPP = process.env.ENABLE_MPP || 'true';
+const ENABLE_DISCORD = process.env.ENABLE_DISCORD || 'true';
 
 const channelsFile = fs.readFileSync(path.resolve(__dirname, '../../config/mpp_channels.yml')).toString();
 const channels = YAML.parse(channelsFile);
@@ -63,7 +64,9 @@ class Cosmic {
             }
         }
         
-        CosmicClientHandler.startDiscordClient();
+        if (ENABLE_DISCORD == 'true') {
+            CosmicClientHandler.startDiscordClient();
+        }
 
         CosmicAPI.start();
 
