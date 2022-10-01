@@ -38,6 +38,11 @@ export interface Item {
     value?: number;
 }
 
+export interface ShopListing {
+    item: Item;
+    overridePrice?: number;
+}
+
 export interface FoodItem {
     edible: true;
 }
@@ -69,7 +74,7 @@ export interface Channel {
 
 export type Token = string | number;
 
-namespace Cosmic {
+export namespace Cosmic {
     export interface Message {
         type: string;
         timestamp?: number;
@@ -86,7 +91,8 @@ namespace Cosmic {
 
     export interface HeartbeatMessage extends Message {
         type: 'heartbeat';
-        foreign_timestamp: number;
+        timestamp: number;
+        foreign_timestamp?: number;
     }
 
     export interface ConnectionMessage extends Message {
@@ -118,6 +124,11 @@ namespace Cosmic {
 
     export interface ChannelListUnsubscribeMessage extends Message {
         type: 'channel_list_unsubscribe';
+    }
+    
+    export interface LogMessage extends Message {
+        type: 'log';
+        args: any[];
     }
 
     export interface Flags {
