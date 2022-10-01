@@ -20,6 +20,7 @@ const Discord = require('discord.js');
 
 const { Cosmic } = require('./Cosmic');
 import { CosmicCommandHandler } from './CosmicCommandHandler';
+import { Cosmic } from './CosmicTypes';
 const { Token, ChatMessage, Vector2, Participant } = require('./CosmicTypes');
 const { CosmicFFI } = require('./CosmicFFI');
 const { CosmicLogger, white, magenta, hex } = require('./CosmicLogger');
@@ -60,7 +61,7 @@ export abstract class CosmicClient {
         if (this.alreadyBound == true) return;
         this.alreadyBound = true;
 
-        this.on('chat message', async msg => {
+        this.on('chat', async (msg: Cosmic.ChatMessage) => {
             let res = await CosmicData.updateUser(msg.sender._id, msg.sender);
             if (typeof res == 'object') {
                 if (res.upsertedId == null) {
@@ -78,6 +79,10 @@ export abstract class CosmicClient {
 
     public sendChat(str: string): void {
 
+    }
+
+    public emitMessage(msg): void {
+        this.emit(msg.type, msg);
     }
 }
 
@@ -238,6 +243,14 @@ export class CosmicClientMPP extends CosmicClientToken {
                 message: `\u034f${msg.message}`
             }]);
         });
+
+        this.client.on('t', msg => {
+            this.emit('heartbeat', {
+                type: 'heartbeat',
+                timestamp: msg.t,
+                foreign_timestamp: msg.e
+            });
+        });
     }
 
     /**
@@ -361,7 +374,7 @@ export class CosmicClientDiscord extends CosmicClientToken {
             let channel = this.previousChannel;
             if (msg.channel) channel = msg.channel;
 
-            console.log(msg);
+            // console.log(msg);
             this.sendChat(msg.message, channel);
         });
     }
