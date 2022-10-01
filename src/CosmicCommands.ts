@@ -18,6 +18,7 @@ import { CosmicCakeFactory } from "./CosmicCakeFactory";
 import { CosmicShop } from "./CosmicShop";
 import { CosmicUtil } from "./CosmicUtil";
 import { Cosmic as CosmicColor } from './CosmicColor';
+import { CosmicSeasonDetection } from "./CosmicSeasonDetection";
 const { Command, CosmicCommandHandler } = require('./CosmicCommandHandler');
 const { CosmicData } = require('./CosmicData');
 const { Cosmic } = require('./Cosmic');
@@ -685,8 +686,8 @@ CosmicCommandHandler.registerCommand(new Command(
     '%PREFIX%shop',
     'Show items in the shop.',
     [ 'default' ],
-    false,
-    'info',
+    true,
+    'cake',
     async (msg, cl) => {
         let out = `Items:`;
         let shopItems = CosmicShop.getListings();
@@ -702,5 +703,43 @@ CosmicCommandHandler.registerCommand(new Command(
         }
 
         return out;
+    }
+));
+
+CosmicCommandHandler.registerCommand(new Command(
+    'season',
+    [ 'season' ],
+    '%PREFIX%season',
+    'Get the current season of the year.',
+    [ 'default' ],
+    false,
+    'info',
+    async (msg, cl) => {
+        let season = CosmicSeasonDetection.getSeason();
+
+        if (season) {
+            return `Season: ${season.displayName}`;
+        } else {
+            return `Season: (none)`;
+        }
+    }
+));
+
+CosmicCommandHandler.registerCommand(new Command(
+    'holiday',
+    [ 'holiday' ],
+    '%PREFIX%holiday',
+    'Get the current holiday.',
+    [ 'default' ],
+    false,
+    'info',
+    async (msg, cl) => {
+        let holiday = CosmicSeasonDetection.getHoliday();
+
+        if (holiday) {
+            return `Holiday: ${holiday.displayName}`;
+        } else {
+            return `Holiday: (none)`;
+        }
     }
 ));

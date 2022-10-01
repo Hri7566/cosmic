@@ -81,7 +81,9 @@ class CosmicCakeFactory {
 
         this.bakingUsers.splice(this.bakingUsers.indexOf(user), 1);
 
-        user.cl.sendChat(`${user.name} finished baking and got: ${cake.emoji || ''}${cake.displayName} (x${cake.count})`, user.channel);
+        if (user.hasOwnProperty('cl')) {
+            user.cl.sendChat(`${user.name} finished baking and got: ${cake.emoji || ''}${cake.displayName} (x${cake.count})`, user.channel);
+        }
     }
 
     public static isAlreadyBaking(_id: string): boolean {

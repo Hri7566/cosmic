@@ -20,6 +20,7 @@ const Discord = require('discord.js');
 
 const { Cosmic } = require('./Cosmic');
 import { CosmicCommandHandler } from './CosmicCommandHandler';
+import { CosmicSeasonDetection } from './CosmicSeasonDetection';
 import { Cosmic } from './CosmicTypes';
 const { Token, ChatMessage, Vector2, Participant } = require('./CosmicTypes');
 const { CosmicFFI } = require('./CosmicFFI');
@@ -203,8 +204,13 @@ export class CosmicClientMPP extends CosmicClientToken {
             // ffi broke :(
             // console.log(CosmicFFI.clib.red(msg.a));
 
+            msg.original_channel = {
+                _id: this.client.channel._id,
+                id: this.client.channel._id
+            }
+
             let newmsg = CosmicForeignMessageHandler.convertMessage('chat', msg);
-            this.emit('chat message', newmsg);
+            this.emit('chat', newmsg);
         });
 
         this.client.on('hi', msg => {
@@ -286,7 +292,7 @@ export class CosmicClientMPP extends CosmicClientToken {
         this.previousCursorPos = { x, y };
     }
 
-    public getPart(str: string) {
+    public getPart(str: string): typeof Participant | undefined {
         let p: typeof Participant;
         if (!str) return;
         for (p of Object.values(this.client.ppl)) {
@@ -294,6 +300,22 @@ export class CosmicClientMPP extends CosmicClientToken {
                 return p;
             }
         }
+    }
+
+    public setSeasonalInfo(): void {
+        const season = CosmicSeasonDetection.getSeason();
+        const holiday = CosmicSeasonDetection.getHoliday();
+
+        let desiredSuffix: string = '';
+
+        if (holiday) {
+            desiredSuffix = ` ${holiday.emoji}`;
+        } else {
+            desiredSuffix = ` ${season.emoji}`;
+        }
+
+        if (this.desiredUser.name.includes(desiredSuffix)) return;
+        this.desiredUser.name += desiredSuffix;
     }
 }
 
@@ -363,11 +385,15 @@ export class CosmicClientDiscord extends CosmicClientToken {
                     name: msg.author.username,
                     _id: msg.author.id,
                     color: msg.member.displayHexColor
+                },
+                original_channel: {
+                    id: msg.channel.id,
+                    _id: msg.channel.name
                 }
             });
             
             this.previousChannel = msg.channel.id;
-            this.emit('chat message', newmsg);
+            this.emit('chat', newmsg);
         });
 
         this.on('send chat message', msg => {

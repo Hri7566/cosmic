@@ -9,7 +9,7 @@
  */
 
 // Local imports
-const { CosmicColor } = require('./CosmicColor');
+const { Cosmic } = require('./CosmicColor');
 
 /**
  * Module-level declarations
@@ -77,7 +77,7 @@ function white(...args): string {
 
 function hex(hexstr, ...args): string {
     // https://tintin.mudhalla.net/info/ansicolor/
-    let c = new CosmicColor(hexstr);
+    let c = new Cosmic.Color(hexstr);
     let str = ``;
     
     for (let i = 0; i < args.length; i++) {
@@ -91,12 +91,11 @@ function hex(hexstr, ...args): string {
     return str;
 }
 
-function log_full_info(method = 'log', ...args) {
-    const ms = Date.now();
-    
+function log_full_info(method = 'log', ...args: any[]) {
+    const ms = (new Number(new Date()) as number);
     const ss = Math.floor((ms / 1000) % 60);
     const mm = Math.floor((ms / 1000 / 60) % 60);
-    const hh = Math.floor((ms / 1000 / 60 / 60) % 24);
+    const hh = Math.floor(((ms / 1000 / 60 / 60) % 12) - (new Date().getTimezoneOffset() / 60));
 
     const ampm = Math.floor((ms / 1000 / 60 / 60) % 24) > 12 ? 'PM' : 'AM';
 

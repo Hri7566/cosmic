@@ -74,6 +74,8 @@ export interface Channel {
 
 export type Token = string | number;
 
+export type Timestamp = string | number;
+
 export namespace Cosmic {
     export interface Message {
         type: string;
@@ -203,5 +205,26 @@ export namespace Cosmic {
         icing: string;
         filling: string;
         topping?: string;
+    }
+    
+    export interface Season {
+        displayName: string;
+        emoji: string;
+    }
+
+    export interface SeasonMessage extends Message, Season {
+        type: 'season';
+        emoji: string;
+    }
+
+    export interface Holiday {
+        displayName: string;
+        emoji: string;
+        timestamp: Timestamp;
+    }
+
+    export interface RangeHoliday extends Omit<Holiday, 'timestamp'> {
+        start: Timestamp;
+        end: Timestamp;
     }
 }
