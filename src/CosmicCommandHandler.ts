@@ -4,16 +4,28 @@
  * Cosmic command handler module
  */
 
+/**
+ * Global module imports
+ */
+
 const { EventEmitter } = require('events');
 const YAML = require('yaml');
 const path = require('path');
 const fs = require('fs');
+
+/**
+ * Local module imports
+ */
 
 const { Message, CommandMessage, Prefix, PermissionGroupIdentifier } = require('./CosmicTypes');
 const { CosmicClient } = require('./CosmicClient');
 const { CosmicUtil } = require('./CosmicUtil');
 const { CosmicLogger, magenta } = require('./CosmicLogger');
 const { CosmicData } = require('./CosmicData');
+
+/**
+ * Module-level declarations
+ */
 
 export interface CommandGroup {
     id: string;
@@ -192,6 +204,10 @@ for (let pre of prefixes.global) {
 }
 
 require('./CosmicCommands');
+
+/**
+ * Module exports
+ */
 
 export {
     CosmicCommandHandler
