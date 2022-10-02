@@ -6,7 +6,11 @@
 
 import { Cosmic, Timestamp } from "./CosmicTypes";
 
-const CURRENT_YEAR = new Date().getFullYear()
+let CURRENT_YEAR = new Date().getFullYear();
+
+setInterval(() => {
+    CURRENT_YEAR = new Date().getFullYear();
+}, 36e5 * 24 * 14);
 
 const HOLIDAYS: Array<Cosmic.Holiday | Cosmic.RangeHoliday> = [
     {
