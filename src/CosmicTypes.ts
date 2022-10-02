@@ -34,18 +34,27 @@ export interface Item {
     id: string;
     displayName: string;
     count: number;
+    description?: string;
     emoji?: string;
     value?: number;
+    sellable?: boolean;
 }
 
 export interface ShopListing {
-    item: Item;
+    item: AnyItem;
     overridePrice?: number;
+    season?: string;
 }
 
-export interface FoodItem {
+export interface FoodItem extends Item {
     edible: true;
 }
+
+export interface UpgradeItem extends Item {
+    cake_bonus?: number;
+}
+
+export type AnyItem = Item | FoodItem | UpgradeItem;
 
 export interface Inventory {
     _id: string; //* this should be the user id
