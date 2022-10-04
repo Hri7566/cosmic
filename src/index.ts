@@ -8,10 +8,10 @@
  *     .   *     .  *      .     *    .         .  *   .  *
  * 
  * COSMIC PROJECT
- * Conceptual Objectified Sustainable Management-level Information Controller
- * 
+ *
  * AUTHOR: Hri7566
  * START DATE: Sun Jul 31 06:17:45 2022 -0400
+ * DESCRIPTION: Bot as a service for multiple platforms
  */
 
 require('dotenv').config();
