@@ -199,8 +199,6 @@ for (let pre of prefixes.global) {
     CosmicCommandHandler.prefixes.push({
         prefix: pre
     });
-
-    // TODO add the mpp-specific prefixes
 }
 
 require('./CosmicCommands');
