@@ -223,7 +223,6 @@ export namespace Cosmic {
 
     export interface SeasonMessage extends Message, Season {
         type: 'season';
-        emoji: string;
     }
 
     export interface Holiday {
