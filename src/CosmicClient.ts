@@ -314,7 +314,7 @@ export class CosmicClientMPP extends CosmicClientToken {
             desiredSuffix = ` ${season.emoji}`;
         }
 
-        if (this.desiredUser.name.includes(desiredSuffix)) return;
+        if (this.desiredUser.name.endsWith(desiredSuffix)) return;
         this.desiredUser.name += desiredSuffix;
     }
 }
