@@ -1,18 +1,3 @@
 global:
   # Global prefixes can be used anywhere
   - '*'
-
-mpp:
-  # MPP prefixes can be configured for any channel
-  -
-    prefix: '&'
-    channels:
-      - '✧𝓓𝓔𝓥 𝓡𝓸𝓸𝓶✧'
-  -
-    prefix: '/'
-    channels:
-      - 'The Dev Channel'
-
-discord:
-  # Discord prefixes are only enabled for the Discord bot
-  - '%'
