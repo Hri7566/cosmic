@@ -8,11 +8,7 @@ import { Cosmic, Timestamp } from "./CosmicTypes";
 
 let CURRENT_YEAR = new Date().getFullYear();
 
-setInterval(() => {
-    CURRENT_YEAR = new Date().getFullYear();
-}, 36e5 * 24 * 14);
-
-const HOLIDAYS: Array<Cosmic.Holiday | Cosmic.RangeHoliday> = [
+let HOLIDAYS: Array<Cosmic.Holiday | Cosmic.RangeHoliday> = [
     {
         displayName: 'New Year\'s Day',
         emoji: '🎆',
@@ -55,6 +51,53 @@ const HOLIDAYS: Array<Cosmic.Holiday | Cosmic.RangeHoliday> = [
         timestamp: `Jan 1 ${CURRENT_YEAR}`
     }
 ]
+
+setInterval(() => {
+    CURRENT_YEAR = new Date().getFullYear();
+    HOLIDAYS = [
+    {
+        displayName: 'New Year\'s Day',
+        emoji: '🎆',
+        timestamp: `Dec 31 ${CURRENT_YEAR}`
+    },
+    {
+        displayName: 'Valentine\'s Day',
+        emoji: '💘',
+        timestamp: `Feb 14 ${CURRENT_YEAR}`
+    },
+    {
+        displayName: 'Saint Patrick\'s Day',
+        emoji: '🍀',
+        timestamp: `Mar 17 ${CURRENT_YEAR}`
+    },
+    {
+        displayName: 'Independence Day',
+        emoji: '🇺🇸',
+        timestamp: `Jul 4 ${CURRENT_YEAR}`
+    },
+    {
+        displayName: 'Halloween',
+        emoji: '🎃',
+        timestamp: `Oct 31 ${CURRENT_YEAR}`
+    },
+    {
+        displayName: 'Thanksgiving',
+        emoji: '🦃',
+        start: `Nov 22 ${CURRENT_YEAR}`,
+        end: `Nov 28 ${CURRENT_YEAR}`
+    },
+    {
+        displayName: 'Christmas',
+        emoji: '🎄',
+        timestamp: `Dec 25 ${CURRENT_YEAR}`
+    },
+    {
+        displayName: 'New Year\'s Eve',
+        emoji: '🎆',
+        timestamp: `Jan 1 ${CURRENT_YEAR}`
+    }
+]
+}, 36e5 * 24 * 14);
 
 export class CosmicSeasonDetection {
     /**
