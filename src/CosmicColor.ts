@@ -2,6 +2,8 @@
  * COSMIC PROJECT
  * 
  * Color module
+ * This module was originally written by Brandon Lockaby circa 2012.
+ * It has been repurposed for use here.
  */
 
 /**
