@@ -58,7 +58,7 @@ export abstract class CosmicClient {
 
     public alreadyBound: boolean = false;
 
-    public bindEventListeners() {
+    protected bindEventListeners() {
         if (this.alreadyBound == true) return;
         this.alreadyBound = true;
 
@@ -196,7 +196,7 @@ export class CosmicClientMPP extends CosmicClientToken {
         this.logger.log('Stopping...');
     }
 
-    public bindEventListeners() {
+    protected bindEventListeners() {
         super.bindEventListeners();
 
         this.client.on('a', msg => {
@@ -322,7 +322,7 @@ export class CosmicClientMPP extends CosmicClientToken {
 export class CosmicClientDiscord extends CosmicClientToken {
     public platform: string = 'discord';
     public previousChannel: string;
-    
+
     public client: typeof Discord.Client;
 
     constructor() {
@@ -338,11 +338,27 @@ export class CosmicClientDiscord extends CosmicClientToken {
         this.bindEventListeners();
     }
 
+    /**
+     * Start Discord client
+     * @param token Discord token
+     */
     public start(token: string) {
         this.client.login(token);
     }
+    
+    /**
+     * Stop Discord client
+     */
+    public stop() {
+        this.client.destroy();
+    }
 
-    public async sendChat(str: string, channel?: string) {
+    /**
+     * Send a chat message in the last channel (or desired channel by passing an ID)
+     * @param str Message
+     * @param channel Optional channel ID
+     */
+    public async sendChat(str: string, channel?: string): Promise<void> {
         if (!str) return;
 
         let special_chars = [
@@ -370,8 +386,8 @@ export class CosmicClientDiscord extends CosmicClientToken {
             this.logger.error(err);
         }
     }
-    
-    public bindEventListeners(): void {
+
+    protected bindEventListeners(): void {
         super.bindEventListeners();
 
         this.client.on('ready', () => {
@@ -388,7 +404,7 @@ export class CosmicClientDiscord extends CosmicClientToken {
                 },
                 original_channel: {
                     id: msg.channel.id,
-                    _id: msg.channel.name
+                    _id: (msg.channel as any).name
                 }
             });
             
