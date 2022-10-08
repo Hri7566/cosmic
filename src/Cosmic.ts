@@ -76,10 +76,10 @@ class Cosmic {
     /**
      * Stop Cosmic
      */
-    public static stop() {
+    public static async stop() {
         this.logger.log("Stopping...");
         CosmicClientHandler.stopAllClients();
-        CosmicData.stop();
+        await CosmicData.stop();
         this.logger.log("Stopped.");
     }
 
