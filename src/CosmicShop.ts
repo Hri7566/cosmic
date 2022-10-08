@@ -7,13 +7,29 @@
 import { EventEmitter } from 'events';
 import { Item, ShopListing } from './CosmicTypes';
 import { SHOP_ITEMS } from './CosmicShopItems';
+import { CosmicSeasonDetection } from './CosmicSeasonDetection';
 
 const DEFAULT_PRICE = 10;
 
 class CosmicShop {
     protected static list: ShopListing[] = SHOP_ITEMS;
 
+    /**
+     * Get the current item listings in the shop
+     * @returns List of items in the shop
+     */
     public static getListings(): ShopListing[] {
+        let rendered = [];
+
+        for (const ls of this.list) {
+            if (ls.season) {
+                if (CosmicSeasonDetection.getSeason().displayName == ls.season) {
+                    rendered.push(ls);
+                }
+            } else {
+                rendered.push(ls);
+            }
+        }
         return this.list;
     }
 
