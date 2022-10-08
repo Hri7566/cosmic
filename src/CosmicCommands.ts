@@ -718,7 +718,7 @@ CosmicCommandHandler.registerCommand(new Command(
         let season = CosmicSeasonDetection.getSeason();
 
         if (season) {
-            return `Season: ${season.displayName}`;
+            return `Season: ${season.emoji}${season.displayName}`;
         } else {
             return `Season: (none)`;
         }
@@ -737,7 +737,7 @@ CosmicCommandHandler.registerCommand(new Command(
         let holiday = CosmicSeasonDetection.getHoliday();
 
         if (holiday) {
-            return `Holiday: ${holiday.displayName}`;
+            return `Holiday: ${holiday.emoji}${holiday.displayName}`;
         } else {
             return `Holiday: (none)`;
         }
