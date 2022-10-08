@@ -1,7 +1,7 @@
 /**
  * COSMIC PROJECT
  * 
- * Custom Event Emitter subsystem module
+ * Custom event emitter subsystem module
  */
 
 /**
@@ -52,7 +52,7 @@ class CosmicEventEmitter extends EventEmitter {
     }
 
     private bindDefaultListeners(): void {
-        
+
     }
 }
 
