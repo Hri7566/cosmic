@@ -19,6 +19,7 @@ import { CosmicShop } from "./CosmicShop";
 import { CosmicUtil } from "./CosmicUtil";
 import { Cosmic as CosmicColor } from './CosmicColor';
 import { CosmicSeasonDetection } from "./CosmicSeasonDetection";
+import { AnyItem, Cosmic as CosmicTypes, Item, ShopListing } from "./CosmicTypes";
 const { Command, CosmicCommandHandler } = require('./CosmicCommandHandler');
 const { CosmicData } = require('./CosmicData');
 const { Cosmic } = require('./Cosmic');
@@ -740,6 +741,69 @@ CosmicCommandHandler.registerCommand(new Command(
             return `Holiday: ${holiday.emoji}${holiday.displayName}`;
         } else {
             return `Holiday: (none)`;
+        }
+    }
+));
+
+CosmicCommandHandler.registerCommand(new Command(
+    'buy',
+    [ 'buy' ],
+    '%PREFIX%buy <item>',
+    'Buy an item from the item shop.',
+    [ 'default' ],
+    true,
+    'cake',
+    async (msg, cl) => {
+        const shopListings = CosmicShop.getListings();
+        const search = msg.argv[1];
+
+        if (!search) {
+            return `Please provide an item name from the item shop.`
+        }
+        
+        let listing: ShopListing;
+
+        for (const ls of shopListings) {
+            if (ls.item.displayName.toLowerCase().includes(search)) {
+                listing = ls;
+            }
+        }
+
+        const balance = await CosmicData.getBalance(msg.sender._id);
+        let price = listing.item.value;
+        
+        if (listing.overridePrice) {
+            price = listing.overridePrice;
+        }
+
+        try {
+            if (CosmicData.hasItem(msg.sender._id, listing.item.id)) {
+                const it: AnyItem = CosmicData.getItem(msg.sender._id, listing.item.id);
+
+                if (it.count >= it.max_stack) {
+                    return `You can't have any more of ${CosmicUtil.formatItemString(listing.item.displayName, listing.item.emoji, 1)}.`;
+                }
+            }
+
+            if (balance < price) {
+                let answers = [
+                    `You can't afford ${listing.item.displayName} (x${listing.item.count}).`,
+                    `You don't have enough money to buy ${listing.item.displayName} (x${listing.item.count}).`,
+                    `You are too poor. Come back again with more for ${listing.item.displayName} (x${listing.item.count}).`,
+                    `You bought ${CosmicUtil.formatItemString(listing.item.displayName, listing.item.emoji, listing.item.count)}. Wait, no. You can't afford that.`
+                ]
+
+                return CosmicUtil.getRandomValueFromArray(answers);
+            }
+
+            CosmicData.addItem(msg.sender._id, listing.item);
+            CosmicData.addBalance(msg.sender._id, -price);
+            
+            return `You bought ${CosmicUtil.formatItemString(listing.item.displayName, listing.item.emoji, listing.item.count)} for ${CosmicData.formatBalance(price)} from the shop.`;
+        } catch (err) {
+            CosmicCommandHandler.logger.error(err);
+            CosmicCommandHandler.logger.warn('Transaction error detected');
+            return `A serious transaction error has occurred. Whoops :/`;
         }
     }
 ));
