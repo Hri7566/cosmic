@@ -15,9 +15,19 @@ let HOLIDAYS: Array<Cosmic.Holiday | Cosmic.RangeHoliday> = [
         timestamp: `Dec 31 ${CURRENT_YEAR}`
     },
     {
+        displayName: 'Martin Luther King, Jr. Day',
+        emoji: '⚖',
+        timestamp: `January 17 ${CURRENT_YEAR}`
+    },
+    {
         displayName: 'Valentine\'s Day',
         emoji: '💘',
         timestamp: `Feb 14 ${CURRENT_YEAR}`
+    },
+    {
+        displayName: 'Presidents\' Day',
+        emoji: '🏛',
+        timestamp: `February 21 ${CURRENT_YEAR}`
     },
     {
         displayName: 'Saint Patrick\'s Day',
@@ -28,6 +38,17 @@ let HOLIDAYS: Array<Cosmic.Holiday | Cosmic.RangeHoliday> = [
         displayName: 'Independence Day',
         emoji: '🇺🇸',
         timestamp: `Jul 4 ${CURRENT_YEAR}`
+    },
+    {
+        displayName: 'Labor Day',
+        emoji: '⚒',
+        timestamp: `Sep 5 ${CURRENT_YEAR}`
+    },
+    {
+        displayName: 'Columbus Day',
+        emoji: '⛵',
+        start: `Oct 10 ${CURRENT_YEAR}`,
+        end: `Oct 13 ${CURRENT_YEAR}`
     },
     {
         displayName: 'Halloween',
