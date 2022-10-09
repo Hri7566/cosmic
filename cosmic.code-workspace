@@ -5,6 +5,7 @@
 		}
 	],
 	"settings": {
-		"deno.unstable": true
+		"deno.unstable": true,
+		"dotenv.enableAutocloaking": true
 	}
 }
