@@ -56,6 +56,26 @@ class CosmicUtil {
 
         return curr;
     }
+    
+    /**
+     * Get a random value from an array
+     * @param arr Array of random elements
+     * @returns Random element from array
+     */
+    public static getRandomValueFromArray(arr: any[]) {
+        return arr[Math.floor(Math.random() * arr.length)];
+    }
+    
+    /**
+     * Format an item's data to display as a string
+     * @param name Name of item
+     * @param emoji Emoji of item
+     * @param count Number of items
+     * @returns Formatted string
+     */
+    public static formatItemString(name: string, emoji: string = '', count: number) {
+        return `${emoji}${name} ${count > 1 ? `(x${count})` : ''}`;
+    }
 }
 
 /**
