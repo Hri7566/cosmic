@@ -1,3 +1,8 @@
-console.log('Hello, world!');
+import * as React from 'react';
+import * as ReactDOM from 'react-dom/server';
 
-const sass = require('./sass/screen.scss');
+require('./sass/screen.scss');
+
+let text = ReactDOM.renderToString(<p>hello</p>);
+
+document.getElementsByTagName('app').innerHTML = text;

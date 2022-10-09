@@ -27,7 +27,8 @@ class CosmicForeignMessageHandler {
                 type: 'chat',
                 sender: omsg.p,
                 message: omsg.a,
-                timestamp: Date.now()
+                timestamp: Date.now(),
+                original_channel: omsg.original_channel
             };
 
             return msg;

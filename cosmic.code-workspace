@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"deno.unstable": true,
+		"dotenv.enableAutocloaking": true
+	}
+}

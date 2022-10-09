@@ -1,33 +1,35 @@
-# cosmic
+# Cosmic
 
-This is currently a bot made for Multiplayer Piano.
+This project is an entertainment program designed to support input and output from multiple services at the same time.
 
-## Credits
+This project was created on July 31, 2022.
 
-- Hri7566: Author
+## Contrubutors
+
+- Hri7566: Author & creator of Cosmic
 
 ## Building
 
-*Please* only run this on Linux/WSL. It's probably really hard to run on Windows.
+*Please* only run this under POSIX-based environments. The yarn scripts just call shell scripts for POSIX-based environments and everything would have to be done by hand on Windows.
 
-This project uses Node.js, Deno, C, and Nim. The decision to use such languages was a brave one.
+This project uses TypeScript and esbuild. Originally, there was planned support for C, Nim, and Deno integration, but interoperability has been deprecated to keep the project maintainable.
 
 ```sh
 $ yarn
-# This will install all required packages
+# Install all required packages
 ```
 
 ```sh
 $ yarn build
-# This will build everything
+# Build everything
 ```
 
 ```sh
 $ yarn start
-# This will start
+# Start the program
 ```
 
 ```sh
 $ yarn dev
-# This will build everything and start
+# Build everything and start
 ```

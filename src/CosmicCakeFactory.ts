@@ -6,6 +6,8 @@
 
 import { CosmicClient, CosmicClientDiscord } from "./CosmicClient";
 import { CosmicData } from "./CosmicData";
+import { ITEMS } from "./CosmicItems";
+import { CosmicLogger, red } from "./CosmicLogger";
 import { User } from "./CosmicTypes";
 const { Cake, FoodItem, Item } = require('./CosmicTypes');
 
@@ -17,6 +19,8 @@ const RANDOM_CHANCE = 0.02;
 class CosmicCakeFactory {
     public static bakingUsers = [];
     public static DEFAULT_CAKE_VALUE = 15;
+
+    public static logger = new CosmicLogger('Cake Factory', red);
 
     public static generateRandomCake() {
         const rarity = Math.random();
@@ -81,7 +85,9 @@ class CosmicCakeFactory {
 
         this.bakingUsers.splice(this.bakingUsers.indexOf(user), 1);
 
-        user.cl.sendChat(`${user.name} finished baking and got: ${cake.emoji || ''}${cake.displayName} (x${cake.count})`, user.channel);
+        if (user.hasOwnProperty('cl')) {
+            user.cl.sendChat(`${user.name} finished baking and got: ${cake.emoji || ''}${cake.displayName} (x${cake.count})`, user.channel);
+        }
     }
 
     public static isAlreadyBaking(_id: string): boolean {
@@ -89,11 +95,28 @@ class CosmicCakeFactory {
     }
 }
 
-setInterval(() => {
+setInterval(async () => {
     let r = Math.random();
-    if (r < RANDOM_CHANCE * CosmicCakeFactory.bakingUsers.length) {
-        let u = CosmicCakeFactory.bakingUsers[Math.floor(Math.random() * CosmicCakeFactory.bakingUsers.length)];
-        if (u) {
+    
+    let u = CosmicCakeFactory.bakingUsers[Math.floor(Math.random() * CosmicCakeFactory.bakingUsers.length)];
+
+    if (u) {
+        let inv = await CosmicData.getInventory(u._id);
+        let bias = 1;
+
+        for (let upgradeItem of Object.values(ITEMS)) {
+            if (!upgradeItem.id.startsWith('upgrade_')) continue;
+            if (await CosmicData.hasItem(u._id, upgradeItem.id)) {
+                if (upgradeItem.hasOwnProperty('cake_bonus')) {
+                    bias *= upgradeItem['cake_bonus'];
+                }
+            }
+        }
+
+        let biasedRando = r / bias;
+        // console.log(`${r} / ${bias} = ${biasedRando}`);
+
+        if (r * biasedRando < RANDOM_CHANCE * CosmicCakeFactory.bakingUsers.length) {
             CosmicCakeFactory.finishBaking(u._id);
         }
     }

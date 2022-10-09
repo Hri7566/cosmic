@@ -28,6 +28,9 @@ const { CosmicAPI } = require('./CosmicAPI');
  */
 
 const MPPCLONE_TOKEN = process.env.MPPCLONE_TOKEN;
+const ENABLE_MPP = process.env.ENABLE_MPP || 'true';
+const ENABLE_DISCORD = process.env.ENABLE_DISCORD || 'true';
+
 const channelsFile = fs.readFileSync(path.resolve(__dirname, '../../config/mpp_channels.yml')).toString();
 const channels = YAML.parse(channelsFile);
 
@@ -53,10 +56,16 @@ class Cosmic {
         
         this.logger.log('Starting clients...');
 
-        for (const uri of Object.keys(channels)) {
-            for (const ch of channels[uri]) {
-                CosmicClientHandler.startClient(uri, ch);
+        if (ENABLE_MPP == 'true') {
+            for (const uri of Object.keys(channels)) {
+                for (const ch of channels[uri]) {
+                    CosmicClientHandler.startMPPClient(uri, ch);
+                }
             }
+        }
+        
+        if (ENABLE_DISCORD == 'true') {
+            CosmicClientHandler.startDiscordClient();
         }
 
         CosmicAPI.start();
@@ -67,10 +76,10 @@ class Cosmic {
     /**
      * Stop Cosmic
      */
-    public static stop() {
+    public static async stop() {
         this.logger.log("Stopping...");
         CosmicClientHandler.stopAllClients();
-        CosmicData.stop();
+        await CosmicData.stop();
         this.logger.log("Stopped.");
     }
 

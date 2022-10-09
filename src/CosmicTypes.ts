@@ -34,13 +34,30 @@ export interface Item {
     id: string;
     displayName: string;
     count: number;
+    description?: string;
     emoji?: string;
     value?: number;
+    sellable?: boolean;
+    max_stack?: number;
 }
 
-export interface FoodItem {
+export interface ShopListing {
+    item: AnyItem;
+    overridePrice?: number;
+    season?: string;
+}
+
+export interface FoodItem extends Item {
     edible: true;
 }
+
+export interface UpgradeItem extends Item {
+    id: `upgrade_${string}`;
+    cake_bonus?: number;
+    max_stack: 1;
+}
+
+export type AnyItem = Item | FoodItem | UpgradeItem;
 
 export interface Inventory {
     _id: string; //* this should be the user id
@@ -69,7 +86,9 @@ export interface Channel {
 
 export type Token = string | number;
 
-namespace Cosmic {
+export type Timestamp = string | number;
+
+export namespace Cosmic {
     export interface Message {
         type: string;
         timestamp?: number;
@@ -86,7 +105,8 @@ namespace Cosmic {
 
     export interface HeartbeatMessage extends Message {
         type: 'heartbeat';
-        foreign_timestamp: number;
+        timestamp: number;
+        foreign_timestamp?: number;
     }
 
     export interface ConnectionMessage extends Message {
@@ -118,6 +138,11 @@ namespace Cosmic {
 
     export interface ChannelListUnsubscribeMessage extends Message {
         type: 'channel_list_unsubscribe';
+    }
+    
+    export interface LogMessage extends Message {
+        type: 'log';
+        args: any[];
     }
 
     export interface Flags {
@@ -192,5 +217,25 @@ namespace Cosmic {
         icing: string;
         filling: string;
         topping?: string;
+    }
+    
+    export interface Season {
+        displayName: string;
+        emoji: string;
+    }
+
+    export interface SeasonMessage extends Message, Season {
+        type: 'season';
+    }
+
+    export interface Holiday {
+        displayName: string;
+        emoji: string;
+        timestamp: Timestamp;
+    }
+
+    export interface RangeHoliday extends Omit<Holiday, 'timestamp'> {
+        start: Timestamp;
+        end: Timestamp;
     }
 }

@@ -4,16 +4,28 @@
  * Cosmic command handler module
  */
 
+/**
+ * Global module imports
+ */
+
 const { EventEmitter } = require('events');
 const YAML = require('yaml');
 const path = require('path');
 const fs = require('fs');
+
+/**
+ * Local module imports
+ */
 
 const { Message, CommandMessage, Prefix, PermissionGroupIdentifier } = require('./CosmicTypes');
 const { CosmicClient } = require('./CosmicClient');
 const { CosmicUtil } = require('./CosmicUtil');
 const { CosmicLogger, magenta } = require('./CosmicLogger');
 const { CosmicData } = require('./CosmicData');
+
+/**
+ * Module-level declarations
+ */
 
 export interface CommandGroup {
     id: string;
@@ -109,9 +121,6 @@ class CosmicCommandHandler {
                 }
             }
 
-            // check platform
-            if (cmd.platform !== cl.platform && cmd.platform !== 'all') break;
-
             // check permissions
             const groups = await CosmicData.getGroups(msg.sender._id);
 
@@ -122,6 +131,9 @@ class CosmicCommandHandler {
             }
 
             if (!pass || !hasPerms) continue;
+
+            // check platform
+            if (cmd.platform !== cl.platform && cmd.platform !== 'all') continue;
 
             let out;
             
@@ -187,11 +199,13 @@ for (let pre of prefixes.global) {
     CosmicCommandHandler.prefixes.push({
         prefix: pre
     });
-
-    // TODO add the mpp-specific prefixes
 }
 
 require('./CosmicCommands');
+
+/**
+ * Module exports
+ */
 
 export {
     CosmicCommandHandler

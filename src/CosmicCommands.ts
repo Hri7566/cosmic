@@ -15,8 +15,12 @@ const crypto = require('crypto');
  */
 
 import { CosmicCakeFactory } from "./CosmicCakeFactory";
+import { CosmicShop } from "./CosmicShop";
+import { CosmicUtil } from "./CosmicUtil";
+import { Cosmic as CosmicColor } from './CosmicColor';
+import { CosmicSeasonDetection } from "./CosmicSeasonDetection";
+import { AnyItem, Cosmic as CosmicTypes, Item, ShopListing } from "./CosmicTypes";
 const { Command, CosmicCommandHandler } = require('./CosmicCommandHandler');
-const { CosmicColor } = require('./CosmicColor');
 const { CosmicData } = require('./CosmicData');
 const { Cosmic } = require('./Cosmic');
 
@@ -39,13 +43,16 @@ CosmicCommandHandler.registerCommand(new Command(
                 let out = `${group.displayName}:`;
 
                 for (let cmd of CosmicCommandHandler.commands) {
+                    if (cmd.platform) {
+                        if (cmd.platform !== cl.platform && cmd.platform !== 'all') continue;
+                    }
+                    
                     if (cmd.commandGroup !== group.id) continue;
                     if (cmd.visible == false) continue;
                     out += ` ${msg.prefix.prefix}${cmd.accessors[0]}, `;
                 }
 
-                out = out.trim();
-                out = out.substring(0, out.length - 1);
+                out = CosmicUtil.trimListString(out);
                 cl.sendChat(out);
             }
 
@@ -55,6 +62,10 @@ CosmicCommandHandler.registerCommand(new Command(
             
             bigLoop:
             for (let cmd of CosmicCommandHandler.commands) {
+                if (cmd.platform) {
+                    if (cmd.platform !== cl.platform && cmd.platform !== 'all') continue;
+                }
+
                 littleLoop:
                 for (let acc of cmd.accessors) {
                     if (msg.argv[1] == acc) {
@@ -122,7 +133,7 @@ CosmicCommandHandler.registerCommand(new Command(
                 if (r > 255 || g > 255 || b > 255) throw 'too large';
                 if (r < 0 || g < 0 || b < 0) throw 'too small';
                 
-                let c = new CosmicColor(r, g, b);
+                let c = new CosmicColor.Color(r, g, b);
                 let outc = `${c.getName().replace('A', 'a')} [${c.toHexa()}]`;
                 return `The RGB color ${r}, ${g}, ${b} is ${outc}`;
             } catch (e) {
@@ -131,7 +142,7 @@ CosmicCommandHandler.registerCommand(new Command(
         } else if (msg.argv[1]) {
             if (msg.argv[1].match(/#[0-9a-f]{6}/ig) !== null) {
                 // definitely a hex string
-                let c = new CosmicColor(msg.argv[1]);
+                let c = new CosmicColor.Color(msg.argv[1]);
                 let outc = `${c.getName().replace('A', 'a')} [${c.toHexa()}]`;
                 return `The hex color '${msg.argv[1]}' is ${outc}`;
             } else {
@@ -139,7 +150,7 @@ CosmicCommandHandler.registerCommand(new Command(
             }
         } else {
             if (msg.sender.color) {
-                let c = new CosmicColor(msg.sender.color);
+                let c = new CosmicColor.Color(msg.sender.color);
                 let outc = `${c.getName().replace('A', 'a')} [${c.toHexa()}]`;
                 return `${msg.sender.name}, your color is ${outc}`;
             }
@@ -219,7 +230,7 @@ CosmicCommandHandler.registerCommand(new Command(
 
 CosmicCommandHandler.registerCommand(new Command(
     'stopbaking',
-    [ 'stopbaking', 'stopbake', 'stop', 's' ],
+    [ 'stopbaking', 'stopbake', 'stop' ],
     '%PREFIX%stopbaking',
     `Stop baking a cake. (WIP)`,
     [ 'default' ],
@@ -387,8 +398,7 @@ CosmicCommandHandler.registerCommand(new Command(
         } catch (err) {
             return `👎 ${err}`;
         }
-    },
-    'mpp'
+    }
 ));
 
 CosmicCommandHandler.registerCommand(new Command(
@@ -668,5 +678,132 @@ CosmicCommandHandler.registerCommand(new Command(
     'info',
     async (msg, cl) => {
         return `Usage: ${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MB`;
+    }
+));
+
+CosmicCommandHandler.registerCommand(new Command(
+    'shop',
+    [ 'shop', 's' ],
+    '%PREFIX%shop',
+    'Show items in the shop.',
+    [ 'default' ],
+    true,
+    'cake',
+    async (msg, cl) => {
+        let out = `Items:`;
+        let shopItems = CosmicShop.getListings();
+
+        if (shopItems.length > 0) {
+            for (let ls of shopItems) {
+                out += ` ${ls.item.displayName}: ${CosmicShop.getItemPrice(ls.item.id)} | `;
+            }
+
+            out = CosmicUtil.trimListString(out);
+        } else {
+            out += ` (none)`;
+        }
+
+        return out;
+    }
+));
+
+CosmicCommandHandler.registerCommand(new Command(
+    'season',
+    [ 'season' ],
+    '%PREFIX%season',
+    'Get the current season of the year.',
+    [ 'default' ],
+    false,
+    'info',
+    async (msg, cl) => {
+        let season = CosmicSeasonDetection.getSeason();
+
+        if (season) {
+            return `Season: ${season.emoji}${season.displayName}`;
+        } else {
+            return `Season: (none)`;
+        }
+    }
+));
+
+CosmicCommandHandler.registerCommand(new Command(
+    'holiday',
+    [ 'holiday' ],
+    '%PREFIX%holiday',
+    'Get the current holiday.',
+    [ 'default' ],
+    false,
+    'info',
+    async (msg, cl) => {
+        let holiday = CosmicSeasonDetection.getHoliday();
+
+        if (holiday) {
+            return `Holiday: ${holiday.emoji}${holiday.displayName}`;
+        } else {
+            return `Holiday: (none)`;
+        }
+    }
+));
+
+CosmicCommandHandler.registerCommand(new Command(
+    'buy',
+    [ 'buy' ],
+    '%PREFIX%buy <item>',
+    'Buy an item from the item shop.',
+    [ 'default' ],
+    true,
+    'cake',
+    async (msg, cl) => {
+        const shopListings = CosmicShop.getListings();
+        const search = msg.argv[1];
+
+        if (!search) {
+            return `Please provide an item name from the item shop.`
+        }
+        
+        let listing: ShopListing;
+
+        for (const ls of shopListings) {
+            if (ls.item.displayName.toLowerCase().includes(search)) {
+                listing = ls;
+            }
+        }
+
+        const balance = await CosmicData.getBalance(msg.sender._id);
+        let price = listing.item.value;
+        
+        if (listing.overridePrice) {
+            price = listing.overridePrice;
+        }
+
+        try {
+            if (CosmicData.hasItem(msg.sender._id, listing.item.id)) {
+                const it: AnyItem = CosmicData.getItem(msg.sender._id, listing.item.id);
+
+                if (it.count >= it.max_stack) {
+                    return `You can't have any more of ${CosmicUtil.formatItemString(listing.item.displayName, listing.item.emoji, 1)}.`;
+                }
+            }
+
+            if (balance < price) {
+                let answers = [
+                    `You can't afford ${listing.item.displayName} (x${listing.item.count}).`,
+                    `You don't have enough money to buy ${listing.item.displayName} (x${listing.item.count}).`,
+                    `You are too poor. Come back again with more for ${listing.item.displayName} (x${listing.item.count}).`,
+                    `You bought ${CosmicUtil.formatItemString(listing.item.displayName, listing.item.emoji, listing.item.count)}. Wait, no. You can't afford that.`
+                ]
+
+                return CosmicUtil.getRandomValueFromArray(answers);
+            }
+
+            CosmicData.addItem(msg.sender._id, listing.item);
+            CosmicData.addBalance(msg.sender._id, -price);
+            
+            return `You bought ${CosmicUtil.formatItemString(listing.item.displayName, listing.item.emoji, listing.item.count)} for ${CosmicData.formatBalance(price)} from the shop.`;
+        } catch (err) {
+            CosmicCommandHandler.logger.error(err);
+            CosmicCommandHandler.logger.warn('Transaction error detected');
+            return `A serious transaction error has occurred. Whoops :/`;
+        }
     }
 ));

@@ -4,5 +4,6 @@
     "deno.enablePaths": [
         "./deno"
     ],
-    "cmake.configureOnOpen": false
+    "cmake.configureOnOpen": false,
+    "dotenv.enableAutocloaking": true
 }

@@ -4,6 +4,8 @@
  * Data module
  */
 
+import { Inventory } from "./CosmicTypes";
+
 /**
  * Global module imports
  */
@@ -311,6 +313,15 @@ class CosmicData {
             return `${currency}${bal.toFixed(fixate)}`;
         } else {
             return `${bal.toFixed(fixate)}${currency}`;
+        }
+    }
+    
+    public static async getBalance(_id: string) {
+        try {
+            let inv: Inventory = await this.getInventory(_id);
+            return inv.balance;
+        } catch (err) {
+            return err;
         }
     }
 
