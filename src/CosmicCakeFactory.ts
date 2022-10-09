@@ -114,7 +114,7 @@ setInterval(async () => {
         }
 
         let biasedRando = r / bias;
-        console.log(`${r} / ${bias} = ${biasedRando}`);
+        // console.log(`${r} / ${bias} = ${biasedRando}`);
 
         if (r * biasedRando < RANDOM_CHANCE * CosmicCakeFactory.bakingUsers.length) {
             CosmicCakeFactory.finishBaking(u._id);
