@@ -75,49 +75,70 @@ let HOLIDAYS: Array<Cosmic.Holiday | Cosmic.RangeHoliday> = [
 
 setInterval(() => {
     CURRENT_YEAR = new Date().getFullYear();
-    HOLIDAYS = [
-    {
-        displayName: 'New Year\'s Day',
-        emoji: '🎆',
-        timestamp: `Dec 31 ${CURRENT_YEAR}`
-    },
-    {
-        displayName: 'Valentine\'s Day',
-        emoji: '💘',
-        timestamp: `Feb 14 ${CURRENT_YEAR}`
-    },
-    {
-        displayName: 'Saint Patrick\'s Day',
-        emoji: '🍀',
-        timestamp: `Mar 17 ${CURRENT_YEAR}`
-    },
-    {
-        displayName: 'Independence Day',
-        emoji: '🇺🇸',
-        timestamp: `Jul 4 ${CURRENT_YEAR}`
-    },
-    {
-        displayName: 'Halloween',
-        emoji: '🎃',
-        timestamp: `Oct 31 ${CURRENT_YEAR}`
-    },
-    {
-        displayName: 'Thanksgiving',
-        emoji: '🦃',
-        start: `Nov 22 ${CURRENT_YEAR}`,
-        end: `Nov 28 ${CURRENT_YEAR}`
-    },
-    {
-        displayName: 'Christmas',
-        emoji: '🎄',
-        timestamp: `Dec 25 ${CURRENT_YEAR}`
-    },
-    {
-        displayName: 'New Year\'s Eve',
-        emoji: '🎆',
-        timestamp: `Jan 1 ${CURRENT_YEAR}`
-    }
-]
+    let HOLIDAYS: Array<Cosmic.Holiday | Cosmic.RangeHoliday> = [
+        {
+            displayName: 'New Year\'s Day',
+            emoji: '🎆',
+            timestamp: `Dec 31 ${CURRENT_YEAR}`
+        },
+        {
+            displayName: 'Martin Luther King, Jr. Day',
+            emoji: '⚖',
+            timestamp: `January 17 ${CURRENT_YEAR}`
+        },
+        {
+            displayName: 'Valentine\'s Day',
+            emoji: '💘',
+            timestamp: `Feb 14 ${CURRENT_YEAR}`
+        },
+        {
+            displayName: 'Presidents\' Day',
+            emoji: '🏛',
+            timestamp: `February 21 ${CURRENT_YEAR}`
+        },
+        {
+            displayName: 'Saint Patrick\'s Day',
+            emoji: '🍀',
+            timestamp: `Mar 17 ${CURRENT_YEAR}`
+        },
+        {
+            displayName: 'Independence Day',
+            emoji: '🇺🇸',
+            timestamp: `Jul 4 ${CURRENT_YEAR}`
+        },
+        {
+            displayName: 'Labor Day',
+            emoji: '⚒',
+            timestamp: `Sep 5 ${CURRENT_YEAR}`
+        },
+        {
+            displayName: 'Columbus Day',
+            emoji: '⛵',
+            start: `Oct 10 ${CURRENT_YEAR}`,
+            end: `Oct 13 ${CURRENT_YEAR}`
+        },
+        {
+            displayName: 'Halloween',
+            emoji: '🎃',
+            timestamp: `Oct 31 ${CURRENT_YEAR}`
+        },
+        {
+            displayName: 'Thanksgiving',
+            emoji: '🦃',
+            start: `Nov 22 ${CURRENT_YEAR}`,
+            end: `Nov 28 ${CURRENT_YEAR}`
+        },
+        {
+            displayName: 'Christmas',
+            emoji: '🎄',
+            timestamp: `Dec 25 ${CURRENT_YEAR}`
+        },
+        {
+            displayName: 'New Year\'s Eve',
+            emoji: '🎆',
+            timestamp: `Jan 1 ${CURRENT_YEAR}`
+        }
+    ]
 }, 36e5 * 24 * 14);
 
 export class CosmicSeasonDetection {
