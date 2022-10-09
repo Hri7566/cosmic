@@ -222,10 +222,13 @@ export class CosmicClientMPP extends CosmicClientToken {
 
         setInterval(() => {
             if (!this.client.isConnected()) return;
+
+            this.setSeasonalInfo();
             
             let set = this.client.getOwnParticipant();
             
             if (set.name !== this.desiredUser.name || set.color !== this.desiredUser.color) {
+                this.logger.debug('sending userset');
                 this.client.sendArray([{
                     m: 'userset',
                     set: this.desiredUser
