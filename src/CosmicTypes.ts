@@ -38,6 +38,7 @@ export interface Item {
     emoji?: string;
     value?: number;
     sellable?: boolean;
+    max_stack?: number;
 }
 
 export interface ShopListing {
@@ -51,7 +52,9 @@ export interface FoodItem extends Item {
 }
 
 export interface UpgradeItem extends Item {
+    id: `upgrade_${string}`;
     cake_bonus?: number;
+    max_stack: 1;
 }
 
 export type AnyItem = Item | FoodItem | UpgradeItem;
