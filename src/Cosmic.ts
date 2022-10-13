@@ -5,7 +5,7 @@
  */
 
 /**
- * Module-level imports
+ * Global module imports
  */
 
 const Client = require('mppclone-client');
@@ -13,6 +13,10 @@ const fs = require('fs');
 const path = require('path');
 const YAML = require('yaml');
 const { EventEmitter } = require('events');
+
+/**
+ * Local module imports
+ */
 
 import { CosmicFFI } from './CosmicFFI';;
 import { CosmicClientHandler } from './CosmicClientHandler';
@@ -83,6 +87,7 @@ class Cosmic {
         this.logger.log("Stopped.");
     }
 
+    // used for bindEventListeners
     private static alreadyBound: boolean = false;
 
     private static bindEventListeners(): void {
@@ -90,14 +95,11 @@ class Cosmic {
         this.alreadyBound = true;
     }
 
+    // TODO move to util?
     public static getUptime() {
         return Date.now() - this.startTime;
     }
 }
-
-/**
- * Module-level script
- */
 
 /**
  * Module-level exports

@@ -49,9 +49,9 @@ Cosmic.start();
 // });
 
 // TODO fix sigint handle
-// process.on('SIGINT', () => {
-//     Cosmic.stop();
-// });
+process.on('SIGINT', () => {
+    Cosmic.stop();
+});
 
 process.stdin.on('data', d => {
     let str = d.toString().split('\n').join(' ').trim();

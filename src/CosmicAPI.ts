@@ -4,6 +4,8 @@
  * Express API module
  */
 
+import { CosmicClientHandler } from "./CosmicClientHandler";
+
 const express = require('express');
 const path = require('path');
 
@@ -23,6 +25,13 @@ class CosmicAPI {
         this.logger.log('Starting...');
 
         this.api.get('/', async (req, res) => {
+            res.json({
+                status: 'online',
+                clients: CosmicClientHandler.getClientCount()
+            });
+        });
+
+        this.api.get('/users', async (req, res) => {
             const cursor = await CosmicData.users.find();
             let users = [];
 

@@ -3,7 +3,8 @@
         "module": "commonjs",
         "allowJs": true,
         "moduleResolution": "node",
-        "outDir": "build/node/"
+        "outDir": "build/node/",
+        "target": "ES6"
     },
     "buildOptions": {
         "verbose": true

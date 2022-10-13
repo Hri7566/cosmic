@@ -51,6 +51,12 @@ class CosmicClientHandler {
         let cl = new CosmicClientDiscord();
         
         cl.start(DISCORD_TOKEN);
+        
+        this.clients.push(cl);
+    }
+
+    public static getClientCount(): number {
+        return this.clients.length;
     }
 }
 
