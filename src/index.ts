@@ -51,6 +51,7 @@ Cosmic.start();
 // TODO fix sigint handle
 process.on('SIGINT', () => {
     Cosmic.stop();
+    process.exit(0);
 });
 
 process.stdin.on('data', d => {
@@ -59,5 +60,6 @@ process.stdin.on('data', d => {
     
     if (str.toLowerCase() == 'stop') {
         Cosmic.stop();
+        process.exit(0);
     }
 });
