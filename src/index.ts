@@ -50,7 +50,7 @@ Cosmic.start();
 
 // TODO fix sigint handle
 process.on('SIGINT', () => {
-    process.stdout.write('\n');
+    console.log('');
     Cosmic.stop();
     process.exit(0);
 });
