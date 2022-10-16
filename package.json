@@ -10,6 +10,7 @@
     "build-nim": "scripts/sh/build-nim.sh",
     "build-c": "scripts/sh/build-c.sh",
     "build-deno": "scripts/sh/build-deno.sh",
+    "build-userscript": "node scripts/js/userscript.esbuild.js",
     "esbuild": "node scripts/js/esbuild.js",
     "start": "node .",
     "dev": "yarn run build && yarn run start"
