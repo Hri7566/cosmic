@@ -312,12 +312,13 @@ export class CosmicClientMPP extends CosmicClientToken {
         let desiredSuffix: string = '';
 
         if (holiday) {
+            if (this.desiredUser.name.endsWith(holiday.emoji)) return;
             desiredSuffix = ` ${holiday.emoji}`;
         } else {
+            if (this.desiredUser.name.endsWith(season.emoji)) return;
             desiredSuffix = ` ${season.emoji}`;
         }
 
-        if (this.desiredUser.name.endsWith(desiredSuffix)) return;
         this.desiredUser.name += desiredSuffix;
     }
 }
