@@ -39,7 +39,7 @@ const channelsFile = fs.readFileSync(path.resolve(__dirname, '../../config/mpp_c
 const channels = YAML.parse(channelsFile);
 
 class Cosmic {
-    // magenta is beautiful
+    // magenta is beautiful space colors :D
     public static logger = new CosmicLogger('Cosmic', magenta);
 
     // event emitter prototypal
@@ -50,12 +50,18 @@ class Cosmic {
 
     public static startTime;
 
+    public static started: boolean = false;
+
     /**
      * Start Cosmic
      */
-    public static async start() {
+    public static async start(): Promise<void> {
+        if (this.started) return;
+        this.started = true;
+
         this.bindEventListeners();
 
+        // connect to database
         CosmicData.start();
         
         this.logger.log('Starting clients...');
@@ -81,6 +87,9 @@ class Cosmic {
      * Stop Cosmic
      */
     public static async stop() {
+        if (!this.started) return;
+        this.started = false;
+
         this.logger.log("Stopping...");
         CosmicClientHandler.stopAllClients();
         await CosmicData.stop();
