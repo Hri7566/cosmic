@@ -503,8 +503,6 @@ CosmicCommandHandler.registerCommand(new Command(
     }
 ));
 
-const startTime = Date.now();
-
 CosmicCommandHandler.registerCommand(new Command(
     'uptime',
     [ 'uptime', 'u' ],
@@ -514,7 +512,7 @@ CosmicCommandHandler.registerCommand(new Command(
     false,
     'info',
     async (msg, cl) => {
-        const ms = Date.now() - startTime;
+        const ms = CosmicUtil.getUptime();
         const s = ms / 1000;
         const m = s / 60;
         const h = m / 60;
