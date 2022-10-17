@@ -25,7 +25,7 @@ export namespace Cosmic {
                 let hexa = (args[0] as string).toLowerCase();
 
                 if (hexa.match(/^#[0-9a-f]{6}$/i)) {
-                    hexa = /^#?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i.exec(hexa).toString();
+                    (hexa as any) = /^#?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i.exec(hexa);
                     if(hexa && hexa.length === 4) {
                         r = parseInt(hexa[1], 16);
                         g = parseInt(hexa[2], 16);

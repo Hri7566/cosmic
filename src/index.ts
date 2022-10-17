@@ -49,9 +49,11 @@ Cosmic.start();
 // });
 
 // TODO fix sigint handle
-// process.on('SIGINT', () => {
-//     Cosmic.stop();
-// });
+process.on('SIGINT', () => {
+    console.log('');
+    Cosmic.stop();
+    process.exit(0);
+});
 
 process.stdin.on('data', d => {
     let str = d.toString().split('\n').join(' ').trim();
@@ -59,5 +61,6 @@ process.stdin.on('data', d => {
     
     if (str.toLowerCase() == 'stop') {
         Cosmic.stop();
+        process.exit(0);
     }
 });

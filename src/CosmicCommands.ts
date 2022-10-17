@@ -19,9 +19,9 @@ import { CosmicShop } from "./CosmicShop";
 import { CosmicUtil } from "./CosmicUtil";
 import { Cosmic as CosmicColor } from './CosmicColor';
 import { CosmicSeasonDetection } from "./CosmicSeasonDetection";
-import { AnyItem, Cosmic as CosmicTypes, Item, ShopListing } from "./CosmicTypes";
+import { AnyItem, Cosmic as CosmicTypes, Inventory, Item, ShopListing } from "./CosmicTypes";
+import { CosmicData } from './CosmicData';
 const { Command, CosmicCommandHandler } = require('./CosmicCommandHandler');
-const { CosmicData } = require('./CosmicData');
 const { Cosmic } = require('./Cosmic');
 
 /**
@@ -88,7 +88,7 @@ CosmicCommandHandler.registerCommand(new Command(
     true, // visible,
     'info',
     (msg, cl) => {
-        let ms = Date.now() - new (Date as any)("Sun Jul 31 06:17:45 2022 -0400");
+        let ms = CosmicUtil.getTimeSinceProjectCreation();
         let ss = ms / 1000;
         let mm = ss / 60;
         let hh = mm / 60;
@@ -503,8 +503,6 @@ CosmicCommandHandler.registerCommand(new Command(
     }
 ));
 
-const startTime = Date.now();
-
 CosmicCommandHandler.registerCommand(new Command(
     'uptime',
     [ 'uptime', 'u' ],
@@ -514,7 +512,7 @@ CosmicCommandHandler.registerCommand(new Command(
     false,
     'info',
     async (msg, cl) => {
-        const ms = Date.now() - startTime;
+        const ms = CosmicUtil.getUptime();
         const s = ms / 1000;
         const m = s / 60;
         const h = m / 60;
@@ -546,9 +544,12 @@ CosmicCommandHandler.registerCommand(new Command(
         let amount_to_remove;
 
         try {
-            amount_to_remove = parseInt(msg.argv[msg.argv.length - 1]);
-            if (typeof amount_to_remove !== 'undefined') {
-                argcat = argcat.substring(0, argcat.length - msg.argv[msg.argv.length - 1].length).trim();
+            let arg_to_check = msg.argv[msg.argv.length - 1];
+            if (arg_to_check !== 1) {
+                amount_to_remove = parseInt(arg_to_check);
+                if (!isNaN(amount_to_remove)) {
+                    argcat = argcat.substring(0, arg_to_check).trim();
+                }
             }
         } finally {};
 
@@ -566,7 +567,17 @@ CosmicCommandHandler.registerCommand(new Command(
                 `There is not ${(/^[aeiou]/).test(argcat) ? 'an' : 'a'} '${argcat}' here.`,
                 `You don't have any '${argcat}'.`
             ]
-            return no_item_answers[Math.floor(Math.random() * no_item_answers.length)];
+            return CosmicUtil.getRandomValueFromArray(no_item_answers);
+        }
+
+        if (!mod_it.edible) {
+            const not_edible_answers = [
+                `You can't eat the ${mod_it.displayName}.`,
+                `The ${mod_it.displayName} hurts your teeth, and you decide not to eat it.`,
+                `Putting the ${mod_it.displayName} in your mouth, you realize that it is not edible, and decide to take it out.`,
+                `Eating the ${mod_it.displayName} will yield no results.`
+            ]
+            return CosmicUtil.getRandomValueFromArray(not_edible_answers);
         }
 
         if (amount_to_remove) {
@@ -585,7 +596,7 @@ CosmicCommandHandler.registerCommand(new Command(
                 `There is not ${amount_to_remove} of that here.`
             ]
             // console.debug(amount_to_remove, mod_it.count);
-            return not_enough_answers[Math.floor(Math.random() * not_enough_answers.length)];
+            return CosmicUtil.getRandomValueFromArray(not_enough_answers);
         }
 
         if (mod_it) {
@@ -635,7 +646,7 @@ CosmicCommandHandler.registerCommand(new Command(
                 `There is no cake for you to eat.`,
                 `No cake.`
             ]
-            return sad_answers[Math.floor(Math.random() * sad_answers.length)];
+            return CosmicUtil.getRandomValueFromArray(sad_answers);
         }
 
         for (let it of inv.items) {
@@ -682,32 +693,6 @@ CosmicCommandHandler.registerCommand(new Command(
 ));
 
 CosmicCommandHandler.registerCommand(new Command(
-    'shop',
-    [ 'shop', 's' ],
-    '%PREFIX%shop',
-    'Show items in the shop.',
-    [ 'admin' ], // [ 'default' ],
-    false, // true,
-    'cake',
-    async (msg, cl) => {
-        let out = `Items:`;
-        let shopItems = CosmicShop.getListings();
-
-        if (shopItems.length > 0) {
-            for (let ls of shopItems) {
-                out += ` ${ls.item.displayName}: ${CosmicShop.getItemPrice(ls.item.id)} | `;
-            }
-
-            out = CosmicUtil.trimListString(out);
-        } else {
-            out += ` (none)`;
-        }
-
-        return out;
-    }
-));
-
-CosmicCommandHandler.registerCommand(new Command(
     'season',
     [ 'season' ],
     '%PREFIX%season',
@@ -746,6 +731,33 @@ CosmicCommandHandler.registerCommand(new Command(
 ));
 
 CosmicCommandHandler.registerCommand(new Command(
+    'shop',
+    [ 'shop', 's' ],
+    '%PREFIX%shop',
+    'Show items in the shop.',
+    [ 'default' ],
+    true,
+    'cake',
+    async (msg, cl) => {
+        let emoji = CosmicShop.emoji ? CosmicShop.emoji : '';
+        let out = `${emoji} Items:`;
+        let shopItems = CosmicShop.getListings();
+
+        if (shopItems.length > 0) {
+            for (let ls of shopItems) {
+                out += ` ${ls.item.displayName}: ${CosmicData.formatBalance(CosmicShop.getItemPrice(ls.item.id))} | `;
+            }
+
+            out = CosmicUtil.trimListString(out);
+        } else {
+            out += ` (none)`;
+        }
+
+        return out;
+    }
+));
+
+CosmicCommandHandler.registerCommand(new Command(
     'buy',
     [ 'buy' ],
     '%PREFIX%buy <item>',
@@ -778,10 +790,20 @@ CosmicCommandHandler.registerCommand(new Command(
 
         try {
             if (CosmicData.hasItem(msg.sender._id, listing.item.id)) {
-                const it: AnyItem = CosmicData.getItem(msg.sender._id, listing.item.id);
+                const inv: Inventory = await CosmicData.getInventory(msg.sender._id);
+                let it: AnyItem;
 
-                if (it.count >= it.max_stack) {
-                    return `You can't have any more of ${CosmicUtil.formatItemString(listing.item.displayName, listing.item.emoji, 1)}.`;
+                for (const i of inv.items) {
+                    if (i.id == listing.item.id) {
+                        it = i;
+                        break;
+                    }
+                }
+
+                if (it) {
+                    if (it.count >= it.max_stack) {
+                        return `You can't have any more of ${CosmicUtil.formatItemString(listing.item.displayName, listing.item.emoji, 1)}.`;
+                    }
                 }
             }
 

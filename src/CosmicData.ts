@@ -350,11 +350,18 @@ class CosmicData {
         }
     }
 
-    public static utilSet(key: string, value: any, _id: string = 'util') {
+    public static async utilSet(key: string, value: any, _id: string = 'util') {
         try {
-            let res = this.util.updateOne({ _id }, {
-                $set: {
+            try {
+                await this.util.insertOne({
+                    _id,
                     [key]: value
+                });
+            } catch (err) {};
+            let res = await this.util.updateOne({ _id }, {
+                $set: {
+                    [key]: value,
+                    lastUpdated: Date.now()
                 }
             });
             return res;
@@ -363,12 +370,12 @@ class CosmicData {
         }
     }
 
-    public static utilGet(key: string) {
+    public static async utilGet(key: string, _id: string = 'util') {
         try {
-            let res = this.util.findOne({ key: { $exists: true } });
+            let res = await this.util.findOne({ _id });
             return res[key];
         } catch (err) {
-            return err;
+            return undefined;
         }
     }
 }

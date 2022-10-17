@@ -9,7 +9,7 @@
  */
 
 // Local imports
-const { Cosmic } = require('./CosmicColor');
+import { Cosmic as CosmicColor } from "./CosmicColor";
 
 /**
  * Module-level declarations
@@ -39,6 +39,8 @@ function formatAsANSI(ansi, ...args): string {
 
     return str;
 }
+
+const ANSI_REGEX = /[\\u001B\\u009B][[\\]()#;?]*(?:(?:(?:(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]+)*|[a-zA-Z\\d]+(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]*)*)?\\u0007)|(?:(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PR-TZcf-nq-uy=><~]))/g;
 
 // Direct color exports
 //* Use as the second parameter for the main class constructor
@@ -75,9 +77,9 @@ function white(...args): string {
     return formatAsANSI('3' + ANSIColors.get('white'), ...args);
 }
 
-function hex(hexstr, ...args): string {
+function hex(hexstr: string, ...args: any[]): string {
     // https://tintin.mudhalla.net/info/ansicolor/
-    let c = new Cosmic.Color(hexstr);
+    let c = new CosmicColor.Color(hexstr);
     let str = ``;
     
     for (let i = 0; i < args.length; i++) {
@@ -110,6 +112,7 @@ function log_full_info(method = 'log', ...args: any[]) {
     }
 
     console[method](`${hh.toString().padStart(2, '0')}:${mm.toString().padStart(2, '0')}:${ss.toString().padStart(2, '0')} ${ampm}`, ...args);
+    return [`${hh.toString().padStart(2, '0')}:${mm.toString().padStart(2, '0')}:${ss.toString().padStart(2, '0')} ${ampm}`, ...args];
 }
 
 /**
@@ -117,28 +120,80 @@ function log_full_info(method = 'log', ...args: any[]) {
  */
 
 class CosmicLogger {
+    static PAST_MESSAGES = [];
+
+    /**
+     * Get previous console lines as an expanded array
+     * @param lines Number of lines
+     * @returns Array of arrays of strings containing what was previously logged
+     */
+    static read(lines: number = 10): string[][] {
+        return this.PAST_MESSAGES.slice(this.PAST_MESSAGES.length - lines, this.PAST_MESSAGES.length);
+    }
+
+    /**
+     * Read previous logs to console
+     * @param lines Number of lines
+     * @param method Console method to log with (log, error, warn, debug)
+     */
+    static readToConsole(lines: number = 10, method: string = 'log'): void {
+        let prevLogs = this.read(lines);
+
+        for (const log of prevLogs) {
+            console[method](log);
+        }
+    }
+
     id: string;
     color: (...args) => string;
     
+    /**
+     * CosmicLogger class
+     * @param id String identifier
+     * @param color Color method (import from CosmicLogger)
+     */
     constructor(id: string, color: (...args) => string) {
         this.id = id;
         this.color = color;
     }
 
-    log(...args) {
-        log_full_info('log', `${blue('[INFO]')} ${this.color(`[${this.id}]`)}`, ...args);
+    /**
+     * Log to console
+     * @param args Content to log
+     */
+    log(...args: any[]) {
+        let [str, pastArgs] = log_full_info('log', `${blue('[INFO]')} ${this.color(`[${this.id}]`)}`, ...args);
+        CosmicLogger.PAST_MESSAGES.push([str, ...pastArgs]);
     }
 
-    error(...args) {
-        log_full_info('error', `${red('[ERROR]')} ${this.color(`[${this.id}]`)}`, ...args);
+    /**
+     * Log to stderr
+     * @param args Content to log to stderr
+     */
+    error(...args: any[]) {
+        let [str, pastArgs] = log_full_info('error', `${red('[ERROR]')} ${this.color(`[${this.id}]`)}`, ...args);
+        CosmicLogger.PAST_MESSAGES.push([str, ...pastArgs]);
     }
 
-    warn(...args) {
-        log_full_info('warn', `${yellow('[WARNING]')} ${this.color(`[${this.id}]`)}`, ...args);
+    /**
+     * Log warning messages
+     * @param args Content to log
+     */
+    warn(...args: any[]) {
+        let [str, pastArgs] = log_full_info('warn', `${yellow('[WARNING]')} ${this.color(`[${this.id}]`)}`, ...args);
+        CosmicLogger.PAST_MESSAGES.push([str, ...pastArgs]);
     }
 
-    debug(...args) {
-        log_full_info('debug', `${blue('[DEBUG]')} ${this.color(`[${this.id}]`)}`, ...args);
+    /**
+     * Log debug messages (doesn't run on NODE_ENV=prod)
+     * @param args Debug content to log
+     */
+    debug(...args: any[]) {
+        if (process.env.NODE_ENV) {
+            if (process.env.NODE_ENV == 'prod') return;
+        }
+        let [str, pastArgs] = log_full_info('debug', `${blue('[DEBUG]')} ${this.color(`[${this.id}]`)}`, ...args);
+        CosmicLogger.PAST_MESSAGES.push([str, ...pastArgs]);
     }
 }
 

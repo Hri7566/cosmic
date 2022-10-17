@@ -13,6 +13,7 @@ const DEFAULT_PRICE = 10;
 
 class CosmicShop {
     protected static list: ShopListing[] = SHOP_ITEMS;
+    public static emoji = '🛒';
 
     /**
      * Get the current item listings in the shop

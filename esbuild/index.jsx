@@ -5,4 +5,4 @@ require('./sass/screen.scss');
 
 let text = ReactDOM.renderToString(<p>hello</p>);
 
-document.getElementsByTagName('app').innerHTML = text;
+document.getElementsByTagName('app')[0].innerHTML = text;
