@@ -5,7 +5,7 @@
   "main": "build/node/index.js",
   "scripts": {
     "test": "npx jest",
-    "build": "yarn run build-node && yarn run esbuild",
+    "build": "yarn run build-c && yarn run build-node && yarn run esbuild",
     "build-node": "scripts/sh/build-node.sh",
     "build-nim": "scripts/sh/build-nim.sh",
     "build-c": "scripts/sh/build-c.sh",
