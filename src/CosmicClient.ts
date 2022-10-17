@@ -48,7 +48,7 @@ export abstract class CosmicClient {
     public once = EventEmitter.prototype.once;
     public emit = EventEmitter.prototype.emit;
 
-    public logger = new CosmicLogger("Cosmic Client", magenta);
+    public logger: typeof CosmicLogger = new CosmicLogger("Cosmic Client", magenta);
 
     public platform: string;
 
@@ -154,10 +154,10 @@ class Cursor {
 }
 
 export class CosmicClientMPP extends CosmicClientToken {
-    private started: boolean = false;
-    private desiredChannel: ChannelConstructionPreset;
+    protected started: boolean = false;
+    protected desiredChannel: ChannelConstructionPreset;
     
-    private desiredUser = {
+    protected desiredUser = {
         name: `🟇 Cosmic (${CosmicCommandHandler.prefixes[0].prefix}help)`,
         color: '#1d0054'
     };
@@ -166,9 +166,9 @@ export class CosmicClientMPP extends CosmicClientToken {
     public cursor: Cursor;
     public platform: string = 'mpp';
 
-    constructor(uri: string, channel: ChannelConstructionPreset, token: string) {
+    constructor(uri: string, channel: ChannelConstructionPreset, token: string, ClientClass: any = Client) {
         super();
-        this.client = new Client(uri, token);
+        this.client = new ClientClass(uri, token);
         this.bindEventListeners();
         this.desiredChannel = channel;
         this.cursor = new Cursor(this);
@@ -275,7 +275,7 @@ export class CosmicClientMPP extends CosmicClientToken {
         });
     }
 
-    private previousCursorPos: typeof Vector2 = {
+    protected previousCursorPos: typeof Vector2 = {
         x: 100,
         y: 200
     };

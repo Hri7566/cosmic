@@ -103,11 +103,6 @@ class Cosmic {
         if (this.alreadyBound) return;
         this.alreadyBound = true;
     }
-
-    // TODO move to util?
-    public static getUptime() {
-        return Date.now() - this.startTime;
-    }
 }
 
 /**

@@ -4,6 +4,9 @@
  * Utility module
  */
 
+import { Cosmic } from "./Cosmic";
+import { CosmicLogger, red } from "./CosmicLogger";
+
 /**
  * Local module imports
  */
@@ -25,8 +28,15 @@ class CosmicUtil {
         return str.toLowerCase().startsWith(prefix.toLowerCase());
     }
 
-    public static set = CosmicData.utilSet;
-    public static get = CosmicData.utilGet;
+    public static async set(key: string, val: string, _id: string = 'util') {
+        return await CosmicData.utilSet(key, val, _id);
+    }
+
+    public static async get(key: string, _id: string = 'util') {
+        return await CosmicData.utilGet(key, _id);
+    }
+
+    public static logger = new CosmicLogger("CosmicUtil", red);
 
     /**
      * Trim the few characters at the end of a list
@@ -62,8 +72,22 @@ class CosmicUtil {
      * @param arr Array of random elements
      * @returns Random element from array
      */
-    public static getRandomValueFromArray(arr: any[]) {
-        return arr[Math.floor(Math.random() * arr.length)];
+    public static async getRandomValueFromArray(arr: any[]) {
+        let prev = await this.get('PREVIOUS_RANDOM_INDEX');
+        let index = Math.floor(Math.random() * arr.length);
+        
+        // danger
+        if (prev) {
+            while (index == prev) {
+                index = Math.floor(Math.random() * arr.length);
+            }
+        }
+
+        this.logger.log("Previous value test:", prev);
+
+        let set_out = await this.set('PREVIOUS_RANDOM_INDEX', index.toString());
+        this.logger.log("Set output:", set_out);
+        return arr[index];
     }
     
     /**
@@ -75,6 +99,23 @@ class CosmicUtil {
      */
     public static formatItemString(name: string, emoji: string = '', count: number) {
         return `${emoji}${name} ${count > 1 ? `(x${count})` : ''}`;
+    }
+
+    // migrated from main class
+    /**
+     * Get the uptime of the program
+     * @returns Time since program start
+     */
+    public static getUptime(): number {
+        return Date.now() - Cosmic.startTime;
+    }
+
+    /**
+     * Get the memory usage of the program
+     * @returns Memory used in megabytes
+     */
+    public static getMemoryUsage(): number {
+        return process.memoryUsage().heapUsed / 1024 / 1024;
     }
 }
 
