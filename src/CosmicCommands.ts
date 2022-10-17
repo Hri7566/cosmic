@@ -88,7 +88,7 @@ CosmicCommandHandler.registerCommand(new Command(
     true, // visible,
     'info',
     (msg, cl) => {
-        let ms = Date.now() - new (Date as any)("Sun Jul 31 06:17:45 2022 -0400");
+        let ms = CosmicUtil.getTimeSinceProjectCreation();
         let ss = ms / 1000;
         let mm = ss / 60;
         let hh = mm / 60;
@@ -739,7 +739,8 @@ CosmicCommandHandler.registerCommand(new Command(
     true,
     'cake',
     async (msg, cl) => {
-        let out = `Items:`;
+        let emoji = CosmicShop.emoji ? CosmicShop.emoji : '';
+        let out = `${emoji} Items:`;
         let shopItems = CosmicShop.getListings();
 
         if (shopItems.length > 0) {

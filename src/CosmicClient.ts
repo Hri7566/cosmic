@@ -78,9 +78,7 @@ export abstract class CosmicClient {
         });
     }
 
-    public sendChat(str: string): void {
-
-    }
+    public abstract sendChat(str: string): void;
 
     public emitMessage(msg): void {
         this.emit(msg.type, msg);

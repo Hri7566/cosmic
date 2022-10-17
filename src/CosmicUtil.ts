@@ -117,6 +117,14 @@ class CosmicUtil {
     public static getMemoryUsage(): number {
         return process.memoryUsage().heapUsed / 1024 / 1024;
     }
+
+    /**
+     * Get the time in milliseconds since Cosmic's inception
+     * @returns Time in milliseconds
+     */
+    public static getTimeSinceProjectCreation(): number {
+        return Date.now() - new (Date as any)("Sun Jul 31 06:17:45 2022 -0400");
+    }
 }
 
 /**
