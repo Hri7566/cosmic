@@ -762,8 +762,8 @@ CosmicCommandHandler.registerCommand(new Command(
     [ 'buy' ],
     '%PREFIX%buy <item>',
     'Buy an item from the item shop.',
-    [ 'default' ],
-    true,
+    [ 'admin' ], // [ 'default' ],
+    false, // true,
     'cake',
     async (msg, cl) => {
         const shopListings = CosmicShop.getListings();
