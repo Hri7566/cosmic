@@ -28,7 +28,7 @@ class CosmicUtil {
         return str.toLowerCase().startsWith(prefix.toLowerCase());
     }
 
-    public static async set(key: string, val: string, _id: string = 'util') {
+    public static async set(key: string, val: any, _id: string = 'util') {
         return await CosmicData.utilSet(key, val, _id);
     }
 
