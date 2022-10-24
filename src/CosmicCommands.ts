@@ -829,3 +829,39 @@ CosmicCommandHandler.registerCommand(new Command(
         }
     }
 ));
+
+CosmicCommandHandler.registerCommand(new Command(
+    'topbal',
+    [ 'topbal', 'leaderboard' ],
+    '%PREFIX%topbal',
+    `List the highest account balances.`,
+    [ 'default' ],
+    true,
+    'cake',
+    async (msg, cl) => {
+        let inventories = await CosmicData.getTopBalances();
+        let out = `Leaderboard:`;
+
+        let user;
+        let i = 0;
+
+        for await (let inv of inventories) {
+            if (i > 10) break;
+            
+            user = await CosmicData.getUser(inv._id);
+            if (!user) {
+                out += `${inv._id.substring(0, 6)}: ${inv.balance} | `;
+            } else {
+                if (user.name.length > 10) {
+                    out += `[${user._id.substring(0, 6)}] ${user.name.substring(0, 14)}…: ${inv.balance} | `;
+                } else {
+                    out += `[${user._id.substring(0, 6)}] ${user.name}: ${inv.balance} | `;
+                }
+            }
+
+            i++;
+        }
+
+        return out;
+    }
+));

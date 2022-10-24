@@ -378,6 +378,15 @@ class CosmicData {
             return undefined;
         }
     }
+
+    public static async getTopBalances() {
+        try {
+            let res = await (this.inventories.find().sort({ 'balance': -1 }));
+            return res;
+        } catch (err) {
+            return err;
+        }
+    }
 }
 
 /**
