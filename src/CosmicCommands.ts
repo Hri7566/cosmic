@@ -460,7 +460,7 @@ CosmicCommandHandler.registerCommand(new Command(
     false,
     'fun',
     async (msg, cl) => {
-        return `No, you suck, bitch!`;
+        return `hi dale!`;
     }
 ));
 
