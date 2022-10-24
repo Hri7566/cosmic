@@ -306,7 +306,7 @@ CosmicCommandHandler.registerCommand(new Command(
     false,
     'cake',
     async (msg, cl) => {
-        let c = CosmicCakeFactory.generateRandomCake();
+        let c = await CosmicCakeFactory.generateRandomCake();
 
         let res = await CosmicData.addItem(msg.sender._id, c);
         // console.debug(res);

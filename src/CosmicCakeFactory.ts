@@ -8,7 +8,8 @@ import { CosmicClient, CosmicClientDiscord } from "./CosmicClient";
 import { CosmicData } from "./CosmicData";
 import { ITEMS } from "./CosmicItems";
 import { CosmicLogger, red } from "./CosmicLogger";
-import { User } from "./CosmicTypes";
+import { Cosmic, User } from "./CosmicTypes";
+import { CosmicUtil } from "./CosmicUtil";
 const { Cake, FoodItem, Item } = require('./CosmicTypes');
 
 const { cakes, uncommon_cakes, rare_cakes, ultra_rare_cakes, secret_cakes } = require('./CosmicCakes');
@@ -22,17 +23,17 @@ class CosmicCakeFactory {
 
     public static logger = new CosmicLogger('Cake Factory', red);
 
-    public static generateRandomCake() {
+    public static async generateRandomCake() {
         const rarity = Math.random();
-        let c = cakes[Math.floor(Math.random() * cakes.length)];
+        let c: Cosmic.Cake = await CosmicUtil.getRandomValueFromArray(cakes);
         if (rarity < 0.1) {
-            c = uncommon_cakes[Math.floor(Math.random() * uncommon_cakes.length)];
+            c = await CosmicUtil.getRandomValueFromArray(uncommon_cakes);
         }
         if (rarity < 0.05) {
-            c = rare_cakes[Math.floor(Math.random() * rare_cakes.length)];
+            c = await CosmicUtil.getRandomValueFromArray(rare_cakes);
         }
         if (rarity < 0.01) {
-            c = ultra_rare_cakes[Math.floor(Math.random() * ultra_rare_cakes.length)]
+            c = await CosmicUtil.getRandomValueFromArray(ultra_rare_cakes);
         }
         return c;
     }
@@ -80,7 +81,7 @@ class CosmicCakeFactory {
     public static async finishBaking(_id: string): Promise<void> {
         let user = this.bakingUsers.find(u => u._id == _id);
 
-        let cake = this.generateRandomCake();
+        let cake = await this.generateRandomCake();
         await CosmicData.addItem(user._id, cake);
 
         this.bakingUsers.splice(this.bakingUsers.indexOf(user), 1);
