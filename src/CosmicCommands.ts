@@ -840,7 +840,7 @@ CosmicCommandHandler.registerCommand(new Command(
     'cake',
     async (msg, cl) => {
         let inventories = await CosmicData.getTopBalances();
-        let out = `Leaderboard:`;
+        let out = `Leaderboard: `;
 
         let user;
         let i = 0;
