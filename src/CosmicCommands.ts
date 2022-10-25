@@ -833,7 +833,7 @@ CosmicCommandHandler.registerCommand(new Command(
 CosmicCommandHandler.registerCommand(new Command(
     'leaderboard',
     [ 'leaderboard', 'topbal' ],
-    '%PREFIX%topbal',
+    '%PREFIX%leaderboard',
     `List the highest account balances.`,
     [ 'default' ],
     true,
