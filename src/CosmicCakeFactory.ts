@@ -14,7 +14,7 @@ const { Cake, FoodItem, Item } = require('./CosmicTypes');
 
 const { cakes, uncommon_cakes, rare_cakes, ultra_rare_cakes, secret_cakes } = require('./CosmicCakes');
 
-const CHECK_INTERVAL = 5000;
+const CHECK_INTERVAL = 15000;
 const RANDOM_CHANCE = 0.02;
 
 class CosmicCakeFactory {
