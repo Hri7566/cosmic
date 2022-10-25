@@ -862,6 +862,8 @@ CosmicCommandHandler.registerCommand(new Command(
             i++;
         }
 
+        out = out.substring(0, out.length - 2).trim();
+
         return out;
     }
 ));
