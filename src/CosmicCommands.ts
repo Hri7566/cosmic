@@ -831,8 +831,8 @@ CosmicCommandHandler.registerCommand(new Command(
 ));
 
 CosmicCommandHandler.registerCommand(new Command(
-    'topbal',
-    [ 'topbal', 'leaderboard' ],
+    'leaderboard',
+    [ 'leaderboard', 'topbal' ],
     '%PREFIX%topbal',
     `List the highest account balances.`,
     [ 'default' ],
@@ -850,12 +850,12 @@ CosmicCommandHandler.registerCommand(new Command(
             
             user = await CosmicData.getUser(inv._id);
             if (!user) {
-                out += `${inv._id.substring(0, 6)}: ${inv.balance} | `;
+                out += `${inv._id.substring(0, 6)}: ${CosmicData.formatBalance(inv.balance)} | `;
             } else {
                 if (user.name.length > 10) {
-                    out += `[${user._id.substring(0, 6)}] ${user.name.substring(0, 14)}…: ${inv.balance} | `;
+                    out += `[${user._id.substring(0, 6)}] ${user.name.substring(0, 14)}…: ${CosmicData.formatBalance(inv.balance)} | `;
                 } else {
-                    out += `[${user._id.substring(0, 6)}] ${user.name}: ${inv.balance} | `;
+                    out += `[${user._id.substring(0, 6)}] ${user.name}: ${CosmicData.formatBalance(inv.balance)} | `;
                 }
             }
 
