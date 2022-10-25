@@ -658,7 +658,7 @@ CosmicCommandHandler.registerCommand(new Command(
 
         await CosmicData.addBalance(msg.sender._id, total);
 
-        return `You ate all of your cake and gained ${CosmicData.formatBalance(total)}${total > 15 ? ' and lots of weight' : ''}.`;
+        return `You ate all of your cake and gained ${CosmicData.formatBalance(total)}${total > 100 ? ' and lots of weight' : ''}.`;
     }
 ));
 
