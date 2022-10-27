@@ -53,7 +53,9 @@ let HOLIDAYS: Array<Cosmic.Holiday | Cosmic.RangeHoliday> = [
     {
         displayName: 'Halloween',
         emoji: '🎃',
-        timestamp: `Oct 31 ${CURRENT_YEAR}`
+        // timestamp: `Oct 31 ${CURRENT_YEAR}`
+        start: `Oct 25 ${CURRENT_YEAR}`,
+        end: `Sep 1 ${CURRENT_YEAR}`
     },
     {
         displayName: 'Thanksgiving',
@@ -75,7 +77,7 @@ let HOLIDAYS: Array<Cosmic.Holiday | Cosmic.RangeHoliday> = [
 
 setInterval(() => {
     CURRENT_YEAR = new Date().getFullYear();
-    let HOLIDAYS: Array<Cosmic.Holiday | Cosmic.RangeHoliday> = [
+    HOLIDAYS = [
         {
             displayName: 'New Year\'s Day',
             emoji: '🎆',
@@ -120,7 +122,9 @@ setInterval(() => {
         {
             displayName: 'Halloween',
             emoji: '🎃',
-            timestamp: `Oct 31 ${CURRENT_YEAR}`
+            // timestamp: `Oct 31 ${CURRENT_YEAR}`
+            start: `Oct 25 ${CURRENT_YEAR}`,
+            end: `Sep 1 ${CURRENT_YEAR}`
         },
         {
             displayName: 'Thanksgiving',
