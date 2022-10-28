@@ -18,20 +18,15 @@ const { EventEmitter } = require('events');
  * Local module imports
  */
 
-import { CosmicFFI } from './CosmicFFI';;
 import { CosmicClientHandler } from './CosmicClientHandler';
-import { ChannelConstructionPreset } from './CosmicClient';
-import { CosmicUtil } from './CosmicUtil';
 import { CosmicData } from './CosmicData';
 const { CosmicLogger, magenta } = require('./CosmicLogger');
-const { Message, CommandMessage, ChatMessage, Prefix } = require('./CosmicTypes');
 const { CosmicAPI } = require('./CosmicAPI');
 
 /**
  * Module-level declarations
  */
 
-const MPPCLONE_TOKEN = process.env.MPPCLONE_TOKEN;
 const ENABLE_MPP = process.env.ENABLE_MPP || 'true';
 const ENABLE_DISCORD = process.env.ENABLE_DISCORD || 'true';
 
@@ -48,7 +43,7 @@ class Cosmic {
     public static once = EventEmitter.prototype.once;
     public static emit = EventEmitter.prototype.emit;
 
-    public static startTime;
+    public static startTime: number;
 
     public static started: boolean = false;
 
@@ -58,6 +53,7 @@ class Cosmic {
     public static async start(): Promise<void> {
         if (this.started) return;
         this.started = true;
+        this.startTime = Date.now();
 
         this.bindEventListeners();
 
@@ -80,7 +76,7 @@ class Cosmic {
 
         CosmicAPI.start();
 
-        this.startTime = Date.now();
+        this.emit('ready');
     }
 
     /**
@@ -102,6 +98,10 @@ class Cosmic {
     private static bindEventListeners(): void {
         if (this.alreadyBound) return;
         this.alreadyBound = true;
+
+        this.on('ready', () => {
+            this.logger.log('Ready');
+        });
     }
 }
 

@@ -29,7 +29,7 @@ class CosmicForeignMessageHandler {
                 message: omsg.a,
                 timestamp: Date.now(),
                 original_channel: omsg.original_channel
-            };
+            }
 
             return msg;
         }

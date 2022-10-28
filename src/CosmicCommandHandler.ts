@@ -160,8 +160,9 @@ class CosmicCommandHandler {
                         _id: 'internal',
                         color: '#ffffff'
                     },
+                    dm: cmsg.original_channel.dm_id,
                     message: out,
-                    timestamp: Date.now()
+                    timestamp: Date.now(),
                 });
 
             }

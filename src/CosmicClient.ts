@@ -211,6 +211,19 @@ export class CosmicClientMPP extends CosmicClientToken {
             this.emit('chat', newmsg);
         });
 
+        this.client.on('dm', msg => {
+            msg.original_channel = {
+                _id: this.client.channel._id,
+                id: this.client.channel._id,
+                dm_id: msg.sender._id
+            }
+
+            msg.p = msg.sender;
+
+            let newmsg = CosmicForeignMessageHandler.convertMessage('chat', msg);
+            this.emit('chat', newmsg);
+        });
+
         this.client.on('hi', msg => {
             this.client.setChannel(this.desiredChannel._id, this.desiredChannel.set);
             this.cursor.start();
@@ -245,10 +258,18 @@ export class CosmicClientMPP extends CosmicClientToken {
         }, 5000);
 
         this.on('send chat message', msg => {
-            this.client.sendArray([{
-                m: 'a',
-                message: `\u034f${msg.message}`
-            }]);
+            if (!msg.dm) {
+                this.client.sendArray([{
+                    m: 'a',
+                    message: `\u034f${msg.message}`
+                }]);
+            } else {
+                this.client.sendArray([{
+                    m: 'dm',
+                    message: `\u034f${msg.message}`,
+                    _id: msg.dm
+                }]);
+            }
         });
 
         this.client.on('t', msg => {

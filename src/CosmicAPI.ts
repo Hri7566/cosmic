@@ -8,6 +8,7 @@ import { CosmicClientHandler } from "./CosmicClientHandler";
 
 const express = require('express');
 const path = require('path');
+const WebSocket = require('ws');
 
 const { CosmicData } = require('./CosmicData');
 const { CosmicLogger, yellow } = require('./CosmicLogger');
@@ -18,6 +19,7 @@ class CosmicAPI {
     public static app = express();
     public static api = express.Router();
     public static server;
+    public static wss;
 
     public static logger = new CosmicLogger('Cosmic API', yellow);
 
@@ -49,6 +51,15 @@ class CosmicAPI {
         
         this.server = this.app.listen(PORT, () => {
             this.logger.log(`Listening on port ${PORT}`);
+        });
+
+        this.wss = new WebSocket.Server({
+            noServer: true
+        });
+
+        this.wss.on('error', err => { this.logger.error(err) });
+        this.wss.on('connection', (ws, req) => {
+            
         });
     }
 

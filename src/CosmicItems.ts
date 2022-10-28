@@ -15,7 +15,7 @@ export const ITEMS: Record<string | symbol, AnyItem> = {
         description: `Bake slightly faster`,
         value: 1000,
         sellable: false,
-        cake_bonus: 1.25,
+        cake_bonus: 1.05,
         max_stack: 1
     },
     BIGGER_BRAIN: {
@@ -26,7 +26,17 @@ export const ITEMS: Record<string | symbol, AnyItem> = {
         description: `Think better`,
         value: 2000,
         sellable: false,
-        cake_bonus: 1.125,
+        cake_bonus: 1.05,
         max_stack: 1
+    },
+    CANDY: {
+        id: 'candy',
+        displayName: 'Halloween Candy',
+        emoji: '🍬',
+        count: 1,
+        description: `Yummy candy`,
+        value: 100,
+        sellable: true,
+        max_stack: 99
     }
 }
