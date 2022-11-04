@@ -13,5 +13,11 @@ export const SHOP_ITEMS: ShopListing[] = [
     },
     {
         item: ITEMS.CANDY
+    },
+    {
+        item: ITEMS.SAND
+    },
+    {
+        item: ITEMS.HOT_SAUCE
     }
 ]

@@ -19,10 +19,11 @@ import { CosmicShop } from "./CosmicShop";
 import { CosmicUtil } from "./CosmicUtil";
 import { Cosmic as CosmicColor } from './CosmicColor';
 import { CosmicSeasonDetection } from "./CosmicSeasonDetection";
-import { AnyItem, Cosmic as CosmicTypes, Inventory, Item, ShopListing } from "./CosmicTypes";
+import { AnyItem, Cosmic, Cosmic as CosmicTypes, Inventory, Item, ShopListing } from "./CosmicTypes";
 import { CosmicData } from './CosmicData';
+import { ITEMS } from "./CosmicItems";
+import { CosmicClient } from "./CosmicClient";
 const { Command, CosmicCommandHandler } = require('./CosmicCommandHandler');
-const { Cosmic } = require('./Cosmic');
 
 /**
  * Module-level declarations
@@ -93,7 +94,8 @@ CosmicCommandHandler.registerCommand(new Command(
         let mm = ss / 60;
         let hh = mm / 60;
         let dd = hh / 24;
-        return `✨ This outer space-themed bot was made by Hri7566#3409. This bot was created ${Math.floor(dd)} days, ${Math.floor(hh % 24)} hours, ${Math.floor(mm % 60)} minutes, and ${Math.floor(ss % 60)} seconds ago.`;
+        let isProd = process.env.NODE_ENV == 'prod';
+        return `${isProd ? '' : '[NON-PRODUCTION BUILD] '}✨ This outer space-themed bot was made by Hri7566#3409. This bot was created ${Math.floor(dd)} days, ${Math.floor(hh % 24)} hours, ${Math.floor(mm % 60)} minutes, and ${Math.floor(ss % 60)} seconds ago.`;
     }
 ));
 
@@ -658,7 +660,7 @@ CosmicCommandHandler.registerCommand(new Command(
 
         await CosmicData.addBalance(msg.sender._id, total);
 
-        return `You ate all of your cake and gained ${CosmicData.formatBalance(total)}${total > 100 ? ' and lots of weight' : ''}.`;
+        return `You ate all of your cake and gained ${CosmicData.formatBalance(total)}${total > 500 ? ' and lots of weight' : ''}.`;
     }
 ));
 
@@ -770,7 +772,7 @@ CosmicCommandHandler.registerCommand(new Command(
         const search = msg.argv[1];
 
         if (!search) {
-            return `Please provide an item name from the item shop.`
+            return `Please type an item name from the item shop.`
         }
         
         let listing: ShopListing;
@@ -831,6 +833,50 @@ CosmicCommandHandler.registerCommand(new Command(
 ));
 
 CosmicCommandHandler.registerCommand(new Command(
+    'sell',
+    [ 'sell' ],
+    '%PREFIX%sell <item>',
+    `Sell an item.`,
+    [ 'default' ],
+    true,
+    'cake',
+    async (msg: Cosmic.CommandMessage, cl: CosmicClient) => {
+        const search = msg.argv[1];
+
+        if (!search) {
+            return `Please type the name of an item to sell.`;
+        }
+
+        const inv: Inventory = await CosmicData.getInventory(msg.sender._id);
+
+        let found: Item;
+        
+        for (let it of inv.items) {
+            if (search == it.id || it.displayName.toLowerCase().includes(search.toLowerCase())) {
+                found = it;
+                break;
+            }
+        }
+
+        if (!found) {
+            return `You don't have a '${search}' to sell.`;
+        }
+
+        let count = 1;
+        let value = found.value || 0;
+
+        if (found.sellable) {
+            let balToAdd = count * value;
+            CosmicData.removeOneItem(msg.sender._id, found.id, count);
+            CosmicData.addBalance(msg.sender._id, balToAdd);
+            return `You sold ${CosmicUtil.formatItemString(found.displayName, found.emoji, count)} and received ${CosmicData.formatBalance(balToAdd)}.`;
+        } else {
+            return `You can't sell ${CosmicUtil.formatItemString(found.displayName, found.emoji, 1)}.`
+        }
+    }
+));
+
+CosmicCommandHandler.registerCommand(new Command(
     'leaderboard',
     [ 'leaderboard', 'topbal' ],
     '%PREFIX%leaderboard',
@@ -865,5 +911,32 @@ CosmicCommandHandler.registerCommand(new Command(
         out = out.substring(0, out.length - 2).trim();
 
         return out;
+    }
+));
+
+CosmicCommandHandler.registerCommand(new Command(
+    'description',
+    [ 'description', 'desc', 'itemdescription' ],
+    '%PREFIX%description <item>',
+    `Get the description of an item.`,
+    [ 'default' ],
+    true,
+    'cake',
+    async (msg, cl) => {
+        if (!msg.argv[1]) return 'Type the name of an item to get a description.';
+        
+        let i: Item;
+        for (let it of Object.values(ITEMS)) {
+            if (msg.argv[1] == it.id || it.displayName.toLowerCase().includes(msg.argv[1].toLowerCase())) {
+                i = it;
+                break;
+            }
+        }
+
+        if (i) {
+            return `Name: ${CosmicUtil.formatItemString(i.displayName, i.emoji, i.count)} | Description: ${i.description ? i.description : 'No description.'}${i.value ? ` | Value: ${i.value}` : ''}`
+        } else {
+            return `Item '${msg.argv[1]}' not found.`;
+        }
     }
 ));

@@ -8,6 +8,10 @@ import { readFile } from "fs";
 import { resolve } from "path";
 import * as http from 'http';
 import { CosmicClientHandler } from "./CosmicClientHandler";
+import { Cosmic } from "./Cosmic";
+import { CosmicShop } from "./CosmicShop";
+import { CosmicSeasonDetection } from "./CosmicSeasonDetection";
+import { CosmicUtil } from "./CosmicUtil";
 
 const express = require('express');
 const path = require('path');
@@ -33,7 +37,8 @@ class CosmicAPI {
             res.json({
                 status: 'online',
                 environment: process.env.NODE_ENV,
-                clients: CosmicClientHandler.getClientCount()
+                clients: CosmicClientHandler.getClientCount(),
+                uptime: Date.now() - Cosmic.startTime
             });
         });
 
@@ -46,6 +51,21 @@ class CosmicAPI {
             }
 
             res.json(users);
+        });
+
+        this.api.get('/shop', async (req, res) => {
+            res.json(CosmicShop.getListings());
+        });
+
+        this.api.get('/season', async (req, res) => {
+            res.json({
+                season: CosmicSeasonDetection.getSeason(req.query.t),
+                holiday: CosmicSeasonDetection.getHoliday(req.query.t)
+            });
+        });
+
+        this.api.get('/utilget', async (req, res) => {
+            res.json(CosmicUtil.get(req.key, req._id));
         });
 
         this.app.use('/api', this.api);

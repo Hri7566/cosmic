@@ -96,7 +96,7 @@ class CosmicUtil {
      * @returns Formatted string
      */
     public static formatItemString(name: string, emoji: string = '', count: number) {
-        return `${emoji}${name} ${count > 1 ? `(x${count})` : ''}`;
+        return `${emoji}${name}${count > 1 ? ` (x${count})` : ''}`;
     }
 
     // migrated from main class
