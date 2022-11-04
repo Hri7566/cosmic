@@ -7,10 +7,10 @@
   -
     _id: 'test/awkward'
     set:
-      color: "#1d0054",
+      color: "#1d0054"
       color2: "#000000"
   -
     _id: 'test/fishing'
     set:
-      color: "#1d0054",
+      color: "#1d0054"
       color2: "#000000"
