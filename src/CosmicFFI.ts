@@ -5,7 +5,7 @@
  */
 
 const path = require('path');
-const ffi = require('ffi-napi');
+import * as ffi from 'ffi-napi';
 const ref = require('ref-napi');
 
 class CosmicFFI {
