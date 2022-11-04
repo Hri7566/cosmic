@@ -252,6 +252,57 @@ export const uncommon_cakes: Array<typeof Cake> = [
         icing: 'ice cream',
         filling: 'ice cream',
         value: 50
+    },
+    {
+        id: 'cake_pound_cake',
+        displayName: 'Pound Cake',
+        emoji: '£',
+        count: 1,
+        edible: true,
+        icing: 'bri\'ish',
+        filling: 'bri\'ish',
+        value: 80
+    },
+    {
+        id: 'cake_dollar_cake',
+        displayName: 'Dollar Cake',
+        emoji: '💵',
+        count: 1,
+        edible: true,
+        icing: 'rich',
+        filling: 'green',
+        value: 80
+    },
+    {
+        id: 'cake_pizza',
+        displayName: 'Pizza Cake',
+        emoji: '🍕',
+        count: 1,
+        edible: true,
+        icing: 'cheesy',
+        filling: 'tomato sauce',
+        topping: 'pepperoni',
+        value: 75
+    },
+    {
+        id: 'cake_water',
+        displayName: 'Water Cake',
+        emoji: '💧',
+        count: 1,
+        edible: true,
+        icing: 'water',
+        filling: 'water',
+        value: 75
+    },
+    {
+        id: 'cake_fire',
+        displayName: 'Fire Cake',
+        emoji: '🔥',
+        count: 1,
+        edible: true,
+        icing: 'smokey',
+        filling: 'flame',
+        value: 80
     }
 ];
 
@@ -277,6 +328,64 @@ export const rare_cakes: Array<typeof Cake> = [
         filling: 'custard',
         topping: 'powdered sugar',
         value: 75
+    },
+    {
+        id: 'cake_flint',
+        displayName: 'Flint Cake',
+        emoji: '🪨',
+        count: 1,
+        edible: true,
+        icing: 'gravel',
+        filling: 'rock',
+        value: 100
+    },
+    {
+        id: 'cake_candy_cake',
+        displayName: 'Candy Cake',
+        emoji: '🍬',
+        count: 1,
+        edible: true,
+        icing: 'candy',
+        filling: 'peanut butter-lined',
+        value: 80
+    },
+    {
+        id: 'cake_clock',
+        displayName: 'Clock Cake',
+        emoji: '⌚',
+        count: 1,
+        edible: true,
+        icing: 'hourly',
+        filling: 'timey-wimey',
+        value: 100
+    },
+    {
+        id: 'cake_tardis',
+        displayName: 'Police Box Cake',
+        count: 1,
+        edible: true,
+        icing: 'timey-wimey',
+        filling: 'wibbly-wobbly',
+        value: 125
+    },
+    {
+        id: 'cake_earth',
+        displayName: 'Earth Cake',
+        emoji: '🌎',
+        count: 1,
+        edible: true,
+        icing: 'blue and green',
+        filling: 'metal'
+    },
+    {
+        id: 'cake_mushroom',
+        displayName: 'Mushroom Cake',
+        emoji: '🍄',
+        count: 1,
+        edible: true,
+        icing: '1-up',
+        filling: 'fungal',
+        value: 80
     }
 ];
 
@@ -289,7 +398,67 @@ export const ultra_rare_cakes: Array<typeof Cake> = [
         edible: true,
         icing: 'black',
         filling: 'black velvet',
-        value: 100
+        value: 200
+    },
+    {
+        id: 'cake_stone',
+        displayName: 'Stone Cake',
+        emoji: '🪨',
+        count: 1,
+        edible: true,
+        icing: 'pebbles',
+        filling: 'rocky',
+        value: 250
+    },
+    {
+        id: 'cake_shoe',
+        displayName: 'Shoe Cake',
+        emoji: '👞',
+        count: 1,
+        edible: true,
+        icing: 'laces',
+        filling: 'stinky',
+        value: 250
+    },
+    {
+        id: 'cake_glitter',
+        displayName: 'Glitter Cake',
+        emoji: '✨',
+        count: 1,
+        edible: true,
+        icing: 'shiny',
+        filling: 'reflective',
+        value: 275
+    },
+    {
+        id: 'cake_hologram',
+        displayName: 'Hologram Cake',
+        emoji: '🔵',
+        count: 1,
+        edible: true,
+        icing: 'transparent',
+        filling: 'holographic',
+        value: 300
+    },
+    {
+        id: 'cake_saxophone',
+        displayName: 'Saxophone Cake',
+        emoji: '🎷',
+        count: 1,
+        edible: true,
+        icing: 'epic',
+        filling: 'epic',
+        value: 325
+    },
+    {
+        id: 'cake_trophy',
+        displayName: 'Trophy Cake',
+        emoji: '🏆',
+        count: 1,
+        edible: true,
+        icing: 'winner',
+        filling: 'winner',
+        value: 500
     }
 ];
 

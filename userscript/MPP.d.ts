@@ -5,6 +5,7 @@ declare namespace MPP {
     let noteQuota: any;
     let soundSelector: any;
     let Notification: any;
+    let cmapi: any;
 
     function press(): unknown;
     function release(): unknown;

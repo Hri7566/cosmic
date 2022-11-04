@@ -38,7 +38,7 @@ class CosmicCakeFactory {
         return c;
     }
 
-    public static startBaking(user: User, cl: CosmicClient): string {
+    public static startBaking(user: User, cl: CosmicClient, isDM: boolean = false): string {
         let response: string = `${user.name} started baking.`;
 
         if (this.isAlreadyBaking(user._id)) {
@@ -53,7 +53,8 @@ class CosmicCakeFactory {
             name: user.name,
             start: Date.now(),
             cl: cl,
-            channel: cl.platform == 'discord' ? (cl as CosmicClientDiscord).previousChannel : undefined
+            channel: cl.platform == 'discord' ? (cl as CosmicClientDiscord).previousChannel : undefined,
+            dm: isDM
         });
 
         return response;
@@ -87,7 +88,11 @@ class CosmicCakeFactory {
         this.bakingUsers.splice(this.bakingUsers.indexOf(user), 1);
 
         if (user.hasOwnProperty('cl')) {
-            user.cl.sendChat(`${user.name} finished baking and got: ${cake.emoji || ''}${cake.displayName} (x${cake.count})`, user.channel);
+            if (user.isDM) {
+                user.cl.sendChat(`${user.name} finished baking and got: ${cake.emoji || ''}${cake.displayName} (x${cake.count})`, user.channel);
+            } else {
+                user.cl.sendChat(`${user.name} finished baking and got: ${cake.emoji || ''}${cake.displayName} (x${cake.count})`, user.channel);
+            }
         }
     }
 

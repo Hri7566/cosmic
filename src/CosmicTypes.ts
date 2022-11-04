@@ -186,6 +186,12 @@ export namespace Cosmic {
         sender: User;
     }
 
+    export interface BehaviorMessage extends Message {
+        type: 'behavior';
+        argv: string[];
+        sender: User;
+    }
+
     export interface ChannelConfig {
         _id: string;
         settings: ChannelSettings;
