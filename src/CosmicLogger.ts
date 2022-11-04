@@ -185,12 +185,12 @@ class CosmicLogger {
     }
 
     /**
-     * Log debug messages (doesn't run on NODE_ENV=prod)
+     * Log debug messages (doesn't run on NODE_ENV=production)
      * @param args Debug content to log
      */
     debug(...args: any[]) {
         if (process.env.NODE_ENV) {
-            if (process.env.NODE_ENV == 'prod') return;
+            if (process.env.NODE_ENV == 'production') return;
         }
         let [str, pastArgs] = log_full_info('debug', `${blue('[DEBUG]')} ${this.color(`[${this.id}]`)}`, ...args);
         CosmicLogger.PAST_MESSAGES.push([str, ...pastArgs]);

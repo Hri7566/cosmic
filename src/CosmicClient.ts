@@ -156,7 +156,7 @@ export class CosmicClientMPP extends CosmicClientToken {
     protected desiredChannel: ChannelConstructionPreset;
     
     protected desiredUser = {
-        name: `🟇 Cosmic (${CosmicCommandHandler.prefixes[0].prefix}${CosmicCommandHandler.commands.find(cmd => cmd.id == 'help').accessors[0]})${process.env.NODE_ENV == 'prod' ? '' : ' [non-production]'}`,
+        name: `🟇 Cosmic (${CosmicCommandHandler.prefixes[0].prefix}${CosmicCommandHandler.commands.find(cmd => cmd.id == 'help').accessors[0]})${process.env.NODE_ENV == 'production' ? '' : ' [non-production]'}`,
         color: '#1d0054'
     };
     

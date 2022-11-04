@@ -43,7 +43,7 @@ const About = () => {
     return (
         <>
             <h1>About</h1>
-            <p>cosmic haha oooaaaeee</p>
+            <p>Made by Hri7566</p>
         </>
     )
 }
@@ -93,7 +93,6 @@ const App = () => {
 }
 
 window.addEventListener('load', () => {
-    console.log('Document loaded')
     // document.getElementById('app').innerHTML = ReactDOM.renderToString(<App />);
     const root = ReactDOM.createRoot(document.getElementById('app'));
     root.render(<App />);
