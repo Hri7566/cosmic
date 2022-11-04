@@ -4,9 +4,10 @@
  * Express API module
  */
 
-import { readFile } from "fs";
+import { readFile, readFileSync } from "fs";
 import { resolve } from "path";
 import * as http from 'http';
+import * as https from 'https';
 import { CosmicClientHandler } from "./CosmicClientHandler";
 import { Cosmic } from "./Cosmic";
 import { CosmicShop } from "./CosmicShop";
@@ -21,6 +22,26 @@ const { CosmicData } = require('./CosmicData');
 const { CosmicLogger, yellow } = require('./CosmicLogger');
 
 const PORT = process.env.PORT || 3000;
+const SSL = process.env.SSL || 'false';
+
+let cert;
+let key;
+
+if (SSL == 'true') {
+    try {
+        cert = readFileSync(resolve(__dirname, '../../ssl/cert.pem'));
+    } catch (err) {
+        console.error(`Couldn't load SSL certificate:`, err);
+        process.exit(4);
+    }
+
+    try {
+        key = readFileSync(resolve(__dirname, '../../ssl/key.pem'));
+    } catch (err) {
+        console.error(`Couldn't read SSL key:`, err);
+        process.exit(5);
+    }
+}
 
 class CosmicAPI {
     public static app = express();
@@ -88,7 +109,13 @@ class CosmicAPI {
             });
         });
         
-        this.server = http.createServer(this.app);
+        if (SSL == 'true') {
+            this.server = https.createServer({
+                cert, key
+            }, this.app);
+        } else {
+            this.server = http.createServer(this.app);
+        }
         this.server.listen(PORT, () => {
             this.logger.log(`Listening on port ${PORT}`);
         });

@@ -2,6 +2,7 @@
 .env
 *.env
 build
+ssl
 
 # node
 node_modules
