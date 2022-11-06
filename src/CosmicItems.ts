@@ -222,5 +222,29 @@ export const ITEMS: Record<string | symbol, AnyItem> = {
         value: 250000,
         max_stack: 1,
         sellable: false
+    },
+    RECYCLE_BIN: {
+        id: 'recycle_bin',
+        displayName: "Recycle Bin",
+        count: 1,
+        value: 500,
+        max_stack: 1,
+        sellable: false
+    },
+    GOLD_SPRING: {
+        id: 'spring_gold',
+        displayName: "Gold Spring",
+        count: 1,
+        value: 250,
+        max_stack: 1,
+        sellable: false
+    },
+    SILVER_SPRING: {
+        id: 'spring_silver',
+        displayName: "Silver Spring",
+        count: 1,
+        value: 250,
+        max_stack: 1,
+        sellable: false
     }
 }
