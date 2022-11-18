@@ -13,6 +13,9 @@ import { Cosmic } from "./Cosmic";
 import { CosmicShop } from "./CosmicShop";
 import { CosmicSeasonDetection } from "./CosmicSeasonDetection";
 import { CosmicUtil } from "./CosmicUtil";
+import { JSONEncodable } from "discord.js";
+import EventEmitter = require("events");
+import crypto = require('crypto');
 
 const express = require('express');
 const path = require('path');
@@ -50,9 +53,13 @@ class CosmicAPI {
     public static wss: typeof WebSocket.Server;
 
     public static logger = new CosmicLogger('Cosmic API', yellow);
+    public static wsClients = [];
 
     public static start() {
         this.logger.log('Starting...');
+
+        //* use req.ip
+        this.app.set('trust proxy', true);
 
         this.api.get('/', async (req, res) => {
             res.json({
@@ -74,6 +81,30 @@ class CosmicAPI {
             res.json(users);
         });
 
+        this.api.get('/user', async (req, res) => {
+            if (!req.query.id) return;
+            let user = await CosmicData.getUser(req.query.id);
+            if (!user) {
+                res.json({
+                    error: 'user not found'
+                });
+            } else {
+                res.json(user);
+            }
+        });
+
+        this.api.get(/\/inv(entory)/, async (req, res) => {
+            if (!req.query.id) return;
+            let inventory = await CosmicData.getInventory(req.query.id);
+            if (!inventory) {
+                res.json({
+                    error: 'inventory not found'
+                });
+            } else {
+                res.json(inventory);
+            }
+        });
+
         this.api.get('/shop', async (req, res) => {
             res.json(CosmicShop.getListings());
         });
@@ -89,6 +120,10 @@ class CosmicAPI {
             res.json(CosmicUtil.get(req.key, req._id));
         });
 
+        this.api.get('*', async (req, res) => {
+            res.status(404).json({ error: 'SORRY NOTHING' });
+        });
+
         this.app.use('/api', this.api);
 
         this.app.use(express.static(path.resolve(__dirname, '../../frontend')));
@@ -97,14 +132,14 @@ class CosmicAPI {
         this.app.get('*', (req, res) => {
             readFile(resolve(__dirname, '../../frontend/index.html'), (err, data) => {
                 if (err) {
-                    res.end('502 oops');
+                    res.status(502).end('oops');
                     return;
                 }
 
                 try {
                     res.send(data.toString());
                 } catch (err) {
-                    res.end('502 really bad things happened :(');
+                    res.status(502).end('really bad things happened :(');
                 }
             });
         });
@@ -121,44 +156,43 @@ class CosmicAPI {
         });
 
         this.wss = new WebSocket.Server({
-            // noServer: true
-            server: this.server
+            noServer: true
+            // server: this.server
+        });
+
+        this.server.on('upgrade', (req, socket, head) => {
+            this.wss.handleUpgrade(req, socket, head, ws => {
+                this.wss.emit('connection', ws, req);
+            })
+        });
+
+        this.server.on('connection', sock => {
+            sock.on('data', d => {
+                try {
+                    // console.log(d.toString());
+                } catch (err) {};
+            });
         });
 
         this.wss.on('error', (err: Error) => { this.logger.error(err) });
+
         this.wss.on('connection', (ws: WebSocket, req: http.ClientRequest) => {
             // console.log('websocket connection');
             // let cl: {
             //     ws: WebSocket;
             //     send: (s: any) => void;
             //     connected: boolean;
+            // } = {
+            //     ws: ws,
+            //     connected: true,
+            //     send: (s: any) => {
+            //         if (!cl.connected) return;
+            //         cl.ws.send(JSON.stringify(s));
+            //     }
             // }
 
-            // cl.ws = ws;
-            // cl.connected = true;
-
-            // cl.send = (s: any) => {
-            //     if (!cl.connected) return;
-            //     cl.ws.send(JSON.stringify(s));
-            // }
-
-            // cl.ws.addEventListener('message', data => {
-            //     if (!cl.connected) return;
-            //     try {
-            //         let msg = JSON.parse(data.toString());
-                    
-            //         switch (msg.m) {
-            //             case 'hi':
-            //                 cl.send({ m: 'hi' });
-            //                 break;
-            //             case 'bye':
-            //                 cl.ws.close();
-            //                 delete cl.ws;
-            //                 cl.connected = false;
-            //                 break;
-            //         }
-            //     } catch (err) {}
-            // });
+            let cl = new CosmicAPIWebSocketClient(ws, req);
+            this.addClient(cl);
         });
     }
 
@@ -166,6 +200,102 @@ class CosmicAPI {
         this.logger.log('Stopping server...');
         this.server.close();
         this.logger.log('Stopped.');
+    }
+
+    public static addClient(cl: CosmicAPIWebSocketClient): void {
+        this.wsClients.push(cl);
+    }
+
+    public static removeClient(cl: CosmicAPIWebSocketClient): void {
+        this.wsClients.splice(this.wsClients.indexOf(cl), 1);
+    }
+
+    public static getClientByIP(ip: string): void {
+        for (let cl of this.wsClients) {
+            if (cl.ip == ip) return cl;
+        }
+    }
+
+    public static generateAPIKey(): string {
+        return crypto.randomUUID();
+    }
+}
+
+class CosmicAPIWebSocketClient extends EventEmitter {
+    public connected = false;
+    public ip: string;
+
+    constructor(
+        public ws: WebSocket,
+        req: http.ClientRequest
+    ) {
+        super();
+
+        this.connected = true;
+        this.bindEventListeners();
+    }
+
+    public send(data: Record<string, any>): void {
+        if (!this.connected) return;
+        
+        this.ws.send(JSON.stringify(data));
+    }
+
+    public destroy(): boolean {
+        try {
+            if (!this.connected) return;
+            this.ws.close();
+            delete this.ws;
+            this.connected = false;
+
+            CosmicAPI.removeClient(this);
+
+            return true;
+        } catch (err) {
+            return false;
+        }
+    }
+
+    protected bindEventListeners() {
+        this.ws.addEventListener('message', async (data: any) => {
+            if (!this.connected) return;
+                try {
+                    let msg = JSON.parse(data.toString());
+                    
+                    switch (msg.m) {
+                        case 'hi':
+                            this.send({ m: 'hi' });
+                            break;
+                        case 'bye':
+                            this.destroy();
+                            break;
+                        case 'inventory':
+                            if (!msg.id) return;
+
+                            let inventory = await CosmicData.getInventory(msg.id);
+                            if (!inventory) {
+                                return this.send({ m: 'error', error: 'inventory not found' });
+                            }
+
+                            this.send({ m: 'inventory', inventory });
+                            break;
+                    }
+                } catch (err) {}
+        });
+    }
+
+    public async verifyAPIKey(key: Uint8Array) {
+        let keys = await CosmicData.getAPIKeys(this.ip);
+        let hasKey = false;
+
+        for (let k of keys) {
+            if (key == k) {
+                hasKey = true;
+                break;
+            }
+        }
+
+        return hasKey;
     }
 }
 

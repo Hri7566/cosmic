@@ -4,6 +4,8 @@
  * Data module
  */
 
+import { ObjectID } from "bson";
+import { Collection } from "mongodb";
 import { Inventory } from "./CosmicTypes";
 
 /**
@@ -32,11 +34,12 @@ class CosmicData {
     public static logger = new CosmicLogger('Cosmic Data', green);
 
     public static db;
-    public static users;
-    public static permissions;
-    public static inventories;
-    public static items;
-    public static util;
+    public static users: Collection;
+    public static permissions: Collection;
+    public static inventories: Collection;
+    public static items: Collection;
+    public static util: Collection;
+    public static apiKeys: Collection;
 
     public static async start(): Promise<void> {
         this.logger.log("Connecting to database...");
@@ -54,6 +57,7 @@ class CosmicData {
             this.items = await this.db.collection("items");
             this.permissions = await this.db.collection("permissions");
             this.util = await this.db.collection("util");
+            this.apiKeys = await this.db.collection("apikeys");
 
             this.logger.log(`Connected to database '${MONGODB_DATABASE}'`);
         } catch (err) {
@@ -71,12 +75,12 @@ class CosmicData {
 
     public static async purgeUsers() {
         this.logger.warn("Purging all users...");
-        await this.users.deleteMany();
+        await this.users.deleteMany(undefined);
     }
 
     public static async purgeInventories() {
         this.logger.warn("Purging all inventories...");
-        await this.inventories.deleteMany();
+        await this.inventories.deleteMany(undefined);
     }
 
     public static async insertUser(user: typeof User) {
@@ -134,7 +138,7 @@ class CosmicData {
     public static async createGroupProfile(_id: string, groups?: string[]) {
         try {
             const result = await this.permissions.insertOne({
-                _id: _id,
+                _id: _id as unknown as ObjectID,
                 groups: groups || [ 'default' ]
             });
 
@@ -146,7 +150,7 @@ class CosmicData {
 
     public static async addGroup(_id: string, group: string) {
         try {
-            const result = await this.permissions.updateOne({
+            const result = await this.permissions.updateOne({ _id }, {
                 $push: { "groups": group }
             });
 
@@ -158,7 +162,7 @@ class CosmicData {
 
     public static async removeGroup(_id: string, group: string) {
         try {
-            const result = await this.permissions.updateOne({
+            const result = await this.permissions.updateOne({ _id }, {
                 $pull: { "groups": group }
             });
 
@@ -175,7 +179,7 @@ class CosmicData {
     public static async createInventory(_id: string, balance?: number, items?: Array<typeof Item>) {
         try {
             const result = await this.inventories.insertOne({
-                _id,
+                _id: _id as unknown as ObjectID,
                 balance: balance || DEFAULT_BALANCE,
                 items: items || DEFAULT_INVENTORY
             });
@@ -354,7 +358,7 @@ class CosmicData {
         try {
             try {
                 await this.util.insertOne({
-                    _id,
+                    _id: _id as unknown as ObjectID,
                     [key]: value
                 });
             } catch (err) {};

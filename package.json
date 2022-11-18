@@ -35,6 +35,7 @@
     "normalize-strings": "^1.1.1",
     "react-router-dom": "^6.4.3",
     "ref-napi": "^3.0.3",
+    "terminal-kit": "^3.0.0",
     "ws": "^8.8.1",
     "yaml": "^2.1.1"
   },

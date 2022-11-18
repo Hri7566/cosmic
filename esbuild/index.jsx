@@ -50,7 +50,7 @@ const About = () => {
 
 class UserCount extends React.Component {
     state = {
-        count: 0
+        count: 'Loading...'
     }
 
     render() {
