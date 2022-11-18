@@ -14,6 +14,8 @@
  * DESCRIPTION: Bot as a service for multiple platforms
  */
 
+console.time('loadTime');
+
 process.stdout.write('\x1b[35m\n\n');
 process.stdout.write('  .    .     *       .      *    * .       *        .  *     \n');
 process.stdout.write('.    *        .   *           .    *     .    .              \n');
@@ -39,6 +41,8 @@ const logger = new CosmicLogger('Cosmic Root', white);
 // logger.debug("This is a debug message.");
 
 import { Cosmic } from './Cosmic';
+console.timeEnd('loadTime');
+
 // process.stdout.write("Starting Cosmic...\n");
 
 logger.log('Cosmic loaded, initializing services...');

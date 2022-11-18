@@ -93,7 +93,7 @@ class CosmicAPI {
             }
         });
 
-        this.api.get(/\/inv(entory)/, async (req, res) => {
+        this.api.get(/\/(inv|inventory)/, async (req, res) => {
             if (!req.query.id) return;
             let inventory = await CosmicData.getInventory(req.query.id);
             if (!inventory) {
@@ -118,6 +118,40 @@ class CosmicAPI {
 
         this.api.get('/utilget', async (req, res) => {
             res.json(CosmicUtil.get(req.key, req._id));
+        });
+        
+        this.api.get('/tool', async (req, res) => {
+            let answers: any = {
+                // 'What?': `I don't know`,
+                'Where am I?': `Under the Newmaker Plane`,
+                'Who am I?': `Newmaker`,
+                'Who are you?': `TOOL`,
+                'Remember being born?': `I'm not Tiara`,
+                'Where is my house?': `You'll never go home`,
+                'Where is the school?': `You can't go back in time`,
+                'What month is it?': `📅`,
+                'What year is it?': `📆`,
+                'Where was the windmill?': `█████`
+            }
+            if (!req.query.q.endsWith('?')) req.query.q = `${req.query.q}?`;
+            // req.query.q = `${req.query.q.substring(0, 1).toUpperCase()}${req.query.q.substring(1).toLowerCase()}`;
+
+            let answer = `I don't know`;
+
+            for (let key of Object.keys(answers)) {
+                if (key.toLowerCase() == req.query.q.toLowerCase()) {
+                    answer = answers[key];
+                    break;
+                }
+            }
+            
+            res.json(answer);
+        });
+
+        this.api.get('apikeytest', async (req, res) => {
+            res.json({
+                key: this.generateAPIKey()
+            });
         });
 
         this.api.get('*', async (req, res) => {

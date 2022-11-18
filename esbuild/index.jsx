@@ -4,6 +4,21 @@ import { BrowserRouter, Routes, Route, Outlet, Link } from 'react-router-dom';
 
 require('./sass/screen.scss');
 
+const Logo = () => {
+    return (
+        <>
+            <img src="assets/pink_ball.png" style={{
+                width: '48px',
+                height: '48px',
+                bottom: '0',
+                marginTop: 'auto',
+                marginBottom: '1.1vh',
+                padding: '.5vh'
+            }}></img>
+        </>
+    )
+}
+
 const Nav = () => {
     return (
         <>
@@ -23,7 +38,7 @@ const Layout = () => {
         <div id="container">
             <div id="header">
                 <div className="left">
-                    <Link to="/"><h1>Cosmic</h1></Link>
+                    <Link to="/"><Logo /><h1>Cosmic</h1></Link>
                 </div>
                 <div className="right">
                     <Nav />

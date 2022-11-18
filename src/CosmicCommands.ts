@@ -95,7 +95,7 @@ CosmicCommandHandler.registerCommand(new Command(
         let hh = mm / 60;
         let dd = hh / 24;
         let isProd = process.env.NODE_ENV == 'production';
-        return `${isProd ? '' : '[NON-PRODUCTION BUILD] '}✨ This outer space-themed bot was made by Hri7566#3409. This bot was created ${Math.floor(dd)} days, ${Math.floor(hh % 24)} hours, ${Math.floor(mm % 60)} minutes, and ${Math.floor(ss % 60)} seconds ago.`;
+        return `${isProd ? '' : '[NON-PRODUCTION BUILD] '}✨ This outer space-themed bot was made by Hri7566#3409. This bot was created ${Math.floor(dd)} days, ${Math.floor(hh % 24)} hours, ${Math.floor(mm % 60)} minutes, and ${Math.floor(ss % 60)} seconds ago. https://cosmic.hri7566.info`;
     }
 ));
 
