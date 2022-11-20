@@ -943,16 +943,3 @@ CosmicCommandHandler.registerCommand(new Command(
         }
     }
 ));
-
-CosmicCommandHandler.registerCommand(new Command(
-    'daily',
-    [ 'daily' ],
-    '%PREFIX%daily',
-    `Get a daily bonus.`,
-    [ 'default' ],
-    true,
-    'cake',
-    async (msg, cl) => {
-        
-    }
-));
