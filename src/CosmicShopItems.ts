@@ -12,12 +12,12 @@ export const SHOP_ITEMS: ShopListing[] = [
         item: ITEMS.LARGER_EGGS
     },
     {
-        item: ITEMS.CANDY
+        item: ITEMS.GIANT_EGGS
     },
     {
-        item: ITEMS.SAND
+        item: ITEMS.WD40
     },
     {
-        item: ITEMS.HOT_SAUCE
+        item: ITEMS.TURKEY
     }
 ]

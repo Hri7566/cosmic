@@ -26,7 +26,18 @@ export const ITEMS: Record<string | symbol, AnyItem> = {
         description: `Think better`,
         value: 2000,
         sellable: false,
-        cake_bonus: 1.05,
+        cake_bonus: 1.15,
+        max_stack: 1
+    },
+    GIANT_EGGS: {
+        id: 'upgrade_giant_eggs',
+        displayName: 'Upgrade: Giant Eggs',
+        emoji: '🥚',
+        count: 1,
+        description: `Bake much faster`,
+        value: 1500,
+        sellable: false,
+        cake_bonus: 1.1,
         max_stack: 1
     },
     CANDY: {
@@ -246,5 +257,33 @@ export const ITEMS: Record<string | symbol, AnyItem> = {
         value: 250,
         max_stack: 1,
         sellable: false
+    },
+    ROLLERCOASTER: {
+        id: 'rollercoaster',
+        displayName: "Rollercoaster",
+        emoji: '🎢',
+        count: 1,
+        value: 250,
+        max_stack: 1,
+        sellable: false
+    },
+    WD40: {
+        id: 'wd40',
+        displayName: 'WD-40',
+        emoji: '🛢️',
+        count: 1,
+        value: 500,
+        max_stack: 50,
+        sellable: false
+    },
+    TURKEY: {
+        id: 'turkey',
+        displayName: 'Turkey',
+        emoji: '🦃',
+        count: 1,
+        value: 0,
+        max_stack: 50,
+        sellable: true,
+        edible: true
     }
 }
