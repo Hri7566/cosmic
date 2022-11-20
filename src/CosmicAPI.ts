@@ -13,7 +13,6 @@ import { Cosmic } from "./Cosmic";
 import { CosmicShop } from "./CosmicShop";
 import { CosmicSeasonDetection } from "./CosmicSeasonDetection";
 import { CosmicUtil } from "./CosmicUtil";
-import { JSONEncodable } from "discord.js";
 import * as YAML from "yaml";
 
 import EventEmitter = require("events");

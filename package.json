@@ -4,16 +4,17 @@
   "description": "Bot as a service for multiple platforms",
   "main": "build/node/index.js",
   "scripts": {
-    "test": "npx jest",
+    "boot": "scripts/sh/boot.sh",
     "build": "yarn run build-c && yarn run build-node && yarn run esbuild",
     "build-node": "scripts/sh/build-node.sh",
     "build-nim": "scripts/sh/build-nim.sh",
     "build-c": "scripts/sh/build-c.sh",
     "build-deno": "scripts/sh/build-deno.sh",
     "build-userscript": "node scripts/js/userscript.esbuild.js",
+    "dev": "yarn run build && yarn run start",
     "esbuild": "node scripts/js/esbuild.js",
     "start": "node .",
-    "dev": "yarn run build && yarn run start"
+    "test": "npx jest"
   },
   "keywords": [],
   "author": "Hri7566 <hri7566@gmail.com>",
@@ -30,7 +31,7 @@
     "mpp-client": "^0.4.3483807882806744",
     "mpp-client-xt": "^1.3.1",
     "mppclone-client": "^1.0.0",
-    "mppclone-cmapi": "^1.3.0",
+    "mppclone-cmapi": "^1.4.0",
     "node-nlp": "^4.24.0",
     "normalize-strings": "^1.1.1",
     "react-router-dom": "^6.4.3",

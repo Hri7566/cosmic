@@ -13,6 +13,7 @@ const Client = require('mppclone-client');
 const YAML = require('yaml');
 const { EventEmitter } = require('events');
 const Discord = require('discord.js');
+const cmapi = require('mppclone-cmapi');
 
 /**
  * Local module imports
@@ -347,6 +348,7 @@ export class CosmicClientDiscord extends CosmicClientToken {
     public previousChannel: string;
 
     public client: typeof Discord.Client;
+    public cmapi;
 
     constructor() {
         super();
@@ -367,6 +369,7 @@ export class CosmicClientDiscord extends CosmicClientToken {
      */
     public start(token: string) {
         this.client.login(token);
+        this.cmapi = new cmapi(this.client);
     }
     
     /**
