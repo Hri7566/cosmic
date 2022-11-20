@@ -194,6 +194,9 @@ class CosmicAPI {
                 'What year is it?': `📆`,
                 'Where was the windmill?': `█████`
             }
+
+            if (!req.query.q) req.query.q = 'What?';
+
             if (!req.query.q.endsWith('?')) req.query.q = `${req.query.q}?`;
             // req.query.q = `${req.query.q.substring(0, 1).toUpperCase()}${req.query.q.substring(1).toLowerCase()}`;
 
