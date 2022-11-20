@@ -244,4 +244,12 @@ export namespace Cosmic {
         start: Timestamp;
         end: Timestamp;
     }
+
+    export interface APIKeyProfile {
+        ip: string;
+        keys: string[];
+        permissions: string[];
+        permissionGroups: string[];
+        user_id?: string;
+    }
 }

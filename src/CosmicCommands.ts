@@ -886,6 +886,9 @@ CosmicCommandHandler.registerCommand(new Command(
     'cake',
     async (msg, cl) => {
         let inventories = await CosmicData.getTopBalances();
+        if (!inventories) {
+            return 'Error: Could not load inventory data';
+        }
         let out = `Leaderboard: `;
 
         let user;
@@ -894,9 +897,9 @@ CosmicCommandHandler.registerCommand(new Command(
         for await (let inv of inventories) {
             if (i > 10) break;
             
-            user = await CosmicData.getUser(inv._id);
+            user = await CosmicData.getUser((inv as any)._id);
             if (!user) {
-                out += `${inv._id.substring(0, 6)}: ${CosmicData.formatBalance(inv.balance)} | `;
+                out += `${(inv as any)._id.substring(0, 6)}: ${CosmicData.formatBalance(inv.balance)} | `;
             } else {
                 if (user.name.length > 10) {
                     out += `[${user._id.substring(0, 6)}] ${user.name.substring(0, 14)}…: ${CosmicData.formatBalance(inv.balance)} | `;

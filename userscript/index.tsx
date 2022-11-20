@@ -20,7 +20,7 @@ window.addEventListener('load', evt => {
     let serverUri = localStorage.getItem('cosmic_uri');
 
     if (!serverUri) {
-        serverUri = 'wss://home.hri7566.info/cosmic';
+        serverUri = 'wss://cosmic.hri7566.info';
     }
 
     const ws = new WebSocket(serverUri);

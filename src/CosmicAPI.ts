@@ -55,6 +55,8 @@ class CosmicAPI {
     public static logger = new CosmicLogger('Cosmic API', yellow);
     public static wsClients = [];
 
+    public static keyLimit = 5;
+
     public static start() {
         this.logger.log('Starting...');
 
@@ -119,6 +121,15 @@ class CosmicAPI {
         this.api.get('/utilget', async (req, res) => {
             res.json(CosmicUtil.get(req.key, req._id));
         });
+
+        this.api.get('/genkey', async (req, res) => {
+            let canGenerateKey = false;
+
+            console.log(req.ip);
+            res.json({
+                key: this.generateAPIKey()
+            });
+        });
         
         this.api.get('/tool', async (req, res) => {
             let answers: any = {
@@ -146,12 +157,6 @@ class CosmicAPI {
             }
             
             res.json(answer);
-        });
-
-        this.api.get('apikeytest', async (req, res) => {
-            res.json({
-                key: this.generateAPIKey()
-            });
         });
 
         this.api.get('*', async (req, res) => {

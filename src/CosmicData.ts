@@ -6,7 +6,7 @@
 
 import { ObjectID } from "bson";
 import { Collection } from "mongodb";
-import { Inventory } from "./CosmicTypes";
+import { Cosmic, Inventory } from "./CosmicTypes";
 
 /**
  * Global module imports
@@ -39,7 +39,7 @@ class CosmicData {
     public static inventories: Collection;
     public static items: Collection;
     public static util: Collection;
-    public static apiKeys: Collection;
+    public static apiKeyProfiles: Collection<Cosmic.APIKeyProfile>;
 
     public static async start(): Promise<void> {
         this.logger.log("Connecting to database...");
@@ -57,10 +57,10 @@ class CosmicData {
             this.items = await this.db.collection("items");
             this.permissions = await this.db.collection("permissions");
             this.util = await this.db.collection("util");
-            this.apiKeys = await this.db.collection("apikeys");
+            this.apiKeyProfiles = await this.db.collection("apikeyprofiles");
 
             this.logger.log(`Connected to database '${MONGODB_DATABASE}'`);
-        } catch (err) {
+        } catch(err) {
             this.logger.error(err);
         } finally {
             // await this.client.close();
@@ -100,7 +100,7 @@ class CosmicData {
             });
 
             return result;
-        } catch (err) {
+        } catch(err) {
             return err;
         }
     }
@@ -110,7 +110,7 @@ class CosmicData {
             const result = await this.users.replaceOne({ _id }, user);
 
             return result;
-        } catch (err) {
+        } catch(err) {
             return err;
         }
     }
@@ -120,7 +120,7 @@ class CosmicData {
             const result = await this.users.deleteOne({ _id: _id });
 
             return result;
-        } catch (err) {
+        } catch(err) {
             return err;
         }
     }
@@ -130,7 +130,7 @@ class CosmicData {
             const result = await this.users.findOne({ _id: _id });
 
             return result;
-        } catch (err) {
+        } catch(err) {
             return err;
         }
     }
@@ -155,7 +155,7 @@ class CosmicData {
             });
 
             return result;
-        } catch (err) {
+        } catch(err) {
             return err;
         }
     }
@@ -167,7 +167,7 @@ class CosmicData {
             });
 
             return result;
-        } catch (err) {
+        } catch(err) {
             return err;
         }
     }
@@ -185,7 +185,7 @@ class CosmicData {
             });
 
             return result;
-        } catch (err) {
+        } catch(err) {
             return err;
         }
     }
@@ -205,7 +205,7 @@ class CosmicData {
             } else {
                 return false;
             }
-        } catch (err) {
+        } catch(err) {
             this.logger.error(err);
             return err;
         }
@@ -224,7 +224,7 @@ class CosmicData {
                     }
                 }
             }
-        } catch (err) {
+        } catch(err) {
             this.logger.error(err);
             return err;
         }
@@ -251,7 +251,7 @@ class CosmicData {
             });
 
             return result;
-        } catch (err) {
+        } catch(err) {
             this.logger.error(err);
             return err;
         }
@@ -270,7 +270,7 @@ class CosmicData {
             });
 
             return result;
-        } catch (err) {
+        } catch(err) {
             return err;
         }
     }
@@ -297,7 +297,7 @@ class CosmicData {
             } else {
                 throw new Error(`Inventory does not have item`);
             }
-        } catch (err) {
+        } catch(err) {
             return err;
         }
     }
@@ -307,7 +307,7 @@ class CosmicData {
             const result = await this.inventories.findOne({ _id: _id });
             
             return result;
-        } catch (err) {
+        } catch(err) {
             return err;
         }
     }
@@ -324,7 +324,7 @@ class CosmicData {
         try {
             let inv: Inventory = await this.getInventory(_id);
             return inv.balance;
-        } catch (err) {
+        } catch(err) {
             return err;
         }
     }
@@ -336,7 +336,7 @@ class CosmicData {
                     balance: amount
                 }
             })
-        } catch (err) {
+        } catch(err) {
             return err;
         }
     }
@@ -349,7 +349,7 @@ class CosmicData {
                 }
             });
             return res;
-        } catch (err) {
+        } catch(err) {
             return err;
         }
     }
@@ -361,7 +361,7 @@ class CosmicData {
                     _id: _id as unknown as ObjectID,
                     [key]: value
                 });
-            } catch (err) {};
+            } catch(err) {};
             let res = await this.util.updateOne({ _id }, {
                 $set: {
                     [key]: value,
@@ -369,7 +369,7 @@ class CosmicData {
                 }
             });
             return res;
-        } catch (err) {
+        } catch(err) {
             return err;
         }
     }
@@ -378,7 +378,7 @@ class CosmicData {
         try {
             let res = await this.util.findOne({ _id });
             return res[key];
-        } catch (err) {
+        } catch(err) {
             return undefined;
         }
     }
@@ -387,8 +387,235 @@ class CosmicData {
         try {
             let res = await (this.inventories.find().sort({ 'balance': -1 }));
             return res;
+        } catch(err) {
+            return undefined;
+        }
+    }
+
+    public static async createAPIKeyProfile(ip: string, keys: string[] = [], permissions: string[] = [], permissionGroups: string[] = [], user_id?: string): Promise<boolean> {
+        try {
+            let profile: Cosmic.APIKeyProfile = { ip, keys, permissions, user_id, permissionGroups };
+            this.apiKeyProfiles.insertOne(profile);
+            return true;
+        } catch(err) {
+            return false;
+        }
+    }
+
+    public static async getAPIKeyProfile(ip: string): Promise<Cosmic.APIKeyProfile> {
+        try {
+            let res = await this.apiKeyProfiles.findOne({ ip });
+            return res;
+        } catch(err) {
+            return undefined;
+        }
+    }
+
+    public static async addAPIKey(ip: string, key: string): Promise<boolean> {
+        try {
+            let res = await this.apiKeyProfiles.updateOne({ ip }, {
+                $push: { keys: key }
+            });
+
+            return true;
+        } catch(err) {
+            return false;
+        }
+    }
+
+    public static async getAPIKeyProfileByUserID(_id: string) {
+        try {
+            let res = await this.apiKeyProfiles.findOne({ user_id: _id });
+            return res;
+        } catch(err) {
+            return;
+        }
+    }
+
+    public static async removeAPIKey(ip: string, key: string): Promise<boolean> {
+        try {
+            let res = await this.apiKeyProfiles.updateOne({ ip }, {
+                $pull: {
+                    keys: key
+                }
+            });
+        } catch(err) {
+            return false;
+        }
+    }
+
+    public static async removeAllAPIKeys(ip: string): Promise<boolean> {
+        try {
+            let res = await this.apiKeyProfiles.updateOne({ ip }, {
+                $set: {
+                    keys: []
+                }
+            });
+
+            return true;
+        } catch(err) {
+            return false;
+        }
+    }
+
+    public static async getAPIKeys(ip: string): Promise<string[]> {
+        try {
+            let res = await this.apiKeyProfiles.findOne({ ip });
+            return res.keys;
+        } catch(err) {
+            return;
+        }
+    }
+
+    public static async addAPIPermission(ip: string, permission: string): Promise<boolean> {
+        try {
+            let res = await this.apiKeyProfiles.updateOne({ ip }, {
+                $push: {
+                    permissions: permission
+                }
+            });
+            
+            return true;
+        } catch(err) {
+            return false;
+        }
+    }
+
+    public static async removeAPIPermission(ip: string, permission: string): Promise<boolean> {
+        try {
+            let res = await this.apiKeyProfiles.updateOne({ ip }, {
+                $pull: {
+                    permissions: permission
+                }
+            });
+
+            return true;
+        } catch(err) {
+            return false;
+        }
+    }
+
+    public static async removeAllAPIPermissions(ip: string): Promise<boolean> {
+        try {
+            let res = await this.apiKeyProfiles.updateOne({ ip }, {
+                $set: {
+                    permissions: []
+                }
+            });
+
+            return true;
+        } catch(err) {
+            return false;
+        }
+    }
+
+    public static async addAPIPermissionGroup(ip: string, permissionGroupID: string): Promise<boolean> {
+        try {
+            let res = await this.apiKeyProfiles.updateOne({ ip }, {
+                $push: {
+                    permissionGroups: permissionGroupID
+                }
+            });
+
+            return true;
+        } catch(err) {
+            return false;
+        }
+    }
+
+    public static async removeAPIPermissionGroup(ip: string, permissionGroupID: string): Promise<boolean> {
+        try {
+            let res = await this.apiKeyProfiles.updateOne({ ip }, {
+                $pull: {
+                    permissionGroups: permissionGroupID
+                }
+            });
+            
+            return true;
+        } catch(err) {
+            return false;
+        }
+    }
+
+    public static async removeAllAPIPermissionGroups(ip: string): Promise<boolean> {
+        try {
+            let res = await this.apiKeyProfiles.updateOne({ ip }, {
+                $set: {
+                    permissionGroups: []
+                }
+            });
+            
+            return true;
+        } catch(err) {
+            return false;
+        }
+    }
+
+    public static async getAPIPermissionGroups(ip: string): Promise<string[]> {
+        try {
+            let res = await this.apiKeyProfiles.findOne({ ip });
+            return res.permissionGroups;
+        } catch(err) {
+            return;
+        }
+    }
+
+    public static async getAPIPermissions(ip: string): Promise<string[]> {
+        try {
+            let res = await this.apiKeyProfiles.findOne({ ip });
+            return res.permissions;
+        } catch(err) {
+            return;
+        }
+    }
+
+    public static async setAPIUserID(ip: string, userID: string): Promise<boolean> {
+        try {
+            let res = await this.apiKeyProfiles.updateOne({ ip }, {
+                $set: {
+                    user_id: userID
+                }
+            });
+
+            return true;
+        } catch(err) {
+            return false;
+        }
+    }
+
+    public static async getAPIUserID(ip: string): Promise<string> {
+        try {
+            let res = await this.apiKeyProfiles.findOne({ ip });
+            return res.user_id;
+        } catch(err) {
+            return;
+        }
+    }
+
+    public static async removeAPIUserID(ip: string): Promise<boolean> {
+        try {
+            let res = this.apiKeyProfiles.updateOne({ ip }, {
+                $unset: {
+                    user_id: ''
+                }
+            });
+            return true;
+        } catch(err) {
+            return false;
+        }
+    }
+
+    public static async setAPIIP(ip: string, new_ip: string): Promise<boolean> {
+        try {
+            let res = this.apiKeyProfiles.updateOne({ ip }, {
+                $set: {
+                    ip: new_ip
+                }
+            });
+
+            return true;
         } catch (err) {
-            return err;
+            return false;
         }
     }
 }
