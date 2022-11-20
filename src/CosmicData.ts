@@ -6,6 +6,7 @@
 
 import { ObjectID } from "bson";
 import { Collection } from "mongodb";
+import { CosmicAPI } from "./CosmicAPI";
 import { Cosmic, Inventory } from "./CosmicTypes";
 
 /**
@@ -392,7 +393,7 @@ class CosmicData {
         }
     }
 
-    public static async createAPIKeyProfile(ip: string, keys: string[] = [], permissions: string[] = [], permissionGroups: string[] = [], user_id?: string): Promise<boolean> {
+    public static async createAPIKeyProfile(ip: string, keys: string[] = [], permissions: string[] = [], permissionGroups: string[] = [ 'default' ], user_id?: string): Promise<boolean> {
         try {
             let profile: Cosmic.APIKeyProfile = { ip, keys, permissions, user_id, permissionGroups };
             this.apiKeyProfiles.insertOne(profile);
@@ -405,6 +406,10 @@ class CosmicData {
     public static async getAPIKeyProfile(ip: string): Promise<Cosmic.APIKeyProfile> {
         try {
             let res = await this.apiKeyProfiles.findOne({ ip });
+            if (!res) {
+                await this.createAPIKeyProfile(ip);
+                return await this.apiKeyProfiles.findOne({ ip });
+            }
             return res;
         } catch(err) {
             return undefined;

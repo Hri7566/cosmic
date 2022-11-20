@@ -5,7 +5,7 @@
  */
 
 import { readFile, readFileSync } from "fs";
-import { resolve } from "path";
+import { dirname, resolve } from "path";
 import * as http from 'http';
 import * as https from 'https';
 import { CosmicClientHandler } from "./CosmicClientHandler";
@@ -14,6 +14,8 @@ import { CosmicShop } from "./CosmicShop";
 import { CosmicSeasonDetection } from "./CosmicSeasonDetection";
 import { CosmicUtil } from "./CosmicUtil";
 import { JSONEncodable } from "discord.js";
+import * as YAML from "yaml";
+
 import EventEmitter = require("events");
 import crypto = require('crypto');
 
@@ -47,15 +49,28 @@ if (SSL == 'true') {
 }
 
 class CosmicAPI {
+    public static logger = new CosmicLogger('Cosmic API', yellow);
+
     public static app = express();
     public static api = express.Router();
     public static server: http.Server;
     public static wss: typeof WebSocket.Server;
-
-    public static logger = new CosmicLogger('Cosmic API', yellow);
     public static wsClients = [];
-
     public static keyLimit = 5;
+    public static permissionGroups: Record<string, Record<string, boolean>>;
+
+    public static validPermissions = {
+        'canSetPermissions': 'boolean',
+        'canSetAllPermissions': 'boolean',
+        'canGenerateKeys': 'boolean',
+        'canGenerateInfiniteKeys': 'boolean',
+    }
+
+    public static messages = {
+        ERROR_PERMISSION_DENIED: {
+            error: 'Permission denied'
+        }
+    }
 
     public static start() {
         this.logger.log('Starting...');
@@ -68,6 +83,12 @@ class CosmicAPI {
                 status: 'online',
                 environment: process.env.NODE_ENV,
                 clients: CosmicClientHandler.getClientCount(),
+                uptime: Date.now() - Cosmic.startTime
+            });
+        });
+
+        this.api.get('/uptime', async (req, res) => {
+            res.json({
                 uptime: Date.now() - Cosmic.startTime
             });
         });
@@ -123,13 +144,43 @@ class CosmicAPI {
         });
 
         this.api.get('/genkey', async (req, res) => {
+            await CosmicData.createAPIKeyProfile(req.ip);
+
             let canGenerateKey = false;
+            canGenerateKey = await this.hasPermission(req.ip, 'canGenerateKeys');
+
+            let canGenerateInfiniteKeys = await this.hasPermission(req.ip, 'canGenerateInfiniteKeys');
+            if (!canGenerateInfiniteKeys) {
+                let keys = await CosmicData.getAPIKeys(req.ip);
+                if (typeof keys !== 'undefined') {
+                    let amountOfKeys = keys.length;
+                    if (amountOfKeys > this.keyLimit) canGenerateKey = false;
+                }
+            }
+
+            if (!canGenerateKey) {
+                return res.json({
+                    error: 'Key request denied',
+                    canGenerateKey
+                });
+            }
 
             console.log(req.ip);
             res.json({
-                key: this.generateAPIKey()
+                key: this.generateAPIKey(),
+                canGenerateKey
             });
         });
+
+        this.api.get('/wipekeys', async (req, res) => {
+            let result = await CosmicData.removeAllAPIKeys(req.ip);
+            res.json({ result });
+        });
+
+        this.api.get('/keyprofile', async (req, res) => {
+            let result = await CosmicData.getAPIKeyProfile(req.ip);
+            res.json({ result });
+        })
         
         this.api.get('/tool', async (req, res) => {
             let answers: any = {
@@ -157,6 +208,64 @@ class CosmicAPI {
             }
             
             res.json(answer);
+        });
+
+        this.api.get(`/set(permission|perm)`, async (req, res) => {
+            if (!(await this.verifyKey(req))) return;
+
+            if (!(await this.hasPermission(req.ip, 'canSetPermissions'))) {
+                res.json(this.messages.ERROR_PERMISSION_DENIED);
+                return;
+            }
+
+            let perm = req.query.permission;
+            if (!perm) {
+                res.json({
+                    error: 'No permission'
+                });
+
+                return;
+            }
+
+            let value = req.query.value;
+            if (!value) {
+                res.json({
+                    error: 'No value'
+                });
+
+                return;
+            }
+
+            if (!this.permissionIsValid(perm, value)) {
+                res.json({
+                    error: 'Invalid permission'
+                });
+
+                return;
+            }
+
+            let given_ip = req.query.ip;
+            if (!given_ip) {
+                given_ip = req.ip;
+            } else {
+                if (!this.hasPermission(req.ip, 'canChangeAllPermissions')) {
+                    res.json(this.messages.ERROR_PERMISSION_DENIED);
+                }
+            }
+
+            // set ip's permission
+            let result;
+            if (value == true) {
+                result = await CosmicData.addAPIPermission(given_ip, perm);
+            } else {
+                result = await CosmicData.removeAPIPermission(given_ip, perm);
+            }
+
+            res.json({ result });
+        });
+
+        this.api.get(`/get(permission|perm)`, (req, res) => {
+
         });
 
         this.api.get('*', async (req, res) => {
@@ -258,6 +367,104 @@ class CosmicAPI {
     public static generateAPIKey(): string {
         return crypto.randomUUID();
     }
+
+    public static async getAvailableKeyCount(ip: string): Promise<number> {
+        try {
+            let keys = await CosmicData.getAPIKeys(ip);
+            return this.keyLimit - keys.length;
+        } catch (err) {
+            return 0;
+        }
+    }
+
+    public static permissionIsValid(permissionName: string, value: any): boolean {
+        for (let key of Object.keys(this.validPermissions)) {
+            let type = this.validPermissions[key];
+            if (permissionName !== key) continue;
+            if (typeof value == type) return true;
+        }
+
+        return false;
+    }
+
+    public static async verifyKey(req): Promise<boolean> {
+        let key = req.query.key;
+        if (!key) return;
+        let validKeys = await CosmicData.getAPIKeys(req.ip);
+        if (validKeys.indexOf(key) == -1) return false;
+        return true;
+    }
+
+    public static async permissionGroupHasPermission(grp: string, permission: string): Promise<boolean> {
+        let group = this.permissionGroups[grp];
+        if (!group) return false;
+
+        let hasPermission = false;
+
+        for (let perm of (group as any)) {
+            if (perm == permission) {
+                if (this.validPermissions[perm] == 'boolean') {
+                    if (perm == true) {
+                        hasPermission = true;
+                        break;
+                    }
+                } else if (typeof this.validPermissions[perm] == 'function') {
+                    try {
+                        if (this.validPermissions[perm]()) {
+                            hasPermission = true;
+                            break;
+                        }
+                    } catch (err) {
+                        hasPermission = false;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return hasPermission;
+    }
+
+    public static async hasPermission(ip: string, permission: string): Promise<boolean> {
+        let permissions = await CosmicData.getAPIPermissions(ip);
+        let permissionGroups = await CosmicData.getAPIPermissionGroups(ip);
+
+        if (!permissions) return false;
+
+        let hasPermission = false;
+        
+        if (permissionGroups) {
+            // check group permission
+            for (let group of permissionGroups) {
+                hasPermission = await this.permissionGroupHasPermission(group, permission);
+                if (hasPermission) break;
+            }
+        }
+
+        // check normal permissions
+        for (let perm of permissions) {
+            if (perm == permission) {
+                if (this.validPermissions[perm] == 'boolean') {
+                    if (perm == true) {
+                        hasPermission = true;
+                        break;
+                    }
+                } else if (typeof this.validPermissions[perm] == 'function') {
+                    try {
+                        if (this.validPermissions[perm]()) {
+                            hasPermission = true;
+                            break;
+                        }
+                    } catch (err) {
+                        hasPermission = false;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return hasPermission;
+    }
 }
 
 class CosmicAPIWebSocketClient extends EventEmitter {
@@ -335,6 +542,23 @@ class CosmicAPIWebSocketClient extends EventEmitter {
         }
 
         return hasKey;
+    }
+}
+
+try {
+    CosmicAPI.permissionGroups = YAML.parse(readFileSync(resolve(__dirname, '../../config/apiPermissionGroups.yml')).toString());
+} catch (err) {
+    CosmicAPI.logger.error('Unable to read permission group configuration, using default configuration instead');
+    
+    CosmicAPI.permissionGroups = {
+        'default': {
+            'canSetPermissions': false,
+            'canSetAllPermissions': false
+        },
+        'admin': {
+            'canSetPermissions': true,
+            'canSetAllPermissions': true
+        }
     }
 }
 
