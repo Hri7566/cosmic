@@ -38,7 +38,7 @@ const Layout = () => {
         <div id="container">
             <div id="header">
                 <div className="left">
-                    <Link to="/"><Logo /><h1>Cosmic</h1></Link>
+                    <Link to="/" style={{ display: 'flex' }}><Logo /><h1>Cosmic</h1></Link>
                 </div>
                 <div className="right">
                     <Nav />
