@@ -102,6 +102,24 @@ class Cosmic {
         this.on('ready', () => {
             this.logger.log('Ready');
         });
+
+        this.on('log', (msg: any) => {
+            this.logger.log(msg.message);
+        });
+
+        this.on('hi', () => {
+            this.logger.log('hi!');
+        });
+
+        this.on('bonk', (msg: any) => {
+            this.emit('log', { message: 'bonked' });
+            try {
+                msg.r.emit('bonk', {
+                    m: 'bonk',
+                    from: 'Cosmic'
+                });
+            } catch(err) {}
+        });
     }
 }
 
