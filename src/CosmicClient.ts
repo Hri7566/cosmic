@@ -369,7 +369,7 @@ export class CosmicClientDiscord extends CosmicClientToken {
      */
     public start(token: string) {
         this.client.login(token);
-        this.cmapi = new cmapi(this.client);
+        // this.cmapi = new cmapi(this.client);
     }
     
     /**
