@@ -179,7 +179,7 @@ class CosmicAPI {
         this.api.get('/keyprofile', async (req, res) => {
             let result = await CosmicData.getAPIKeyProfile(req.ip);
             res.json({ result });
-        })
+        });
         
         this.api.get('/tool', async (req, res) => {
             let answers: any = {
@@ -212,7 +212,7 @@ class CosmicAPI {
             res.json(answer);
         });
 
-        this.api.get(`/set(permission|perm)`, async (req, res) => {
+        this.api.get(/\/set(permission|perm)/, async (req, res) => {
             if (!(await this.verifyKey(req))) return;
 
             if (!(await this.hasPermission(req.ip, 'canSetPermissions'))) {
@@ -266,8 +266,10 @@ class CosmicAPI {
             res.json({ result });
         });
 
-        this.api.get(`/get(permission|perm)`, (req, res) => {
-
+        this.api.get(/\/get(permission|perm)/, (req, res) => {
+            return res.json({
+                error: 'unfinished'
+            });
         });
 
         this.api.get('*', async (req, res) => {
@@ -403,10 +405,12 @@ class CosmicAPI {
 
         let hasPermission = false;
 
-        for (let perm of (group as any)) {
+        console.log(group);
+
+        for (let perm of Object.keys(group as any)) {
             if (perm == permission) {
                 if (this.validPermissions[perm] == 'boolean') {
-                    if (perm == true) {
+                    if (group[perm] == true) {
                         hasPermission = true;
                         break;
                     }

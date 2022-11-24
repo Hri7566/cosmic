@@ -221,9 +221,9 @@ export const ITEMS: Record<string | symbol, AnyItem> = {
     BOTTLE: {
         id: 'bottle',
         displayName: "Bottle",
-        count: 6,
+        count: 1,
         value: 500000,
-        max_stack: 1,
+        max_stack: 6,
         sellable: false
     },
     PICTOGRAPH_BOX: {
