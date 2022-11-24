@@ -611,7 +611,11 @@ CosmicCommandHandler.registerCommand(new Command(
                 // CosmicCommandHandler.logger.debug(`amount: ${amount_to_remove}`);
                 return `You ate ${amount_to_remove == 1 ? (/^[aeiou]/).test(mod_it.displayName) ? 'an' : 'a' : amount_to_remove + ' of'} ${mod_it.displayName} and got ${CosmicData.formatBalance(bal_add)}.`
             }
-            return `You ate a ${mod_it.displayName}.`;
+
+            let aOrAn = 'a';
+            if (/^[aeiou]/i.test(mod_it.displayName)) aOrAn = 'an';
+
+            return `You ate ${aOrAn} ${mod_it.displayName}.`;
         } else {
             return `Could not find the item '${argcat}' in your inventory. Do you have one?`;
         }
