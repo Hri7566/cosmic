@@ -9,6 +9,7 @@
  */
 
 const crypto = require('crypto');
+import { evaluate } from 'mathjs';
 
 /**
  * Local module imports
@@ -945,5 +946,21 @@ CosmicCommandHandler.registerCommand(new Command(
         } else {
             return `Item '${msg.argv[1]}' not found.`;
         }
+    }
+));
+
+CosmicCommandHandler.registerCommand(new Command(
+    'math',
+    [ 'math' ],
+    '%PREFIX%math',
+    `Evaluate a mathematical expression.`,
+    [ 'default' ],
+    true,
+    'fun',
+    async (msg, cl) => {
+        if (!msg.argv[1]) return `Please submit an expression to evaluate.`;
+
+        let expr = msg.a.substring(msg.argv[0].length).trim();
+        return evaluate(expr);
     }
 ));
