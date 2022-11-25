@@ -960,7 +960,11 @@ CosmicCommandHandler.registerCommand(new Command(
     async (msg, cl) => {
         if (!msg.argv[1]) return `Please submit an expression to evaluate.`;
 
-        let expr = msg.a.substring(msg.argv[0].length).trim();
-        return evaluate(expr);
+        try {
+            let expr = msg.a.substring(msg.argv[0].length).trim();
+            return evaluate(expr);
+        } catch(err) {
+            return err;
+        }
     }
 ));
