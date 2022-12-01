@@ -1086,5 +1086,13 @@ CosmicCommandHandler.registerCommand(new Command(
 CosmicCommandHandler.registerCommand(new Command(
     'groupadd',
     [ 'groupadd', 'ga' ],
-    '%PREFIX%groupadd <groupID> <userID>'
+    '%PREFIX%groupadd <groupID> <userID>',
+    `Add a permission group to a user's profile.`,
+    [ 'admin' ],
+    false,
+    'info',
+    async (msg, cl) => {
+        // TODO this whole command
+        return 'finish this, hri'
+    }
 ));
