@@ -386,6 +386,66 @@ export const rare_cakes: Array<typeof Cake> = [
         icing: '1-up',
         filling: 'fungal',
         value: 80
+    },
+    {
+        id: 'cake_pumpkin_pie_cake',
+        displayName: 'Pumpkin Pie Cake',
+        emoji: '🥧',
+        count: 1,
+        edible: true,
+        icing: 'cream',
+        filling: 'pumpkin',
+        value: 80
+    },
+    {
+        id: 'cake_apple',
+        displayName: 'Apple Cake',
+        emoji: '🍎',
+        count: 1,
+        edible: true,
+        icing: 'leaves',
+        filling: 'apple',
+        value: 80
+    },
+    {
+        id: 'cake_orange',
+        displayName: 'Orange Cake',
+        emoji: '🍊',
+        count: 1,
+        edible: true,
+        icing: 'leaves',
+        filling: 'orange',
+        value: 80
+    },
+    {
+        id: 'cake_banana',
+        displayName: 'Banana Cake',
+        emoji: '🍌',
+        count: 1,
+        edible: true,
+        icing: 'banana peel',
+        filling: 'banana',
+        value: 80
+    },
+    {
+        id: 'cake_raspberry',
+        displayName: 'Raspberry Cake',
+        emoji: '🍓',
+        count: 1,
+        edible: true,
+        icing: 'raspberry',
+        filling: 'raspberry',
+        value: 80
+    },
+    {
+        id: 'cake_blueberry',
+        displayName: 'Blueberry Cake',
+        emoji: '🫐',
+        count: 1,
+        edible: true,
+        icing: 'bluberry',
+        filling: 'blueberry',
+        value: 80
     }
 ];
 
@@ -459,6 +519,24 @@ export const ultra_rare_cakes: Array<typeof Cake> = [
         icing: 'winner',
         filling: 'winner',
         value: 500
+    },
+    {
+        id: 'cake_diamond',
+        displayName: 'Diamond Cake',
+        emoji: '💎',
+        count: 1,
+        edible: true,
+        icing: 'gem',
+        filling: 'gem',
+        value: 1000
+    },
+    {
+        id: 'cake_gold',
+        displayName: 'Gold Cake',
+        count: 1,
+        edible: true,
+        icing: 'golden',
+        filling: 'golden'
     }
 ];
 

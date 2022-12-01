@@ -960,12 +960,18 @@ CosmicCommandHandler.registerCommand(new Command(
     async (msg, cl) => {
         if (!msg.argv[1]) return `Please submit an expression to evaluate.`;
 
+        let out: string;
+
         try {
-            let expr = msg.a.substring(msg.argv[0].length).trim();
-            return evaluate(expr);
+            let expr = msg.argv.join(' ').substring(msg.argv[0].length).trim();
+            out = evaluate(expr);
         } catch(err) {
-            return err;
+            out = err;
         }
+
+        out = out.toString();
+        
+        return out.split('\n').join(' ');
     }
 ));
 
@@ -1075,4 +1081,10 @@ CosmicCommandHandler.registerCommand(new Command(
         joke = knockKnockJokes[Math.floor(Math.random() * knockKnockJokes.length)];
         cl.client.on('a', listener1);
     }
+));
+
+CosmicCommandHandler.registerCommand(new Command(
+    'groupadd',
+    [ 'groupadd', 'ga' ],
+    '%PREFIX%groupadd <groupID> <userID>'
 ));
