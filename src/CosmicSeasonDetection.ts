@@ -72,6 +72,11 @@ let HOLIDAYS: Array<Cosmic.Holiday | Cosmic.RangeHoliday> = [
         displayName: 'New Year\'s Eve',
         emoji: '🎆',
         timestamp: `Jan 1 ${CURRENT_YEAR}`
+    },
+    {
+        displayName: 'Sponge Day',
+        emoji: '🧽',
+        timestamp: `Dec 2 ${CURRENT_YEAR}`
     }
 ]
 
@@ -141,6 +146,11 @@ setInterval(() => {
             displayName: 'New Year\'s Eve',
             emoji: '🎆',
             timestamp: `Jan 1 ${CURRENT_YEAR}`
+        },
+        {
+            displayName: 'Sponge Day',
+            emoji: '🧽',
+            timestamp: `Dec 2 ${CURRENT_YEAR}`
         }
     ]
 }, 36e5 * 24 * 14);
@@ -158,7 +168,7 @@ export class CosmicSeasonDetection {
         if ((month == 2 && day <= 21) || month >= 11 || month < 2) {
             return {
                 displayName: 'Winter',
-                emoji: '❄'
+                emoji: '❄️'
             }
         }
 
@@ -172,7 +182,7 @@ export class CosmicSeasonDetection {
         if ((month == 5 && day >= 22) || month > 5) {
             return {
                 displayName: 'Summer',
-                emoji: '☀'
+                emoji: '☀️'
             }
         }
 

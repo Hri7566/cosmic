@@ -446,6 +446,16 @@ export const rare_cakes: Array<typeof Cake> = [
         icing: 'bluberry',
         filling: 'blueberry',
         value: 80
+    },
+    {
+        id: 'cake_meringue',
+        displayName: 'Meringue Cake',
+        emoji: '🍓',
+        count: 1,
+        edible: true,
+        icing: 'white',
+        filling: 'cream',
+        topping: 'strawberries'
     }
 ];
 

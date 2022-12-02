@@ -1084,15 +1084,27 @@ CosmicCommandHandler.registerCommand(new Command(
 ));
 
 CosmicCommandHandler.registerCommand(new Command(
-    'groupadd',
-    [ 'groupadd', 'ga' ],
-    '%PREFIX%groupadd <groupID> <userID>',
-    `Add a permission group to a user's profile.`,
+    'usermod',
+    [ 'usermod' ],
+    '%PREFIX%usermod [flags] <userID>',
+    `Modify a user's identity.`,
     [ 'admin' ],
     false,
     'info',
     async (msg, cl) => {
-        // TODO this whole command
-        return 'finish this, hri'
+        
+    }
+));
+
+CosmicCommandHandler.registerCommand(new Command(
+    'testthing',
+    [ 'test' ],
+    undefined,
+    undefined,
+    [ 'test' ],
+    false,
+    'info',
+    async (msg, cl) => {
+        return `yes it worked`;
     }
 ));
