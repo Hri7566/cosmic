@@ -654,7 +654,7 @@ CosmicCommandHandler.registerCommand(new Command(
                 `There is no cake for you to eat.`,
                 `No cake.`
             ]
-            return CosmicUtil.getRandomValueFromArray(sad_answers);
+            return await CosmicUtil.getRandomValueFromArray(sad_answers);
         }
 
         for (let it of inv.items) {
