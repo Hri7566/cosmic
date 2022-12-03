@@ -15,16 +15,17 @@ import { evaluate } from 'mathjs';
  * Local module imports
  */
 
-import { CosmicCakeFactory } from "./CosmicCakeFactory";
-import { CosmicShop } from "./CosmicShop";
-import { CosmicUtil } from "./CosmicUtil";
+import { CosmicCakeFactory } from './CosmicCakeFactory';
+import { CosmicShop } from './CosmicShop';
+import { CosmicUtil } from './CosmicUtil';
 import { Cosmic as CosmicColor } from './CosmicColor';
-import { CosmicSeasonDetection } from "./CosmicSeasonDetection";
-import { AnyItem, Cosmic, Cosmic as CosmicTypes, Inventory, Item, ShopListing } from "./CosmicTypes";
+import { CosmicSeasonDetection } from './CosmicSeasonDetection';
+import { AnyItem, Cosmic as CosmicTypes, Inventory, Item, ShopListing, User } from './CosmicTypes';
 import { CosmicData } from './CosmicData';
 import { ITEMS } from "./CosmicItems";
-import { CosmicClient } from "./CosmicClient";
+import { CosmicClient } from './CosmicClient';
 const { Command, CosmicCommandHandler } = require('./CosmicCommandHandler');
+const { Cosmic } = require('./Cosmic');
 
 /**
  * Module-level declarations
@@ -665,7 +666,39 @@ CosmicCommandHandler.registerCommand(new Command(
 
         await CosmicData.addBalance(msg.sender._id, total);
 
-        return `You ate all of your cake and gained ${CosmicData.formatBalance(total)}${total > 500 ? ' and lots of weight' : ''}.`;
+        let randomMessages = [
+            `You ate all of your cake and gained `,
+            `You consumed your cake and it became `,
+            `Your stomach turned your cake into `,
+            `You fed yourself and your stomach returned `,
+            `You ate cake and got `,
+            `Your cake gave you `,
+            `The cake you ate entered your stomach and came out as `,
+            `Your mouth ate the cake and now you have `,
+            `Your digestive system sends you `,
+            `Cake = `,
+            `The cake became `,
+            `As you eat, your cake turns into `,
+            `You didn't actually eat the cake, but it still became `,
+            `You love cake and cake loves you. `,
+            `Cake becomes `,
+            `The cake returns to its original form as `,
+            `You ate all of your cake and gained 0 star bits. Just kidding, it was `,
+            `Your cake means `,
+            `Cakes become `,
+            `The cake becomes `,
+            `Your cake happens to be worth `,
+            `The cake eats you and you get `,
+            `There is cake all over your face and you get `,
+            `Your cake is `,
+            `cake taste good become `,
+            `cake is `,
+            `the cake `,
+            `cake `
+        ];
+
+        let randomMessage = CosmicUtil.getRandomValueFromArray(randomMessages);
+        return `${randomMessage}${CosmicData.formatBalance(total)}${total > 500 ? ' and lots of weight' : ''}.`;
     }
 ));
 
@@ -845,7 +878,7 @@ CosmicCommandHandler.registerCommand(new Command(
     [ 'default' ],
     true,
     'cake',
-    async (msg: Cosmic.CommandMessage, cl: CosmicClient) => {
+    async (msg: CosmicTypes.CommandMessage, cl: CosmicClient) => {
         const search = msg.argv[1];
 
         if (!search) {
@@ -1084,27 +1117,45 @@ CosmicCommandHandler.registerCommand(new Command(
 ));
 
 CosmicCommandHandler.registerCommand(new Command(
-    'usermod',
-    [ 'usermod' ],
-    '%PREFIX%usermod [flags] <userID>',
-    `Modify a user's identity.`,
+    'addgroup',
+    [ 'addgroup', 'ag', 'groupadd' ],
+    '%PREFIX%addgroup <userID> <groupID>',
+    `Add a group to a user profile.`,
     [ 'admin' ],
     false,
     'info',
     async (msg, cl) => {
-        
+        const userID = msg.argv[1];
+        const groupID = msg.argv[2];
+
+        try {
+            await CosmicData.addGroup(userID, groupID);
+            const user = await CosmicData.getGroups(userID);
+            return `Successfully added \`${user._id}\` to group \`${groupID}\``;
+        } catch (err) {
+            return `Unable to add user to group.`;
+        }
     }
 ));
 
 CosmicCommandHandler.registerCommand(new Command(
-    'testthing',
-    [ 'test' ],
-    undefined,
-    undefined,
-    [ 'test' ],
+    'removegroup',
+    [ 'removegroup', 'rmg', 'rmgroup', 'grouprm' ],
+    '%PREFIX%addgroup <userID> <groupID>',
+    `Remove a group from a user profile.`,
+    [ 'admin' ],
     false,
     'info',
     async (msg, cl) => {
-        return `yes it worked`;
+        const userID = msg.argv[1];
+        const groupID = msg.argv[2];
+
+        try {
+            await CosmicData.removeGroup(userID, groupID);
+            const user = await CosmicData.getGroups(userID);
+            return `Successfully removed \`${user._id}\` from group \`${groupID}\``;
+        } catch (err) {
+            return `Unable to add user to group.`;
+        }
     }
 ));
