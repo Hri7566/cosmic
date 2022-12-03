@@ -8,7 +8,6 @@
  * Global module imports
  */
 
-const Client = require('mppclone-client');
 const fs = require('fs');
 const path = require('path');
 const YAML = require('yaml');
