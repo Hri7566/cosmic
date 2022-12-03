@@ -73,11 +73,6 @@ let HOLIDAYS: Array<Cosmic.Holiday | Cosmic.RangeHoliday> = [
         emoji: '🎆',
         timestamp: `Jan 1 ${CURRENT_YEAR}`
     },
-    {
-        displayName: 'Sponge Day',
-        emoji: '🧽',
-        timestamp: `Dec 2 ${CURRENT_YEAR}`
-    }
 ]
 
 setInterval(() => {
@@ -146,11 +141,6 @@ setInterval(() => {
             displayName: 'New Year\'s Eve',
             emoji: '🎆',
             timestamp: `Jan 1 ${CURRENT_YEAR}`
-        },
-        {
-            displayName: 'Sponge Day',
-            emoji: '🧽',
-            timestamp: `Dec 2 ${CURRENT_YEAR}`
         }
     ]
 }, 36e5 * 24 * 14);
@@ -217,5 +207,15 @@ export class CosmicSeasonDetection {
                 }
             }
         }
+    }
+
+    /**
+     * Get the current month of the year
+     * @param t Optional date
+     * @returns Month of the year from 1-12
+     */
+    public static getMonth(t?: Timestamp): number {
+        const date = new Date(t || Date.now());
+        return date.getMonth();
     }
 }
