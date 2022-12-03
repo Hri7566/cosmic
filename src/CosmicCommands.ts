@@ -697,7 +697,7 @@ CosmicCommandHandler.registerCommand(new Command(
             `cake `
         ];
 
-        let randomMessage = CosmicUtil.getRandomValueFromArray(randomMessages);
+        let randomMessage = await CosmicUtil.getRandomValueFromArray(randomMessages);
         return `${randomMessage}${CosmicData.formatBalance(total)}${total > 500 ? ' and lots of weight' : ''}.`;
     }
 ));
