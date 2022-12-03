@@ -303,10 +303,9 @@ class CosmicData {
         }
     }
 
-    public static async getInventory(_id: string): Promise<typeof Inventory | any> {
+    public static async getInventory(_id: string): Promise<typeof Inventory> {
         try {
             const result = await this.inventories.findOne({ _id: _id });
-            
             return result;
         } catch(err) {
             return err;
