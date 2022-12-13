@@ -24,6 +24,7 @@ import { AnyItem, Cosmic as CosmicTypes, Inventory, Item, ShopListing, User } fr
 import { CosmicData } from './CosmicData';
 import { ITEMS } from "./CosmicItems";
 import { CosmicClient } from './CosmicClient';
+import { CosmicFFI } from './CosmicFFI';
 const { Command, CosmicCommandHandler } = require('./CosmicCommandHandler');
 const { Cosmic } = require('./Cosmic');
 
@@ -1157,5 +1158,18 @@ CosmicCommandHandler.registerCommand(new Command(
         } catch (err) {
             return `Unable to add user to group.`;
         }
+    }
+));
+
+CosmicCommandHandler.registerCommand(new Command(
+    'ctest',
+    [ 'ctest' ],
+    '%PREFIX%ctest',
+    undefined,
+    [ 'default' ],
+    false,
+    'info',
+    async (msg, cl) => {
+        return CosmicFFI.clib.get_test_string(undefined);
     }
 ));

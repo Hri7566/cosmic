@@ -1,6 +1,7 @@
 #ifndef COSMIC_MAIN
 #define COSMIC_MAIN
 
-char* test(void);
+char* get_test_string(void);
+char* handleMessage(int argc, char** argv);
 
 #endif
