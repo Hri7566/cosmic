@@ -84,7 +84,7 @@ class CosmicUtil {
         }
 
         let set_out = await this.set('PREVIOUS_RANDOM_INDEX', index.toString());
-        this.logger.log("Set output:", set_out);
+        // this.logger.log("Set output:", set_out);
         return arr[index];
     }
     
