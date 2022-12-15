@@ -274,7 +274,7 @@ export const ITEMS: Record<string | symbol, AnyItem> = {
         count: 1,
         value: 500,
         max_stack: 50,
-        sellable: false
+        sellable: true
     },
     TURKEY: {
         id: 'turkey',

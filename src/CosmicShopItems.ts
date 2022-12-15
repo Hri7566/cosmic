@@ -16,8 +16,5 @@ export const SHOP_ITEMS: ShopListing[] = [
     },
     {
         item: ITEMS.WD40
-    },
-    {
-        item: ITEMS.TURKEY
     }
 ]

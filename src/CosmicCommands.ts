@@ -533,7 +533,7 @@ CosmicCommandHandler.registerCommand(new Command(
 CosmicCommandHandler.registerCommand(new Command(
     'eat',
     [ 'eat', 'e' ],
-    '%PREFIX%eat [item]',
+    '%PREFIX%eat [item] [amount]',
     `Eat an edible item.`,
     [ 'default' ],
     true,
@@ -574,7 +574,7 @@ CosmicCommandHandler.registerCommand(new Command(
             ]
             return CosmicUtil.getRandomValueFromArray(no_item_answers);
         }
-
+        
         if (!mod_it.edible) {
             const not_edible_answers = [
                 `You can't eat the ${mod_it.displayName}.`,
@@ -584,7 +584,8 @@ CosmicCommandHandler.registerCommand(new Command(
             ]
             return CosmicUtil.getRandomValueFromArray(not_edible_answers);
         }
-
+        
+        
         if (amount_to_remove) {
             if (amount_to_remove < 1) {
                 return `1 < Amount to eat < 100`;
@@ -600,7 +601,7 @@ CosmicCommandHandler.registerCommand(new Command(
                 `Did you want to eat less?`,
                 `There is not ${amount_to_remove} of that here.`
             ]
-            // console.debug(amount_to_remove, mod_it.count);
+            console.debug(amount_to_remove, mod_it.count);
             return CosmicUtil.getRandomValueFromArray(not_enough_answers);
         }
 
@@ -803,7 +804,7 @@ CosmicCommandHandler.registerCommand(new Command(
     [ 'buy' ],
     '%PREFIX%buy <item>',
     'Buy an item from the item shop.',
-    [ 'admin' ], // [ 'default' ],
+    [ 'default' ], // [ 'default' ],
     false, // true,
     'cake',
     async (msg, cl) => {
@@ -817,9 +818,18 @@ CosmicCommandHandler.registerCommand(new Command(
         let listing: ShopListing;
 
         for (const ls of shopListings) {
-            if (ls.item.displayName.toLowerCase().includes(search)) {
+            if (ls.item.displayName.toLowerCase().includes(search.toLowerCase())) {
                 listing = ls;
             }
+        }
+
+        if (!listing) {
+            let no_listing_answers = [
+                'That item is not in the shop.',
+                `We don't sell '${search}' here.`
+            ];
+
+            return CosmicUtil.getRandomValueFromArray(no_listing_answers);
         }
 
         const balance = await CosmicData.getBalance(msg.sender._id);
@@ -1171,5 +1181,41 @@ CosmicCommandHandler.registerCommand(new Command(
     'info',
     async (msg, cl) => {
         return CosmicFFI.clib.get_test_string(undefined);
+    }
+));
+
+CosmicCommandHandler.registerCommand(new Command(
+    'additemcount',
+    [ 'additemcount' ],
+    '%PREFIX%additemcount [user_id] [item_id] [count]',
+    undefined,
+    [ 'default' ],
+    false,
+    'info',
+    async (msg, cl) => {
+        const userID = msg.argv[1];
+        const itemID = msg.argv[2];
+        let count = msg.argv[3];
+
+        if (!userID) {
+            return 'No user ID given';
+        }
+
+        if (!itemID) {
+            return 'No item ID given';
+        }
+
+        count = parseInt(count);
+
+        if (!count || isNaN(count)) {
+            return 'No count given';
+        }
+
+        if (await CosmicData.hasItem(userID, itemID)) {
+            const res = await CosmicData.addItem(userID, { id: itemID, count });
+            return `Added ${count} to item ${itemID} at inventory ${userID}`;
+        } else {
+            return `Epic fail`;
+        }
     }
 ));

@@ -37,7 +37,7 @@ class CosmicData {
     public static db;
     public static users: Collection;
     public static permissions: Collection;
-    public static inventories: Collection;
+    public static inventories: Collection<Inventory>;
     public static items: Collection;
     public static util: Collection;
     public static apiKeyProfiles: Collection<Cosmic.APIKeyProfile>;
@@ -180,7 +180,7 @@ class CosmicData {
     public static async createInventory(_id: string, balance?: number, items?: Array<typeof Item>) {
         try {
             const result = await this.inventories.insertOne({
-                _id: _id as unknown as ObjectID,
+                _id: _id,
                 balance: balance || DEFAULT_BALANCE,
                 items: items || DEFAULT_INVENTORY
             });
@@ -619,6 +619,16 @@ class CosmicData {
 
             return true;
         } catch (err) {
+            return false;
+        }
+    }
+
+    public static async setExistingItemSellable(item_id: string, sellable: boolean): Promise<boolean> {
+        try {
+            let res = await this.inventories.updateMany({ 'items.id': item_id }, { $set: { 'item.$.sellable': sellable } } as any);
+            
+            return true;
+        } catch(err) {
             return false;
         }
     }
