@@ -164,6 +164,7 @@ export class CosmicClientMPP extends CosmicClientToken {
     public client: typeof Client;
     public cursor: Cursor;
     public platform: string = 'mpp';
+    public cmapi: typeof cmapi;
 
     constructor(uri: string, channel: ChannelConstructionPreset, token: string, ClientClass: any = Client) {
         super();
@@ -171,6 +172,7 @@ export class CosmicClientMPP extends CosmicClientToken {
         this.bindEventListeners();
         this.desiredChannel = channel;
         this.cursor = new Cursor(this);
+        this.cmapi = new cmapi(this.client);
     }
     
     /**
@@ -194,6 +196,8 @@ export class CosmicClientMPP extends CosmicClientToken {
         this.cursor.stop();
         this.logger.log('Stopping...');
     }
+
+    public last_dm: string;
 
     protected bindEventListeners() {
         super.bindEventListeners();
@@ -220,6 +224,8 @@ export class CosmicClientMPP extends CosmicClientToken {
             }
 
             msg.p = msg.sender;
+
+            this.last_dm = msg.p;
 
             let newmsg = CosmicForeignMessageHandler.convertMessage('chat', msg);
             this.emit('chat', newmsg);
