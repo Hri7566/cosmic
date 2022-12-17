@@ -12,7 +12,7 @@ const normalize = require('normalize-strings');
 const Client = require('mppclone-client');
 const YAML = require('yaml');
 const { EventEmitter } = require('events');
-const Discord = require('discord.js');
+import * as Discord from 'discord.js';
 const cmapi = require('mppclone-cmapi');
 
 /**
@@ -152,6 +152,7 @@ class Cursor {
     }
 }
 
+// ANCHOR MPP Client
 export class CosmicClientMPP extends CosmicClientToken {
     protected started: boolean = false;
     protected desiredChannel: ChannelConstructionPreset;
@@ -349,15 +350,18 @@ export class CosmicClientMPP extends CosmicClientToken {
     }
 }
 
+// ANCHOR Discord client
 export class CosmicClientDiscord extends CosmicClientToken {
     public platform: string = 'discord';
     public previousChannel: string;
 
-    public client: typeof Discord.Client;
+    public client: Discord.Client;
     public cmapi;
+    public rest: Discord.REST;
 
     constructor() {
         super();
+
         this.client = new Discord.Client({
             intents: [
                 Discord.GatewayIntentBits.Guilds,
@@ -366,6 +370,7 @@ export class CosmicClientDiscord extends CosmicClientToken {
                 Discord.GatewayIntentBits.GuildMembers
             ]
         });
+
         this.bindEventListeners();
     }
 
@@ -375,7 +380,9 @@ export class CosmicClientDiscord extends CosmicClientToken {
      */
     public start(token: string) {
         this.client.login(token);
-        // this.cmapi = new cmapi(this.client);
+
+        // setup REST for slash commands
+        this.rest = new Discord.REST({ version: '10' }).setToken(token);
     }
     
     /**
@@ -390,7 +397,7 @@ export class CosmicClientDiscord extends CosmicClientToken {
      * @param str Message
      * @param channel Optional channel ID
      */
-    public async sendChat(str: string, channel?: string): Promise<void> {
+    public async sendChat(str: string, channel?: string, interaction?: Discord.ChatInputCommandInteraction): Promise<void> {
         if (!str) return;
 
         let special_chars = [
@@ -406,16 +413,20 @@ export class CosmicClientDiscord extends CosmicClientToken {
             str = str.split(char).join(`\\${char}`);
         }
 
-        try {
-            if (channel) {
-                (await this.client.channels.cache.get(channel)).send(`\u034f${str}`);
-            } else {
-                if (this.previousChannel) {
-                    (await this.client.channels.cache.get(this.previousChannel)).send(`\u034f${str}`);
+        if (interaction.isChatInputCommand()) {
+            interaction.reply(`\u034f${str}`);
+        } else {
+            try {
+                if (channel) {
+                    (await this.client.channels.cache.get(channel) as any).send(`\u034f${str}`);
+                } else {
+                    if (this.previousChannel) {
+                        (await this.client.channels.cache.get(this.previousChannel) as any).send(`\u034f${str}`);
+                    }
                 }
+            } catch (err) {
+                this.logger.error('Unable to send chat message:', err);
             }
-        } catch (err) {
-            this.logger.error(err);
         }
     }
 
