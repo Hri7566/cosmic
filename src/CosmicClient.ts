@@ -170,10 +170,10 @@ export class CosmicClientMPP extends CosmicClientToken {
     constructor(uri: string, channel: ChannelConstructionPreset, token: string, ClientClass: any = Client) {
         super();
         this.client = new ClientClass(uri, token);
-        this.bindEventListeners();
+        this.cmapi = new cmapi(this.client);
         this.desiredChannel = channel;
         this.cursor = new Cursor(this);
-        this.cmapi = new cmapi(this.client);
+        this.bindEventListeners();
     }
     
     /**
@@ -286,6 +286,14 @@ export class CosmicClientMPP extends CosmicClientToken {
                 timestamp: msg.t,
                 foreign_timestamp: msg.e
             });
+        });
+
+        this.cmapi.on('?hat', msg => {
+            this.logger.debug('cmapi hat');
+            this.cmapi.sendArray([{
+                m: 'update hat',
+                url: 'santa'
+            }], { mode: 'id', id: msg._original_sender, global: false });
         });
     }
 
