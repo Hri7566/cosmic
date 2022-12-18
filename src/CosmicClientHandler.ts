@@ -4,14 +4,13 @@
  * Cosmic client handler
  */
 
-import { CosmicClientDiscord } from "./CosmicClient";
-import { CosmicLogger, red } from "./CosmicLogger";
-
 /**
  * Local module imports
- */
+*/
 
-const { CosmicClient, CosmicClientMPP, ChannelConstructionPreset } = require('./CosmicClient');
+import { CosmicClientDiscord } from "./CosmicClient";
+import { CosmicLogger, red } from "./CosmicLogger";
+import { CosmicClient, CosmicClientMPP, ChannelConstructionPreset } from './CosmicClient';
 
 /**
  * Module-level declarations
@@ -29,7 +28,7 @@ class CosmicClientHandler {
     private static clients = [];
     public static logger = new CosmicLogger('Client Handler', red);
 
-    public static startMPPClient(uri: string, channel: typeof ChannelConstructionPreset): boolean {
+    public static startMPPClient(uri: string, channel: ChannelConstructionPreset): boolean {
         if (this.clients.length > MPP_HARD_CLIENT_LIMIT) return false;
 
         let cl = new CosmicClientMPP(uri, channel, MPPCLONE_TOKEN);

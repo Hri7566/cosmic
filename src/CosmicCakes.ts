@@ -4,9 +4,9 @@
  * Cakes
  */
 
-const { Cake } = require('./CosmicTypes');
+import { Cosmic as CosmicTypes } from './CosmicTypes';
 
-export const cakes: Array<typeof Cake> = [
+export const cakes: Array<CosmicTypes.Cake> = [
     {
         id: 'cake_chocolate',
         displayName: 'Chocolate Cake',
@@ -27,79 +27,6 @@ export const cakes: Array<typeof Cake> = [
         filling: 'vanilla',
         topping: 'cherry',
         value: 18
-    },
-    {
-        id: 'cupcake_strawberry',
-        displayName: 'Strawberry Cupcake',
-        emoji: '🧁',
-        count: 6,
-        edible: true,
-        icing: 'strawberry',
-        filling: 'chocolate',
-        value: 2
-    },
-    {
-        id: 'cupcake_vanilla',
-        displayName: 'Vanilla Cupcake',
-        emoji: '🧁',
-        count: 6,
-        edible: true,
-        icing: 'white',
-        filling: 'vanilla',
-        value: 2
-    },
-    {
-        id: 'cupcake_strawberry',
-        displayName: 'Chocolate Cupcake',
-        emoji: '🧁',
-        count: 6,
-        edible: true,
-        icing: 'chocolate',
-        filling: 'chocolate',
-        topping: '',
-        value: 2
-    },
-    {
-        id: 'cupcake_halloween',
-        displayName: 'Strawberry Cupcake',
-        emoji: '🧁',
-        count: 6,
-        edible: true,
-        icing: 'purple',
-        filling: 'chocolate',
-        topping: 'plastic',
-        value: 2
-    },
-    {
-        id: 'cupcake_valentines',
-        displayName: 'Valentine\'s Cupcake',
-        emoji: '🧁',
-        count: 6,
-        edible: true,
-        icing: 'pink',
-        filling: 'velvet',
-        topping: 'strawberries',
-        value: 2
-    },
-    {
-        id: 'cupcake_gender_boy',
-        displayName: 'Gender Reveal Cupcake (Boy)',
-        emoji: '🧁',
-        count: 6,
-        edible: true,
-        icing: 'blue',
-        filling: 'chocolate',
-        value: 2
-    },
-    {
-        id: 'cupcake_gender_girl',
-        displayName: 'Gender Reveal Cupcake (Girl)',
-        emoji: '🧁',
-        count: 6,
-        edible: true,
-        icing: 'pink',
-        filling: 'vanilla',
-        value: 2
     },
     {
         id: 'cake_angel',
@@ -165,7 +92,7 @@ export const cakes: Array<typeof Cake> = [
         value: 5
     },
     {
-        id: 'cake_cheese',
+        id: 'cake_cheesecake',
         displayName: 'Cheesecake',
         emoji: '🍰',
         count: 1,
@@ -177,7 +104,7 @@ export const cakes: Array<typeof Cake> = [
     }
 ];
 
-export const uncommon_cakes: Array<typeof Cake> = [
+export const uncommon_cakes: Array<CosmicTypes.Cake> = [
     {
         id: 'cake_birthday',
         displayName: 'Birthday Cake',
@@ -303,10 +230,82 @@ export const uncommon_cakes: Array<typeof Cake> = [
         icing: 'smokey',
         filling: 'flame',
         value: 80
+    },
+    {
+        id: 'cupcake_strawberry',
+        displayName: 'Strawberry Cupcake',
+        emoji: '🧁',
+        count: 6,
+        edible: true,
+        icing: 'strawberry',
+        filling: 'chocolate',
+        value: 10
+    },
+    {
+        id: 'cupcake_vanilla',
+        displayName: 'Vanilla Cupcake',
+        emoji: '🧁',
+        count: 6,
+        edible: true,
+        icing: 'white',
+        filling: 'vanilla',
+        value: 10
+    },
+    {
+        id: 'cupcake_Chocolate',
+        displayName: 'Chocolate Cupcake',
+        emoji: '🧁',
+        count: 6,
+        edible: true,
+        icing: 'chocolate',
+        filling: 'chocolate',
+        value: 10
+    },
+    {
+        id: 'cupcake_halloween',
+        displayName: 'Halloween Cupcake',
+        emoji: '🧁',
+        count: 6,
+        edible: true,
+        icing: 'purple',
+        filling: 'chocolate',
+        topping: 'plastic',
+        value: 12
+    },
+    {
+        id: 'cupcake_valentines',
+        displayName: 'Valentine\'s Cupcake',
+        emoji: '🧁',
+        count: 6,
+        edible: true,
+        icing: 'pink',
+        filling: 'velvet',
+        topping: 'strawberries',
+        value: 12
+    },
+    {
+        id: 'cupcake_gender_boy',
+        displayName: 'Gender Reveal Cupcake (Boy)',
+        emoji: '🧁',
+        count: 6,
+        edible: true,
+        icing: 'blue',
+        filling: 'chocolate',
+        value: 10
+    },
+    {
+        id: 'cupcake_gender_girl',
+        displayName: 'Gender Reveal Cupcake (Girl)',
+        emoji: '🧁',
+        count: 6,
+        edible: true,
+        icing: 'pink',
+        filling: 'vanilla',
+        value: 10
     }
 ];
 
-export const rare_cakes: Array<typeof Cake> = [
+export const rare_cakes: Array<CosmicTypes.Cake> = [
     {
         id: 'cake_party',
         displayName: 'Party Cake',
@@ -459,7 +458,7 @@ export const rare_cakes: Array<typeof Cake> = [
     }
 ];
 
-export const ultra_rare_cakes: Array<typeof Cake> = [
+export const ultra_rare_cakes: Array<CosmicTypes.Cake> = [
     {
         id: 'cake_bowling',
         displayName: 'Bowling Ball Cake',
@@ -546,11 +545,12 @@ export const ultra_rare_cakes: Array<typeof Cake> = [
         count: 1,
         edible: true,
         icing: 'golden',
-        filling: 'golden'
+        filling: 'golden',
+        value: 10000
     }
 ];
 
-export const secret_cakes: Array<typeof Cake> = [
+export const secret_cakes: Array<CosmicTypes.Cake> = [
     {
         id: 'cake_cosmic',
         displayName: 'Cosmic Cake',
@@ -561,5 +561,15 @@ export const secret_cakes: Array<typeof Cake> = [
         filling: 'galaxies',
         topping: 'stars',
         value: 1_000_000
+    },
+    {
+        id: 'cake_nitsua',
+        displayName: 'Nitsua Cake',
+        count: 1,
+        edible: true,
+        icing: 'austin',
+        filling: 'austin',
+        topping: 'austin',
+        value: 500_000
     }
 ];

@@ -228,7 +228,21 @@ CosmicCommandHandler.registerCommand(new Command(
     true,
     'cake',
     async (msg, cl) => {
-        const response = CosmicCakeFactory.startBaking(msg.sender, cl);
+        let response;
+        let isDM = false;
+
+        try {
+            if (msg.original_message) {
+                if (msg.original_message.original_message) {
+                    isDM = msg.original_message.original_message.m == 'dm'
+                }
+            }
+        } catch (err) {
+            isDM = false;
+        }
+
+        response = CosmicCakeFactory.startBaking(msg.sender, cl, isDM);
+        // response = CosmicCakeFactory.startBaking(msg.sender, cl);
         return response;
     }
 ));

@@ -10,9 +10,9 @@ import { ITEMS } from "./CosmicItems";
 import { CosmicLogger, red } from "./CosmicLogger";
 import { Cosmic, User } from "./CosmicTypes";
 import { CosmicUtil } from "./CosmicUtil";
-const { Cake, FoodItem, Item } = require('./CosmicTypes');
+import { FoodItem, Item } from './CosmicTypes';
 
-const { cakes, uncommon_cakes, rare_cakes, ultra_rare_cakes, secret_cakes } = require('./CosmicCakes');
+import { cakes, uncommon_cakes, rare_cakes, ultra_rare_cakes, secret_cakes } from './CosmicCakes';
 
 const CHECK_INTERVAL = 15000;
 const RANDOM_CHANCE = 0.02;
@@ -43,8 +43,16 @@ class CosmicCakeFactory {
 
         if (this.isAlreadyBaking(user._id)) {
             const already_answers = [
-                `You are already baking.`
-            ]
+                `You are already baking.`,
+                `Baking, you already are.`,
+                `You're already baking.`,
+                `Keep trying.`,
+                `The oven is already full.`,
+                `The oven has cake in it already.`,
+                `The oven is full of cake.`,
+                `You can't bake more, the oven still has cake.`
+            ];
+
             return already_answers[Math.floor(Math.random() * already_answers.length)];
         }
 
@@ -75,6 +83,7 @@ class CosmicCakeFactory {
                 `Error: start baking first`,
                 `Have you ever even baked before?`
             ];
+
             return replies[Math.floor(Math.random() * replies.length)];
         }
     }
@@ -88,10 +97,21 @@ class CosmicCakeFactory {
         this.bakingUsers.splice(this.bakingUsers.indexOf(user), 1);
 
         if (user.hasOwnProperty('cl')) {
-            if (user.isDM) {
-                user.cl.sendChat(`${user.name} finished baking and got: ${cake.emoji || ''}${cake.displayName} (x${cake.count})`, user.channel);
+            if (user.dm) {
+                // user.cl.sendChat(`${user.name} finished baking and got: ${CosmicUtil.formatItemString(cake.displayName, cake.emoji, cake.count)}`, user.channel);
+                user.cl.emit('send chat message', {
+                    type: 'chat',
+                    sender: {
+                        name: 'internal',
+                        _id: 'internal',
+                        color: '#ffffff'
+                    },
+                    dm: user._id,
+                    timestamp: Date.now(),
+                    message: `${user.name} finished baking and got: ${cake.emoji || ''}${cake.displayName} (x${cake.count})`
+                });
             } else {
-                user.cl.sendChat(`${user.name} finished baking and got: ${cake.emoji || ''}${cake.displayName} (x${cake.count})`, user.channel);
+                user.cl.sendChat(`${user.name} finished baking and got: ${cake.emoji || ''}${cake.displayName} (x${cake.count})`);
             }
         }
     }

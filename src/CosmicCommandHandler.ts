@@ -91,7 +91,8 @@ class CosmicCommandHandler {
             type: 'command',
             argv: cmsg.message.split(' '),
             sender: cmsg.sender,
-            timestamp: cmsg.timestamp
+            timestamp: cmsg.timestamp,
+            original_message: cmsg
         };
 
         // check prefix
@@ -164,7 +165,6 @@ class CosmicCommandHandler {
                     message: out,
                     timestamp: Date.now(),
                 });
-
             }
 
             return;

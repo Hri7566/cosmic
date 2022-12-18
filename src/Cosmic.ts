@@ -9,8 +9,8 @@
  */
 
 const fs = require('fs');
-const path = require('path');
-const YAML = require('yaml');
+import * as path from 'path';
+import * as YAML from 'yaml';
 const { EventEmitter } = require('events');
 
 /**
