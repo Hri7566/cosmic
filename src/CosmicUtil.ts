@@ -6,6 +6,7 @@
 
 import { Cosmic } from "./Cosmic";
 import { CosmicLogger, red } from "./CosmicLogger";
+import { User } from "./CosmicTypes";
 
 /**
  * Local module imports
@@ -97,6 +98,14 @@ class CosmicUtil {
      */
     public static formatItemString(name: string, emoji: string = '', count: number) {
         return `${emoji}${name}${count > 1 ? ` (x${count})` : ''}`;
+    }
+
+    /**
+     * Format a username and ID as a string (lossy)
+     * @param user User to pull data from
+     */
+    public static formatUserString(user: User) {
+        return `[${user._id.substring(0, 6)}] ${user.name}`;
     }
 
     // migrated from main class

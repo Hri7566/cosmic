@@ -19,7 +19,7 @@
   #     color: "#1d0054"
   #     color2: "#000000"
   -
-    _id: 'lobby'
+    _id: "Cosmic"
     set:
       color: "#1d0054"
       color2: "#000000"
