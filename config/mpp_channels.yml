@@ -1,13 +1,13 @@
 "wss://mppclone.com:8443":
-  -
-    _id: "✧𝓓𝓔𝓥 𝓡𝓸𝓸𝓶✧"
-    disable:
-      - crown
-    dmOnly:
-      - bake
-    set:
-      color: "#1d0054"
-      color2: "#000000"
+  # -
+  #   _id: "✧𝓓𝓔𝓥 𝓡𝓸𝓸𝓶✧"
+  #   disable:
+  #     - crown
+  #   dmOnly:
+  #     - bake
+  #   set:
+  #     color: "#1d0054"
+  #     color2: "#000000"
   # -
   #   _id: 'test/awkward'
   #   set:
@@ -18,3 +18,8 @@
   #   set:
   #     color: "#1d0054"
   #     color2: "#000000"
+  -
+    _id: "Cosmic [indev]"
+    set:
+      color: "#1d0054"
+      color2: "#000000"
