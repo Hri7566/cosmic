@@ -108,7 +108,7 @@ class CosmicCakeFactory {
                     },
                     dm: user._id,
                     timestamp: Date.now(),
-                    message: `${user.name} finished baking and got: ${cake.emoji || ''}${cake.displayName} (x${cake.count})`
+                    message: `${CosmicUtil.formatUserString(user)} finished baking and got: ${cake.emoji || ''}${cake.displayName} (x${cake.count})`
                 });
             } else {
                 user.cl.sendChat(`${user.name} finished baking and got: ${cake.emoji || ''}${cake.displayName} (x${cake.count})`);
