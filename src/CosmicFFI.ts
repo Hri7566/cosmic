@@ -2,6 +2,14 @@
  * COSMIC PROJECT
  * 
  * Foreign function interface module
+ * 
+ * This module is designed to load a C library which
+ * is also included in the Cosmic directory.
+ * 
+ * I recently found out that "libcosmic" already
+ * exists, actually... but this shouldn't be too
+ * much of a problem if this is the only project
+ * that uses it.
  */
 
 const path = require('path');

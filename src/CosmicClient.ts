@@ -2,6 +2,8 @@
  * COSMIC PROJECT
  * 
  * Cosmic client module
+ * 
+ * Client connections for outgoing services
  */
 
 /**
@@ -239,6 +241,7 @@ export class CosmicClientMPP extends CosmicClientToken {
             this.logger.log(`Connected to ${this.client.uri}`);
         });
 
+        // TODO maybe move this setInterval to somewhere else?
         setInterval(() => {
             if (!this.client.isConnected()) return;
 

@@ -2,6 +2,8 @@
  * COSMIC PROJECT
  * 
  * Cake factory module
+ * 
+ * Cake generator for money game
  */
 
 import { CosmicClient, CosmicClientDiscord } from "./CosmicClient";

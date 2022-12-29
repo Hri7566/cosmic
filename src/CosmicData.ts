@@ -2,6 +2,8 @@
  * COSMIC PROJECT
  * 
  * Data module
+ * 
+ * Database connection loader and data interface
  */
 
 import { ObjectID } from "bson";

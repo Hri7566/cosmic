@@ -2,6 +2,8 @@
  * COSMIC PROJECT
  * 
  * Express API module
+ * 
+ * This is a mess.
  */
 
 import { readFile, readFileSync } from "fs";
@@ -77,6 +79,185 @@ class CosmicAPI {
         //* use req.ip
         this.app.set('trust proxy', true);
 
+        this.setupRoutes();
+        
+        if (SSL == 'true') {
+            this.server = https.createServer({
+                cert, key
+            }, this.app);
+        } else {
+            this.server = http.createServer(this.app);
+        }
+        this.server.listen(PORT, () => {
+            this.logger.log(`Listening on port ${PORT}`);
+        });
+
+        this.wss = new WebSocket.Server({
+            noServer: true
+            // server: this.server
+        });
+
+        this.server.on('upgrade', (req, socket, head) => {
+            this.wss.handleUpgrade(req, socket, head, ws => {
+                this.wss.emit('connection', ws, req);
+            })
+        });
+
+        this.server.on('connection', sock => {
+            sock.on('data', d => {
+                try {
+                    // console.log(d.toString());
+                } catch (err) {};
+            });
+        });
+
+        this.wss.on('error', (err: Error) => { this.logger.error(err) });
+
+        this.wss.on('connection', (ws: WebSocket, req: http.ClientRequest) => {
+            // console.log('websocket connection');
+            // let cl: {
+            //     ws: WebSocket;
+            //     send: (s: any) => void;
+            //     connected: boolean;
+            // } = {
+            //     ws: ws,
+            //     connected: true,
+            //     send: (s: any) => {
+            //         if (!cl.connected) return;
+            //         cl.ws.send(JSON.stringify(s));
+            //     }
+            // }
+
+            let cl = new CosmicAPIWebSocketClient(ws, req);
+            this.addClient(cl);
+        });
+    }
+
+    public static stop() {
+        this.logger.log('Stopping server...');
+        this.server.close();
+        this.logger.log('Stopped.');
+    }
+
+    public static addClient(cl: CosmicAPIWebSocketClient): void {
+        this.wsClients.push(cl);
+    }
+
+    public static removeClient(cl: CosmicAPIWebSocketClient): void {
+        this.wsClients.splice(this.wsClients.indexOf(cl), 1);
+    }
+
+    public static getClientByIP(ip: string): void {
+        for (let cl of this.wsClients) {
+            if (cl.ip == ip) return cl;
+        }
+    }
+
+    public static generateAPIKey(): string {
+        return crypto.randomUUID();
+    }
+
+    public static async getAvailableKeyCount(ip: string): Promise<number> {
+        try {
+            let keys = await CosmicData.getAPIKeys(ip);
+            return this.keyLimit - keys.length;
+        } catch (err) {
+            return 0;
+        }
+    }
+
+    public static permissionIsValid(permissionName: string, value: any): boolean {
+        for (let key of Object.keys(this.validPermissions)) {
+            let type = this.validPermissions[key];
+            if (permissionName !== key) continue;
+            if (typeof value == type) return true;
+        }
+
+        return false;
+    }
+
+    public static async verifyKey(req): Promise<boolean> {
+        let key = req.query.key;
+        if (!key) return;
+        let validKeys = await CosmicData.getAPIKeys(req.ip);
+        if (validKeys.indexOf(key) == -1) return false;
+        return true;
+    }
+
+    public static async permissionGroupHasPermission(grp: string, permission: string): Promise<boolean> {
+        let group = this.permissionGroups[grp];
+        if (!group) return false;
+
+        let hasPermission = false;
+
+        console.log(group);
+
+        for (let perm of Object.keys(group as any)) {
+            if (perm == permission) {
+                if (this.validPermissions[perm] == 'boolean') {
+                    if (group[perm] == true) {
+                        hasPermission = true;
+                        break;
+                    }
+                } else if (typeof this.validPermissions[perm] == 'function') {
+                    try {
+                        if (this.validPermissions[perm]()) {
+                            hasPermission = true;
+                            break;
+                        }
+                    } catch (err) {
+                        hasPermission = false;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return hasPermission;
+    }
+
+    public static async hasPermission(ip: string, permission: string): Promise<boolean> {
+        let permissions = await CosmicData.getAPIPermissions(ip);
+        let permissionGroups = await CosmicData.getAPIPermissionGroups(ip);
+
+        if (!permissions) return false;
+
+        let hasPermission = false;
+        
+        if (permissionGroups) {
+            // check group permission
+            for (let group of permissionGroups) {
+                hasPermission = await this.permissionGroupHasPermission(group, permission);
+                if (hasPermission) break;
+            }
+        }
+
+        // check normal permissions
+        for (let perm of permissions) {
+            if (perm == permission) {
+                if (this.validPermissions[perm] == 'boolean') {
+                    if (perm == true) {
+                        hasPermission = true;
+                        break;
+                    }
+                } else if (typeof this.validPermissions[perm] == 'function') {
+                    try {
+                        if (this.validPermissions[perm]()) {
+                            hasPermission = true;
+                            break;
+                        }
+                    } catch (err) {
+                        hasPermission = false;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return hasPermission;
+    }
+
+    private static setupRoutes(): void {
         this.api.get('/', async (req, res) => {
             res.json({
                 status: 'online',
@@ -276,11 +457,6 @@ class CosmicAPI {
             res.status(404).json({ error: 'SORRY NOTHING' });
         });
 
-        this.app.use('/api', this.api);
-
-        this.app.use(express.static(path.resolve(__dirname, '../../frontend')));
-        this.app.use('/assets', express.static(path.resolve(__dirname, '../../assets')));
-
         this.app.get('*', (req, res) => {
             readFile(resolve(__dirname, '../../frontend/index.html'), (err, data) => {
                 if (err) {
@@ -295,181 +471,10 @@ class CosmicAPI {
                 }
             });
         });
-        
-        if (SSL == 'true') {
-            this.server = https.createServer({
-                cert, key
-            }, this.app);
-        } else {
-            this.server = http.createServer(this.app);
-        }
-        this.server.listen(PORT, () => {
-            this.logger.log(`Listening on port ${PORT}`);
-        });
 
-        this.wss = new WebSocket.Server({
-            noServer: true
-            // server: this.server
-        });
-
-        this.server.on('upgrade', (req, socket, head) => {
-            this.wss.handleUpgrade(req, socket, head, ws => {
-                this.wss.emit('connection', ws, req);
-            })
-        });
-
-        this.server.on('connection', sock => {
-            sock.on('data', d => {
-                try {
-                    // console.log(d.toString());
-                } catch (err) {};
-            });
-        });
-
-        this.wss.on('error', (err: Error) => { this.logger.error(err) });
-
-        this.wss.on('connection', (ws: WebSocket, req: http.ClientRequest) => {
-            // console.log('websocket connection');
-            // let cl: {
-            //     ws: WebSocket;
-            //     send: (s: any) => void;
-            //     connected: boolean;
-            // } = {
-            //     ws: ws,
-            //     connected: true,
-            //     send: (s: any) => {
-            //         if (!cl.connected) return;
-            //         cl.ws.send(JSON.stringify(s));
-            //     }
-            // }
-
-            let cl = new CosmicAPIWebSocketClient(ws, req);
-            this.addClient(cl);
-        });
-    }
-
-    public static stop() {
-        this.logger.log('Stopping server...');
-        this.server.close();
-        this.logger.log('Stopped.');
-    }
-
-    public static addClient(cl: CosmicAPIWebSocketClient): void {
-        this.wsClients.push(cl);
-    }
-
-    public static removeClient(cl: CosmicAPIWebSocketClient): void {
-        this.wsClients.splice(this.wsClients.indexOf(cl), 1);
-    }
-
-    public static getClientByIP(ip: string): void {
-        for (let cl of this.wsClients) {
-            if (cl.ip == ip) return cl;
-        }
-    }
-
-    public static generateAPIKey(): string {
-        return crypto.randomUUID();
-    }
-
-    public static async getAvailableKeyCount(ip: string): Promise<number> {
-        try {
-            let keys = await CosmicData.getAPIKeys(ip);
-            return this.keyLimit - keys.length;
-        } catch (err) {
-            return 0;
-        }
-    }
-
-    public static permissionIsValid(permissionName: string, value: any): boolean {
-        for (let key of Object.keys(this.validPermissions)) {
-            let type = this.validPermissions[key];
-            if (permissionName !== key) continue;
-            if (typeof value == type) return true;
-        }
-
-        return false;
-    }
-
-    public static async verifyKey(req): Promise<boolean> {
-        let key = req.query.key;
-        if (!key) return;
-        let validKeys = await CosmicData.getAPIKeys(req.ip);
-        if (validKeys.indexOf(key) == -1) return false;
-        return true;
-    }
-
-    public static async permissionGroupHasPermission(grp: string, permission: string): Promise<boolean> {
-        let group = this.permissionGroups[grp];
-        if (!group) return false;
-
-        let hasPermission = false;
-
-        console.log(group);
-
-        for (let perm of Object.keys(group as any)) {
-            if (perm == permission) {
-                if (this.validPermissions[perm] == 'boolean') {
-                    if (group[perm] == true) {
-                        hasPermission = true;
-                        break;
-                    }
-                } else if (typeof this.validPermissions[perm] == 'function') {
-                    try {
-                        if (this.validPermissions[perm]()) {
-                            hasPermission = true;
-                            break;
-                        }
-                    } catch (err) {
-                        hasPermission = false;
-                        break;
-                    }
-                }
-            }
-        }
-
-        return hasPermission;
-    }
-
-    public static async hasPermission(ip: string, permission: string): Promise<boolean> {
-        let permissions = await CosmicData.getAPIPermissions(ip);
-        let permissionGroups = await CosmicData.getAPIPermissionGroups(ip);
-
-        if (!permissions) return false;
-
-        let hasPermission = false;
-        
-        if (permissionGroups) {
-            // check group permission
-            for (let group of permissionGroups) {
-                hasPermission = await this.permissionGroupHasPermission(group, permission);
-                if (hasPermission) break;
-            }
-        }
-
-        // check normal permissions
-        for (let perm of permissions) {
-            if (perm == permission) {
-                if (this.validPermissions[perm] == 'boolean') {
-                    if (perm == true) {
-                        hasPermission = true;
-                        break;
-                    }
-                } else if (typeof this.validPermissions[perm] == 'function') {
-                    try {
-                        if (this.validPermissions[perm]()) {
-                            hasPermission = true;
-                            break;
-                        }
-                    } catch (err) {
-                        hasPermission = false;
-                        break;
-                    }
-                }
-            }
-        }
-
-        return hasPermission;
+        this.app.use('/api', this.api);
+        this.app.use(express.static(path.resolve(__dirname, '../../frontend')));
+        this.app.use('/assets', express.static(path.resolve(__dirname, '../../assets')));
     }
 }
 

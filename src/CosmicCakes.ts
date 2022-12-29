@@ -1,7 +1,7 @@
 /**
  * COSMIC PROJECT
  * 
- * Cakes
+ * Cake Hall of Fame
  */
 
 import { Cosmic as CosmicTypes } from './CosmicTypes';

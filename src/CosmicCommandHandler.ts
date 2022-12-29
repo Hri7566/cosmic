@@ -2,6 +2,8 @@
  * COSMIC PROJECT
  * 
  * Cosmic command handler module
+ * 
+ * Command loader and interface
  */
 
 /**

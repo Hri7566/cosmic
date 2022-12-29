@@ -3,7 +3,9 @@
  * 
  * Color module
  * This module was originally written by Brandon Lockaby circa 2012.
- * It has been repurposed for use here.
+ * It was released under GPL3 along with the rest of the site files
+ * with permission from the new owner. It has been repurposed for use
+ * here to get the names of colors.
  */
 
 /**

@@ -62,11 +62,7 @@ class Cosmic {
         this.logger.log('Starting clients...');
 
         if (ENABLE_MPP == 'true') {
-            for (const uri of Object.keys(channels)) {
-                for (const ch of channels[uri]) {
-                    CosmicClientHandler.startMPPClient(uri, ch);
-                }
-            }
+            this.startMPPClients();
         }
         
         if (ENABLE_DISCORD == 'true') {
@@ -107,7 +103,8 @@ class Cosmic {
         });
 
         this.on('hi', () => {
-            this.logger.log('hi!');
+            this.logger.debug('hi!');
+            this.emit('hello');
         });
 
         this.on('bonk', (msg: any) => {
@@ -119,6 +116,14 @@ class Cosmic {
                 });
             } catch(err) {}
         });
+    }
+
+    private static startMPPClients() {
+        for (const uri of Object.keys(channels)) {
+            for (const ch of channels[uri]) {
+                CosmicClientHandler.startMPPClient(uri, ch);
+            }
+        }
     }
 }
 

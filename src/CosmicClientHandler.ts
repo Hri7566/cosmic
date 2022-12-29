@@ -2,6 +2,8 @@
  * COSMIC PROJECT
  * 
  * Cosmic client handler
+ * 
+ * Loader for CosmicClient-type modules
  */
 
 /**

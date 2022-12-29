@@ -2,6 +2,8 @@
  * COSMIC PROJECT
  * 
  * Cosmic commands
+ * 
+ * Command logic for entire innards (complexity warning)
  */
 
 /**
