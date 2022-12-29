@@ -96,6 +96,8 @@ class CosmicCakeFactory {
 
         this.bakingUsers.splice(this.bakingUsers.indexOf(user), 1);
 
+        const cakeMessage = `${cake.emoji || ''}${cake.displayName} (x${cake.count})`;
+
         if (user.hasOwnProperty('cl')) {
             if (user.dm) {
                 // user.cl.sendChat(`${user.name} finished baking and got: ${CosmicUtil.formatItemString(cake.displayName, cake.emoji, cake.count)}`, user.channel);
@@ -108,10 +110,10 @@ class CosmicCakeFactory {
                     },
                     dm: user._id,
                     timestamp: Date.now(),
-                    message: `${CosmicUtil.formatUserString(user)} finished baking and got: ${cake.emoji || ''}${cake.displayName} (x${cake.count})`
+                    message: `${CosmicUtil.formatUserString(user)} finished baking and got: ${cakeMessage}`
                 });
             } else {
-                user.cl.sendChat(`${user.name} finished baking and got: ${cake.emoji || ''}${cake.displayName} (x${cake.count})`);
+                user.cl.sendChat(`${user.name} finished baking and got: ${cakeMessage}`);
             }
         }
     }
