@@ -2,6 +2,8 @@
  * COSMIC PROJECT
  * 
  * Main Cosmic module
+ * 
+ * This file itself really isn't that large, but it loads everything else.
  */
 
 /**
