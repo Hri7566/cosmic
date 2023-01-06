@@ -1170,7 +1170,7 @@ CosmicCommandHandler.registerCommand(new Command(
 CosmicCommandHandler.registerCommand(new Command(
     'removegroup',
     [ 'removegroup', 'rmg', 'rmgroup', 'grouprm' ],
-    '%PREFIX%addgroup <userID> <groupID>',
+    '%PREFIX%removegroup <userID> <groupID>',
     `Remove a group from a user profile.`,
     [ 'admin' ],
     false,
