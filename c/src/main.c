@@ -1,3 +1,8 @@
+/**
+ * COSMIC PROJECT
+ * Foreign function C module
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 

@@ -1184,7 +1184,7 @@ CosmicCommandHandler.registerCommand(new Command(
             const user = await CosmicData.getGroups(userID);
             return `Successfully removed \`${user._id}\` from group \`${groupID}\``;
         } catch (err) {
-            return `Unable to add user to group.`;
+            return `Unable to remove user from group.`;
         }
     }
 ));
