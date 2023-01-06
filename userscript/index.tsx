@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
 
 import { BrowserLogger } from "./BrowserLogger";
-const cmapi = require('../../cmapi');
+// const cmapi = require('mppclone-cmapi');
 
 window.addEventListener('load', evt => {
     const LOGGER = new BrowserLogger('CosmicUI');
@@ -13,9 +13,9 @@ window.addEventListener('load', evt => {
         )
     }
 
-    if (!MPP.cmapi) {
-        MPP.cmapi = new cmapi(MPP.client);
-    }
+    // if (!MPP.cmapi) {
+        // MPP.cmapi = new cmapi(MPP.client);
+    // }
 
     let serverUri = localStorage.getItem('cosmic_uri');
 

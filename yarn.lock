@@ -3389,10 +3389,10 @@ mppclone-client@^1.0.0:
   dependencies:
     ws "^8.5.0"
 
-mppclone-cmapi@^1.4.0:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/mppclone-cmapi/-/mppclone-cmapi-1.4.0.tgz#9eb810e51380c1164b898f1d7f154572ce97f67a"
-  integrity sha512-pSmQXtLsZPjy9LquVwRzsnV/2C06AVoc1fggO9Az9KUIjl1XlOJRpwf2V28SQX2VmcKFydU7os/OiEwuQj2P0w==
+mppclone-cmapi@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/mppclone-cmapi/-/mppclone-cmapi-1.5.0.tgz#5043bba29135411f7a0f4199f5a4df41f92b7d35"
+  integrity sha512-qLwjm8ovUb0qc8FIQhH3LJYkrOhiBcEH5cYiLfA7+M+Wot6Vq5oi9EewLlba/4PWqSZB6dZMqri5mNROvFt8gw==
 
 ms@2.0.0:
   version "2.0.0"

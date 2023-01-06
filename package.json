@@ -32,7 +32,7 @@
     "mpp-client": "^0.4.3483807882806744",
     "mpp-client-xt": "^1.3.1",
     "mppclone-client": "^1.0.0",
-    "mppclone-cmapi": "^1.4.0",
+    "mppclone-cmapi": "^1.5.0",
     "node-nlp": "^4.24.0",
     "normalize-strings": "^1.1.1",
     "react-router-dom": "^6.4.3",

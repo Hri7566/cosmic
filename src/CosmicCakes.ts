@@ -571,5 +571,15 @@ export const secret_cakes: Array<CosmicTypes.Cake> = [
         filling: 'austin',
         topping: 'austin',
         value: 500_000
+    },
+    {
+        id: 'cake_khorne',
+        displayName: 'Khorne Cake',
+        count: 1,
+        edible: true,
+        icing: 'blood',
+        filling: 'khorne flakes',
+        topping: 'skulls',
+        value: 999_999
     }
 ];
