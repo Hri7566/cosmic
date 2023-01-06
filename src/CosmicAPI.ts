@@ -564,11 +564,13 @@ try {
     CosmicAPI.permissionGroups = {
         'default': {
             'canSetPermissions': false,
-            'canSetAllPermissions': false
+            'canSetAllPermissions': false,
+            'canGenerateKey': false
         },
         'admin': {
             'canSetPermissions': true,
-            'canSetAllPermissions': true
+            'canSetAllPermissions': true,
+            'canGenerateKey': true
         }
     }
 }
