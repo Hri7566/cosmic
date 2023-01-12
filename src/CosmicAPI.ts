@@ -456,7 +456,11 @@ class CosmicAPI {
         this.api.get('*', async (req, res) => {
             res.status(404).json({ error: 'SORRY NOTHING' });
         });
-
+        
+        this.app.use(express.static(path.resolve(__dirname, '../../frontend')));
+        this.app.use('/assets', express.static(path.resolve(__dirname, '../../assets')));
+        this.app.use('/api', this.api);
+        
         this.app.get('*', (req, res) => {
             readFile(resolve(__dirname, '../../frontend/index.html'), (err, data) => {
                 if (err) {
@@ -471,10 +475,6 @@ class CosmicAPI {
                 }
             });
         });
-
-        this.app.use('/api', this.api);
-        this.app.use(express.static(path.resolve(__dirname, '../../frontend')));
-        this.app.use('/assets', express.static(path.resolve(__dirname, '../../assets')));
     }
 }
 
