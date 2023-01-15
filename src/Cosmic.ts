@@ -35,7 +35,11 @@ const channelsFile = fs.readFileSync(path.resolve(__dirname, '../../config/mpp_c
 const channels = YAML.parse(channelsFile);
 
 class Cosmic {
-    // magenta is beautiful space colors :D
+    get [Symbol.toStringTag]() {
+        return 'Cosmic'
+    }
+
+    // magenta is a beautiful space color :D
     public static logger = new CosmicLogger('Cosmic', magenta);
 
     // event emitter prototypal

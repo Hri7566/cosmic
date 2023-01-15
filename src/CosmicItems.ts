@@ -55,7 +55,7 @@ export const ITEMS: Record<string | symbol, AnyItem> = {
         displayName: 'Anonypple',
         emoji: '🍎',
         count: 1,
-        description: 'Why am I even making this?',
+        description: 'Why am I even making this stuff?',
         value: 25,
         sellable: true,
         max_stack: 999

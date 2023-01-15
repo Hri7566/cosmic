@@ -16,7 +16,7 @@ import { FoodItem, Item } from './CosmicTypes';
 
 import { cakes, uncommon_cakes, rare_cakes, ultra_rare_cakes, secret_cakes } from './CosmicCakes';
 
-const CHECK_INTERVAL = 15000;
+const CHECK_INTERVAL = 25000;
 const RANDOM_CHANCE = 0.02;
 
 class CosmicCakeFactory {
@@ -41,7 +41,7 @@ class CosmicCakeFactory {
     }
 
     public static startBaking(user: User, cl: CosmicClient, isDM: boolean = false): string {
-        let response: string = `${user.name} started baking.`;
+        let response: string = `${CosmicUtil.formatUserString(user)} started baking.`;
 
         if (this.isAlreadyBaking(user._id)) {
             const already_answers = [
@@ -74,7 +74,7 @@ class CosmicCakeFactory {
         let user = this.bakingUsers.find(u => u._id == _id);
         if (user) {
             this.bakingUsers.splice(this.bakingUsers.indexOf(user), 1);
-            return `${user.name} stopped baking.`;
+            return `${CosmicUtil.formatUserString(user)} stopped baking.`;
         } else {
             let replies = [
                 `I don't think you're baking.`,
@@ -104,6 +104,14 @@ class CosmicCakeFactory {
         if (user.hasOwnProperty('cl')) {
             if (user.dm) {
                 // user.cl.sendChat(`${user.name} finished baking and got: ${CosmicUtil.formatItemString(cake.displayName, cake.emoji, cake.count)}`, user.channel);
+
+                let finishedBakingAnswers = [
+                    `${CosmicUtil.formatUserString(user)} finished baking and got: ${cakeMessage}`,
+                    `${CosmicUtil.formatUserString(user)} took the cake out of the oven and got: ${cakeMessage}`
+                ];
+
+                let answer = CosmicUtil.getRandomValueFromArray(finishedBakingAnswers);
+
                 user.cl.emit('send chat message', {
                     type: 'chat',
                     sender: {
@@ -113,10 +121,10 @@ class CosmicCakeFactory {
                     },
                     dm: user._id,
                     timestamp: Date.now(),
-                    message: `${CosmicUtil.formatUserString(user)} finished baking and got: ${cakeMessage}`
+                    message: answer
                 });
             } else {
-                user.cl.sendChat(`${user.name} finished baking and got: ${cakeMessage}`);
+                user.cl.sendChat();
             }
         }
     }

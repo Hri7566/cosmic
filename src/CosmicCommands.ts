@@ -27,6 +27,7 @@ import { CosmicData } from './CosmicData';
 import { ITEMS } from "./CosmicItems";
 import { CosmicClient } from './CosmicClient';
 import { CosmicFFI } from './CosmicFFI';
+import { CosmicWork } from './CosmicWork';
 const { Command, CosmicCommandHandler } = require('./CosmicCommandHandler');
 const { Cosmic } = require('./Cosmic');
 
@@ -43,6 +44,18 @@ CosmicCommandHandler.registerCommand(new Command(
     true, // visible
     'info',
     (msg, cl) => {
+        let isDM = false;
+
+        try {
+            if (msg.original_message) {
+                if (msg.original_message.original_message) {
+                    isDM = msg.original_message.original_message.m == 'dm'
+                }
+            }
+        } catch (err) {
+            isDM = false;
+        }
+
         if (!msg.argv[1]) {
             for (let group of CosmicCommandHandler.commandGroups) {
                 // let out = '🌠 Commands:';
@@ -59,7 +72,8 @@ CosmicCommandHandler.registerCommand(new Command(
                 }
 
                 out = CosmicUtil.trimListString(out);
-                cl.sendChat(out);
+                console.log(msg);
+                cl.emit('send chat message', { dm: isDM ? msg.sender._id : undefined, message: out });
             }
 
             // return out;
@@ -711,10 +725,7 @@ CosmicCommandHandler.registerCommand(new Command(
             `The cake eats you and you get `,
             `There is cake all over your face and you get `,
             `Your cake is `,
-            `cake taste good become `,
-            `cake is `,
-            `the cake `,
-            `cake `
+            `Cake taste good become `,
         ];
 
         let randomMessage = await CosmicUtil.getRandomValueFromArray(randomMessages);
@@ -1273,6 +1284,33 @@ CosmicCommandHandler.registerCommand(new Command(
     async (msg, cl) => {
         const output = CosmicFFI.clib.handleMessage(msg.argv.length, msg.argv);
         return output;
+    },
+    'mpp'
+));
+
+CosmicCommandHandler.registerCommand(new Command(
+    'work',
+    [ 'work' ],
+    '%PREFIX%work',
+    undefined,
+    [ 'default' ],
+    false,
+    'fun',
+    async (msg, cl) => {
+        let isDM = false;
+
+        try {
+            if (msg.original_message) {
+                if (msg.original_message.original_message) {
+                    isDM = msg.original_message.original_message.m == 'dm'
+                }
+            }
+        } catch (err) {
+            isDM = false;
+        }
+
+        let user = await CosmicData.getUser(msg.sender._id);
+        return await CosmicWork.startWorking(cl, user, isDM);
     },
     'mpp'
 ));

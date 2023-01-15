@@ -46,6 +46,10 @@ export interface ChannelConstructionPreset {
 }
 
 export abstract class CosmicClient {
+    get [Symbol.toStringTag]() {
+        return 'CosmicClient'
+    }
+
     public on = EventEmitter.prototype.on;
     public off = EventEmitter.prototype.off;
     public once = EventEmitter.prototype.once;
