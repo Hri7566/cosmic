@@ -12,13 +12,15 @@ import { User } from "./CosmicTypes";
  * Local module imports
  */
 
-const { CosmicData } = require('./CosmicData');
+import { CosmicData } from './CosmicData';
 
 /**
  * Module-level declarations
  */
 
 class CosmicUtil {
+    public static logger = new CosmicLogger("CosmicUtil", red);
+
     /**
      * Check if a string starts with a prefix
      * @param str String with supposed prefix
@@ -29,15 +31,26 @@ class CosmicUtil {
         return str.toLowerCase().startsWith(prefix.toLowerCase());
     }
 
-    public static async set(key: string, val: any, _id: string = 'util') {
+    /**
+     * Set a utility value
+     * @param key Key to set
+     * @param val Value to set
+     * @param _id ID of database storage location
+     * @returns Operation succession
+     */
+    public static async set(key: string, val: any, _id: string = 'util'): Promise<any> {
         return await CosmicData.utilSet(key, val, _id);
     }
 
-    public static async get(key: string, _id: string = 'util') {
+    /**
+     * Get a utility value
+     * @param key Key to get
+     * @param _id ID of database storage location
+     * @returns Utility value
+     */
+    public static async get(key: string, _id: string = 'util'): Promise<any> {
         return await CosmicData.utilGet(key, _id);
     }
-
-    public static logger = new CosmicLogger("CosmicUtil", red);
 
     /**
      * Trim the few characters at the end of a list
