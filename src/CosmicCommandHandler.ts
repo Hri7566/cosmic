@@ -42,10 +42,10 @@ export class Command {
     public permissionGroups: Array<typeof PermissionGroupIdentifier>;
     public commandGroup: string;
     public visible: boolean;
-    public callback: (msg: typeof Message, cl: typeof CosmicClient) => string | undefined;
+    public callback: (msg: typeof Message, cl: typeof CosmicClient) => Promise<string> | string | undefined;
     public platform: string;
 
-    constructor(id: string, accessors: string[], usage: string = 'No usage', description: string | 'No description', permissionGroups: string[], visible: boolean, commandGroup: string, callback: (msg: typeof Message, cl: typeof CosmicClient) => string | undefined, platform?: string) {
+    constructor(id: string, accessors: string[], usage: string = 'No usage', description: string | 'No description', permissionGroups: string[], visible: boolean, commandGroup: string, callback: (msg: typeof Message, cl: typeof CosmicClient) => Promise<string> | string | undefined, platform?: string) {
         this.id = id;
         this.accessors = accessors;
         this.usage = usage;

@@ -22,14 +22,14 @@ import { CosmicShop } from './CosmicShop';
 import { CosmicUtil } from './CosmicUtil';
 import { Cosmic as CosmicColor } from './CosmicColor';
 import { CosmicSeasonDetection } from './CosmicSeasonDetection';
-import { AnyItem, Cosmic as CosmicTypes, Inventory, Item, ShopListing, User } from './CosmicTypes';
+import { AnyItem, CommandMessage, Inventory, Item, ShopListing, User } from './CosmicTypes';
 import { CosmicData } from './CosmicData';
 import { ITEMS } from "./CosmicItems";
 import { CosmicClient } from './CosmicClient';
 import { CosmicFFI } from './CosmicFFI';
 import { CosmicWork } from './CosmicWork';
-const { Command, CosmicCommandHandler } = require('./CosmicCommandHandler');
-const { Cosmic } = require('./Cosmic');
+import { Command, CosmicCommandHandler } from './CosmicCommandHandler';
+import { Cosmic } from './Cosmic';
 
 /**
  * Module-level declarations
@@ -918,7 +918,7 @@ CosmicCommandHandler.registerCommand(new Command(
     [ 'default' ],
     true,
     'cake',
-    async (msg: CosmicTypes.CommandMessage, cl: CosmicClient) => {
+    async (msg: CommandMessage, cl: CosmicClient) => {
         const search = msg.argv[1];
 
         if (!search) {

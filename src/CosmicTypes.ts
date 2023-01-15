@@ -89,168 +89,166 @@ export type Token = string | number;
 
 export type Timestamp = string | number;
 
-export namespace Cosmic {
-    export interface Message {
-        type: string;
-        timestamp?: number;
-    }
+export interface Message {
+    type: string;
+    timestamp?: number;
+}
 
-    export interface ChatMessage extends Message {
-        type: 'chat';
-        sender: Participant;
-        message: string;
-        platform: string;
-        original_channel?: string; //* for discord
-        prefix?: Prefix;
-    }
+export interface ChatMessage extends Message {
+    type: 'chat';
+    sender: Participant;
+    message: string;
+    platform: string;
+    original_channel?: string; //* for discord
+    prefix?: Prefix;
+}
 
-    export interface HeartbeatMessage extends Message {
-        type: 'heartbeat';
-        timestamp: number;
-        foreign_timestamp?: number;
-    }
+export interface HeartbeatMessage extends Message {
+    type: 'heartbeat';
+    timestamp: number;
+    foreign_timestamp?: number;
+}
 
-    export interface ConnectionMessage extends Message {
-        type: 'connection';
-        received_user: User;
-        motd: string;
-        version: string | number;
-    }
+export interface ConnectionMessage extends Message {
+    type: 'connection';
+    received_user: User;
+    motd: string;
+    version: string | number;
+}
 
-    export interface ChannelUpdateMessage extends Message {
-        type: 'channel_update';
-        channel: Channel;
-    }
+export interface ChannelUpdateMessage extends Message {
+    type: 'channel_update';
+    channel: Channel;
+}
 
-    export interface ChannelSettingsMessage extends Message {
-        type: 'channel_settings';
-        set: ChannelSettings;
-    }
+export interface ChannelSettingsMessage extends Message {
+    type: 'channel_settings';
+    set: ChannelSettings;
+}
 
-    export interface ChannelListMessage extends Message {
-        type: 'channel_list';
-        complete: boolean;
-        channels: Channel[];
-    }
+export interface ChannelListMessage extends Message {
+    type: 'channel_list';
+    complete: boolean;
+    channels: Channel[];
+}
 
-    export interface ChannelListSubscribeMessage extends Message {
-        type: 'channel_list_subscribe';
-    }
+export interface ChannelListSubscribeMessage extends Message {
+    type: 'channel_list_subscribe';
+}
 
-    export interface ChannelListUnsubscribeMessage extends Message {
-        type: 'channel_list_unsubscribe';
-    }
-    
-    export interface LogMessage extends Message {
-        type: 'log';
-        args: any[];
-    }
+export interface ChannelListUnsubscribeMessage extends Message {
+    type: 'channel_list_unsubscribe';
+}
 
-    export interface Flags {
-        [key: string]: string | number | boolean;
-    }
+export interface LogMessage extends Message {
+    type: 'log';
+    args: any[];
+}
 
-    export interface Vector2 {
-        x: number;
-        y: number;
-    }
+export interface Flags {
+    [key: string]: string | number | boolean;
+}
 
-    export interface Vector3 extends Vector2 {
-        z: number;
-    }
+export interface Vector2 {
+    x: number;
+    y: number;
+}
 
-    export interface CursorMessage extends Message {
-        type: 'cursor';
-        position: Vector2;
-    }
+export interface Vector3 extends Vector2 {
+    z: number;
+}
 
-    export interface NoteMessage extends Message {
-        type: 'note';
-        notes: Note[];
-    }
+export interface CursorMessage extends Message {
+    type: 'cursor';
+    position: Vector2;
+}
 
-    export interface ChatDirectMessage extends Message {
-        type: 'direct_message';
-        message: string;
-        _id: string;
-    }
+export interface NoteMessage extends Message {
+    type: 'note';
+    notes: Note[];
+}
 
-    //? maybe use this as "admin"-only message type?
-    export interface RootMessage extends Message {
-        type: 'root';
-        message: Message;
-    }
+export interface ChatDirectMessage extends Message {
+    type: 'direct_message';
+    message: string;
+    _id: string;
+}
 
-    export interface CommandMessage extends Message {
-        type: 'command';
-        argv: string[];
-        sender: User;
-    }
+//? maybe use this as "admin"-only message type?
+export interface RootMessage extends Message {
+    type: 'root';
+    message: Message;
+}
 
-    export interface BehaviorMessage extends Message {
-        type: 'behavior';
-        argv: string[];
-        sender: User;
-    }
+export interface CommandMessage extends Message {
+    type: 'command';
+    argv: string[];
+    sender: User;
+}
 
-    export interface ChannelConfig {
-        _id: string;
-        settings: ChannelSettings;
-    }
+export interface BehaviorMessage extends Message {
+    type: 'behavior';
+    argv: string[];
+    sender: User;
+}
 
-    export interface Prefix {
-        prefix: string;
-    }
+export interface ChannelConfig {
+    _id: string;
+    settings: ChannelSettings;
+}
 
-    export interface PrefixMPP extends Prefix {
-        channels: Array<string | ChannelConfig>;
-    }
+export interface Prefix {
+    prefix: string;
+}
 
-    export interface PrefixConfig {
-        global: Array<string | Prefix>;
-        mpp: PrefixMPP[];
-    }
+export interface PrefixMPP extends Prefix {
+    channels: Array<string | ChannelConfig>;
+}
 
-    export type Permission = string;
+export interface PrefixConfig {
+    global: Array<string | Prefix>;
+    mpp: PrefixMPP[];
+}
 
-    export type PermissionGroupIdentifier = string;
+export type Permission = string;
 
-    export interface PermissionGroup {
-        id: PermissionGroupIdentifier;
-        permissions: Permission[];
-    }
+export type PermissionGroupIdentifier = string;
 
-    export interface Cake extends FoodItem {
-        icing: string;
-        filling: string;
-        topping?: string;
-    }
-    
-    export interface Season {
-        displayName: string;
-        emoji: string;
-    }
+export interface PermissionGroup {
+    id: PermissionGroupIdentifier;
+    permissions: Permission[];
+}
 
-    export interface SeasonMessage extends Message, Season {
-        type: 'season';
-    }
+export interface Cake extends FoodItem {
+    icing: string;
+    filling: string;
+    topping?: string;
+}
 
-    export interface Holiday {
-        displayName: string;
-        emoji: string;
-        timestamp: Timestamp;
-    }
+export interface Season {
+    displayName: string;
+    emoji: string;
+}
 
-    export interface RangeHoliday extends Omit<Holiday, 'timestamp'> {
-        start: Timestamp;
-        end: Timestamp;
-    }
+export interface SeasonMessage extends Message, Season {
+    type: 'season';
+}
 
-    export interface APIKeyProfile {
-        ip: string;
-        keys: string[];
-        permissions: string[];
-        permissionGroups: string[];
-        user_id?: string;
-    }
+export interface Holiday {
+    displayName: string;
+    emoji: string;
+    timestamp: Timestamp;
+}
+
+export interface RangeHoliday extends Omit<Holiday, 'timestamp'> {
+    start: Timestamp;
+    end: Timestamp;
+}
+
+export interface APIKeyProfile {
+    ip: string;
+    keys: string[];
+    permissions: string[];
+    permissionGroups: string[];
+    user_id?: string;
 }

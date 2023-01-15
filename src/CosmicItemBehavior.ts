@@ -1,6 +1,6 @@
-import { Cosmic } from "./CosmicTypes";
+import { BehaviorMessage } from "./CosmicTypes";
 
-type BehaviorCallback = (msg: Cosmic.BehaviorMessage) => (string | void);
+type BehaviorCallback = (msg: BehaviorMessage) => (string | void);
 
 export class CosmicItemBehavior {
     constructor(
@@ -16,7 +16,7 @@ function addBehavior(id: string, bh: BehaviorCallback, consume?: boolean) {
     ITEM_BEHAVIORS.set(id, new CosmicItemBehavior(id, bh, consume));
 }
 
-addBehavior('hot_sauce', (msg: Cosmic.BehaviorMessage) => {
+addBehavior('hot_sauce', (msg: BehaviorMessage) => {
 
 });
 

@@ -11,12 +11,6 @@
 import { EventEmitter } from 'events';
 
 /**
- * Local module imports
- */
-
-import { Cosmic } from './CosmicTypes';
-
-/**
  * Module-level declarations
  */
 

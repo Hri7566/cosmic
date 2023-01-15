@@ -10,7 +10,7 @@ import { CosmicClient, CosmicClientDiscord } from "./CosmicClient";
 import { CosmicData } from "./CosmicData";
 import { ITEMS } from "./CosmicItems";
 import { CosmicLogger, red } from "./CosmicLogger";
-import { Cosmic, User } from "./CosmicTypes";
+import { Cake, User } from "./CosmicTypes";
 import { CosmicUtil } from "./CosmicUtil";
 import { FoodItem, Item } from './CosmicTypes';
 
@@ -27,7 +27,7 @@ class CosmicCakeFactory {
 
     public static async generateRandomCake() {
         const rarity = Math.random();
-        let c: Cosmic.Cake = await CosmicUtil.getRandomValueFromArray(cakes);
+        let c: Cake = await CosmicUtil.getRandomValueFromArray(cakes);
         if (rarity < 0.1) {
             c = await CosmicUtil.getRandomValueFromArray(uncommon_cakes);
         }

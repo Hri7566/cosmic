@@ -9,7 +9,7 @@
 import { ObjectID } from "bson";
 import { Collection } from "mongodb";
 import { CosmicAPI } from "./CosmicAPI";
-import { Cosmic, Inventory } from "./CosmicTypes";
+import { APIKeyProfile, Inventory } from "./CosmicTypes";
 
 /**
  * Global module imports
@@ -42,7 +42,7 @@ class CosmicData {
     public static inventories: Collection<Inventory>;
     public static items: Collection;
     public static util: Collection;
-    public static apiKeyProfiles: Collection<Cosmic.APIKeyProfile>;
+    public static apiKeyProfiles: Collection<APIKeyProfile>;
 
     public static async start(): Promise<void> {
         this.logger.log("Connecting to database...");
@@ -396,7 +396,7 @@ class CosmicData {
 
     public static async createAPIKeyProfile(ip: string, keys: string[] = [], permissions: string[] = [], permissionGroups: string[] = [ 'default' ], user_id?: string): Promise<boolean> {
         try {
-            let profile: Cosmic.APIKeyProfile = { ip, keys, permissions, user_id, permissionGroups };
+            let profile: APIKeyProfile = { ip, keys, permissions, user_id, permissionGroups };
             this.apiKeyProfiles.insertOne(profile);
             return true;
         } catch(err) {
@@ -404,7 +404,7 @@ class CosmicData {
         }
     }
 
-    public static async getAPIKeyProfile(ip: string): Promise<Cosmic.APIKeyProfile> {
+    public static async getAPIKeyProfile(ip: string): Promise<APIKeyProfile> {
         try {
             let res = await this.apiKeyProfiles.findOne({ ip });
             if (!res) {
