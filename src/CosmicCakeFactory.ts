@@ -90,10 +90,11 @@ class CosmicCakeFactory {
         }
     }
     
-    public static async finishBaking(_id: string): Promise<void> {
+    public static async finishBaking(_id: string, multiplier: number = 1): Promise<void> {
         let user = this.bakingUsers.find(u => u._id == _id);
 
         let cake = await this.generateRandomCake();
+        cake.value *= multiplier;
         await CosmicData.addItem(user._id, cake);
 
         this.bakingUsers.splice(this.bakingUsers.indexOf(user), 1);
@@ -133,12 +134,17 @@ setInterval(async () => {
     if (u) {
         let inv = await CosmicData.getInventory(u._id);
         let bias = 1;
+        let multiplier = 1;
 
         for (let upgradeItem of Object.values(ITEMS)) {
             if (!upgradeItem.id.startsWith('upgrade_')) continue;
             if (await CosmicData.hasItem(u._id, upgradeItem.id)) {
                 if (upgradeItem.hasOwnProperty('cake_bonus')) {
                     bias *= upgradeItem['cake_bonus'];
+                }
+
+                if (upgradeItem.hasOwnProperty('cake_multiply')) {
+                    multiplier *= upgradeItem['cake_multiply'];
                 }
             }
         }
@@ -147,7 +153,7 @@ setInterval(async () => {
         // console.log(`${r} / ${bias} = ${biasedRando}`);
 
         if (r * biasedRando < RANDOM_CHANCE * CosmicCakeFactory.bakingUsers.length) {
-            CosmicCakeFactory.finishBaking(u._id);
+            CosmicCakeFactory.finishBaking(u._id, multiplier);
         }
     }
 }, CHECK_INTERVAL);

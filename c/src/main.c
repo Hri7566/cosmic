@@ -15,8 +15,11 @@ char* get_test_string(void) {
 
 char* handleMessage(int argc, char** argv) {
     char* output = "";
+    printf("%s", argv[0]);
     if (strcmp(argv[0], "*help")) {
         output = "hello";
         return output;
+    } else {
+        return 'nothing';
     }
 }

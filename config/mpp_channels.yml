@@ -8,6 +8,7 @@
     set:
       color: "#1d0054"
       color2: "#000000"
+    hat: 'minecraft/item/nether_star'
   # -
   #   _id: 'test/awkward'
   #   set:

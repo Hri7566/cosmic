@@ -295,7 +295,7 @@ export class CosmicClientMPP extends CosmicClientToken {
             this.logger.debug('cmapi hat');
             this.cmapi.sendArray([{
                 m: 'update hat',
-                url: 'santa'
+                url: 'minecraft/item/nether_star'
             }], { mode: 'id', id: msg._original_sender, global: false });
         });
     }

@@ -59,7 +59,7 @@ class Cosmic {
         this.bindEventListeners();
 
         // connect to database
-        CosmicData.start();
+        await CosmicData.start();
         
         this.logger.log('Starting clients...');
 

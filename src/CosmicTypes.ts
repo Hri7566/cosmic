@@ -54,6 +54,7 @@ export interface FoodItem extends Item {
 export interface UpgradeItem extends Item {
     id: `upgrade_${string}`;
     cake_bonus?: number;
+    cake_multiply?: number;
     max_stack: 1;
 }
 
