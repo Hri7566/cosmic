@@ -477,3 +477,5 @@ export class CosmicClientDiscord extends CosmicClientToken {
         });
     }
 }
+
+export type CosmicClientAny = CosmicClient | CosmicClientMPP | CosmicClientDiscord;

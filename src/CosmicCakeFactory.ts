@@ -40,7 +40,7 @@ class CosmicCakeFactory {
         return c;
     }
 
-    public static startBaking(user: User, cl: CosmicClient, isDM: boolean = false): string {
+    public static async startBaking(user: User, cl: CosmicClient, isDM: boolean = false): Promise<string> {
         let response: string = `${CosmicUtil.formatUserString(user)} started baking.`;
 
         if (this.isAlreadyBaking(user._id)) {
@@ -57,6 +57,12 @@ class CosmicCakeFactory {
 
             return already_answers[Math.floor(Math.random() * already_answers.length)];
         }
+
+        if (!(await this.hasCakeMix(user._id))) {
+            return `You have no cake mix. Maybe you could go to the store?`;
+        }
+
+        await CosmicData.removeOneItem(user._id, ITEMS.CAKE_MIX.id);
 
         this.bakingUsers.push({
             _id: user._id,
@@ -131,6 +137,10 @@ class CosmicCakeFactory {
 
     public static isAlreadyBaking(_id: string): boolean {
         return typeof this.bakingUsers.find(u => u._id == _id) !== 'undefined';
+    }
+
+    public static async hasCakeMix(_id: string): Promise<boolean> {
+        return await CosmicData.hasItem(_id, ITEMS.CAKE_MIX.id) == true;
     }
 }
 

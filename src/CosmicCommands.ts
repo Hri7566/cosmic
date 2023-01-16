@@ -25,7 +25,7 @@ import { CosmicSeasonDetection } from './CosmicSeasonDetection';
 import { AnyItem, CommandMessage, Inventory, Item, ShopListing, User } from './CosmicTypes';
 import { CosmicData } from './CosmicData';
 import { ITEMS } from "./CosmicItems";
-import { CosmicClient } from './CosmicClient';
+import { CosmicClient, CosmicClientAny } from './CosmicClient';
 import { CosmicFFI } from './CosmicFFI';
 import { CosmicWork } from './CosmicWork';
 import { Command, CosmicCommandHandler } from './CosmicCommandHandler';
@@ -257,7 +257,7 @@ CosmicCommandHandler.registerCommand(new Command(
             isDM = false;
         }
 
-        response = CosmicCakeFactory.startBaking(msg.sender, cl, isDM);
+        response = await CosmicCakeFactory.startBaking(msg.sender, cl, isDM);
         // response = CosmicCakeFactory.startBaking(msg.sender, cl);
         return response;
     }
@@ -307,14 +307,33 @@ CosmicCommandHandler.registerCommand(new Command(
 CosmicCommandHandler.registerCommand(new Command(
     'balance',
     [ 'balance', 'bal', 'money' ],
-    '%PREFIX%balance',
-    `Show the user's balance.`,
+    '%PREFIX%balance [user_id]',
+    `Show a user's balance.`,
     [ 'default' ],
     true,
     'cake',
     async (msg, cl) => {
-        const inventory = await CosmicData.getInventory(msg.sender._id);
-        return `Balance: ${CosmicData.formatBalance(inventory.balance)}`;
+        let _id = msg.sender._id;
+        let argcat = msg.argv.join(' ').substring(msg.argv[0].length).trim();
+        if (msg.argv[1]) {
+            if (cl.platform == 'mpp') {
+                _id = cl.getPart(argcat)._id;
+                if (!_id) _id = argcat;
+            } else {
+                _id = argcat;
+            }
+        }
+        try {
+            const inventory = await CosmicData.getInventory(_id);
+            const user = await CosmicData.getUser(_id);
+            if (_id !== msg.sender._id) {
+                return `${CosmicUtil.formatUserString(user)}'s Balance: ${CosmicData.formatBalance(inventory.balance)}`;
+            } else {
+                return `Balance: ${CosmicData.formatBalance(inventory.balance)}`;
+            }
+        } catch (err) {
+            return `Unable to find user '${_id}'.`;
+        }
     }
 ));
 

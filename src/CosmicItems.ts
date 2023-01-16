@@ -285,5 +285,13 @@ export const ITEMS: Record<string | symbol, AnyItem> = {
         max_stack: 50,
         sellable: true,
         edible: true
+    },
+    CAKE_MIX: {
+        id: 'mix',
+        displayName: 'Cake Mix',
+        emoji: '📦',
+        count: 1,
+        sellable: true,
+        value: 300
     }
 }
