@@ -8,18 +8,18 @@
     set:
       color: "#1d0054"
       color2: "#000000"
-  -
-    _id: 'test/awkward'
-    set:
-      color: "#1d0054"
-      color2: "#000000"
-  -
-    _id: 'test/fishing'
-    set:
-      color: "#1d0054"
-      color2: "#000000"
-  -
-    _id: "Cosmic [indev]"
-    set:
-     color: "#1d0054"
-     color2: "#000000"
+  # -
+  #   _id: 'test/awkward'
+  #   set:
+  #     color: "#1d0054"
+  #     color2: "#000000"
+  # -
+  #   _id: 'test/fishing'
+  #   set:
+  #     color: "#1d0054"
+  #     color2: "#000000"
+  # -
+  #   _id: "Cosmic [indev]"
+  #   set:
+  #    color: "#1d0054"
+  #    color2: "#000000"
