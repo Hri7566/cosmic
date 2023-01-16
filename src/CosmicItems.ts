@@ -55,7 +55,7 @@ export const ITEMS: Record<string | symbol, AnyItem> = {
         displayName: 'Anonypple',
         emoji: '🍎',
         count: 1,
-        description: 'Why am I even making this?',
+        description: 'Why am I even making this stuff?',
         value: 25,
         sellable: true,
         max_stack: 999
@@ -285,5 +285,13 @@ export const ITEMS: Record<string | symbol, AnyItem> = {
         max_stack: 50,
         sellable: true,
         edible: true
+    },
+    CAKE_MIX: {
+        id: 'mix',
+        displayName: 'Cake Mix',
+        emoji: '📦',
+        count: 1,
+        sellable: true,
+        value: 300
     }
 }

@@ -4,9 +4,9 @@
  * Cake Hall of Fame
  */
 
-import { Cosmic as CosmicTypes } from './CosmicTypes';
+import { Cake } from './CosmicTypes';
 
-export const cakes: Array<CosmicTypes.Cake> = [
+export const cakes: Array<Cake> = [
     {
         id: 'cake_chocolate',
         displayName: 'Chocolate Cake',
@@ -104,7 +104,7 @@ export const cakes: Array<CosmicTypes.Cake> = [
     }
 ];
 
-export const uncommon_cakes: Array<CosmicTypes.Cake> = [
+export const uncommon_cakes: Array<Cake> = [
     {
         id: 'cake_birthday',
         displayName: 'Birthday Cake',
@@ -305,7 +305,7 @@ export const uncommon_cakes: Array<CosmicTypes.Cake> = [
     }
 ];
 
-export const rare_cakes: Array<CosmicTypes.Cake> = [
+export const rare_cakes: Array<Cake> = [
     {
         id: 'cake_party',
         displayName: 'Party Cake',
@@ -458,7 +458,7 @@ export const rare_cakes: Array<CosmicTypes.Cake> = [
     }
 ];
 
-export const ultra_rare_cakes: Array<CosmicTypes.Cake> = [
+export const ultra_rare_cakes: Array<Cake> = [
     {
         id: 'cake_bowling',
         displayName: 'Bowling Ball Cake',
@@ -550,7 +550,7 @@ export const ultra_rare_cakes: Array<CosmicTypes.Cake> = [
     }
 ];
 
-export const secret_cakes: Array<CosmicTypes.Cake> = [
+export const secret_cakes: Array<Cake> = [
     {
         id: 'cake_cosmic',
         displayName: 'Cosmic Cake',
@@ -571,5 +571,15 @@ export const secret_cakes: Array<CosmicTypes.Cake> = [
         filling: 'austin',
         topping: 'austin',
         value: 500_000
+    },
+    {
+        id: 'cake_khorne',
+        displayName: 'Khorne Cake',
+        count: 1,
+        edible: true,
+        icing: 'blood',
+        filling: 'khorne flakes',
+        topping: 'skulls',
+        value: 999_999
     }
 ];

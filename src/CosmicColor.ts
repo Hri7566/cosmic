@@ -6,6 +6,9 @@
  * It was released under GPL3 along with the rest of the site files
  * with permission from the new owner. It has been repurposed for use
  * here to get the names of colors.
+ * 
+ * I was given explicit permission to use this module in private
+ * projects.
  */
 
 /**

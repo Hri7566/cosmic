@@ -4,11 +4,11 @@
  * Seasonal event detection module
  */
 
-import { Cosmic, Timestamp } from "./CosmicTypes";
+import { Holiday, RangeHoliday, Season, Timestamp } from "./CosmicTypes";
 
 let CURRENT_YEAR = new Date().getFullYear();
 
-let HOLIDAYS: Array<Cosmic.Holiday | Cosmic.RangeHoliday> = [
+let HOLIDAYS: Array<Holiday | RangeHoliday> = [
     {
         displayName: 'New Year\'s Day',
         emoji: '🎆',
@@ -150,7 +150,7 @@ export class CosmicSeasonDetection {
      * Get the current season information.
      * @param t Optional date for detection
      */
-    public static getSeason(t?: number): Cosmic.Season {
+    public static getSeason(t?: number): Season {
         const date = new Date(t || Date.now());
         const month = date.getMonth();
         const day = date.getDate();
@@ -189,18 +189,18 @@ export class CosmicSeasonDetection {
      * @param t Optional date
      * @returns Current holiday, otherwise undefined
      */
-    public static getHoliday(t?: Timestamp): Cosmic.Holiday | Cosmic.RangeHoliday {
+    public static getHoliday(t?: Timestamp): Holiday | RangeHoliday {
         const date = new Date(t || Date.now());
 
         for (let hol of HOLIDAYS) {
             if (hol.hasOwnProperty('start')) {
-                hol = (hol as Cosmic.RangeHoliday);
+                hol = (hol as RangeHoliday);
                 
                 if (date > new Date(hol.start) && date < new Date(hol.end)) {
                     return hol;
                 }
             } else {
-                hol = (hol as Cosmic.Holiday);
+                hol = (hol as Holiday);
                 
                 if (date > new Date(hol.timestamp) && date < new Date((new Number(new Date(hol.timestamp)) as number) + (36e5 * 24))) {
                     return hol;

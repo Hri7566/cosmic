@@ -24,8 +24,7 @@ const cmapi = require('mppclone-cmapi');
 const { Cosmic } = require('./Cosmic');
 import { CosmicCommandHandler } from './CosmicCommandHandler';
 import { CosmicSeasonDetection } from './CosmicSeasonDetection';
-import { Cosmic } from './CosmicTypes';
-const { Token, ChatMessage, Vector2, Participant } = require('./CosmicTypes');
+import  { Token, ChatMessage, Vector2, Participant } from './CosmicTypes';
 const { CosmicFFI } = require('./CosmicFFI');
 const { CosmicLogger, white, magenta, hex } = require('./CosmicLogger');
 const { CosmicForeignMessageHandler } = require('./CosmicForeignMessageHandler');
@@ -46,6 +45,10 @@ export interface ChannelConstructionPreset {
 }
 
 export abstract class CosmicClient {
+    get [Symbol.toStringTag]() {
+        return 'CosmicClient'
+    }
+
     public on = EventEmitter.prototype.on;
     public off = EventEmitter.prototype.off;
     public once = EventEmitter.prototype.once;
@@ -65,7 +68,7 @@ export abstract class CosmicClient {
         if (this.alreadyBound == true) return;
         this.alreadyBound = true;
 
-        this.on('chat', async (msg: Cosmic.ChatMessage) => {
+        this.on('chat', async (msg: ChatMessage) => {
             let res = await CosmicData.updateUser(msg.sender._id, msg.sender);
             if (typeof res == 'object') {
                 if (res.upsertedId == null) {
@@ -89,7 +92,7 @@ export abstract class CosmicClient {
 }
 
 export abstract class CosmicClientToken extends CosmicClient {
-    private token: typeof Token;
+    private token: Token;
 
     constructor() {
         super();
@@ -101,9 +104,9 @@ class Cursor {
 
     public sendInterval: any;
     public updateInterval: any;
-    public pos: typeof Vector2;
-    public vel: typeof Vector2;
-    public angle: typeof Vector2;
+    public pos: Vector2;
+    public vel: Vector2;
+    public angle: number;
     public follow: string | undefined;
     public scale: number;
     public speed: number;
@@ -127,7 +130,7 @@ class Cursor {
         }, 1000 / CURSOR_SEND_RATE);
 
         this.updateInterval = setInterval(() => {
-            let followPos: typeof Vector2 = {
+            let followPos: Vector2 = {
                 x: 50,
                 y: 50
             }
@@ -295,8 +298,13 @@ export class CosmicClientMPP extends CosmicClientToken {
             this.logger.debug('cmapi hat');
             this.cmapi.sendArray([{
                 m: 'update hat',
-                url: 'santa'
+                url: 'minecraft/item/nether_star'
             }], { mode: 'id', id: msg._original_sender, global: false });
+        });
+
+        this.cmapi.on('cosmic', msg => {
+            // TODO implement cosmic message
+            //? for userscript?
         });
     }
 
@@ -313,7 +321,7 @@ export class CosmicClientMPP extends CosmicClientToken {
         });
     }
 
-    protected previousCursorPos: typeof Vector2 = {
+    protected previousCursorPos: Vector2 = {
         x: 100,
         y: 200
     };
@@ -333,10 +341,9 @@ export class CosmicClientMPP extends CosmicClientToken {
         this.previousCursorPos = { x, y };
     }
 
-    public getPart(str: string): typeof Participant | undefined {
-        let p: typeof Participant;
+    public getPart(str: string): Participant | undefined {
         if (!str) return;
-        for (p of Object.values(this.client.ppl)) {
+        for (let p of (Object.values(this.client.ppl as Record<string, Participant>))) {
             if (p.name.toLowerCase().includes(str.toLowerCase()) || p._id.toLowerCase().includes(str.toLowerCase())) {
                 return p;
             }
@@ -475,3 +482,5 @@ export class CosmicClientDiscord extends CosmicClientToken {
         });
     }
 }
+
+export type CosmicClientAny = CosmicClient | CosmicClientMPP | CosmicClientDiscord;

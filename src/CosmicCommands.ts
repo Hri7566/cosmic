@@ -22,13 +22,14 @@ import { CosmicShop } from './CosmicShop';
 import { CosmicUtil } from './CosmicUtil';
 import { Cosmic as CosmicColor } from './CosmicColor';
 import { CosmicSeasonDetection } from './CosmicSeasonDetection';
-import { AnyItem, Cosmic as CosmicTypes, Inventory, Item, ShopListing, User } from './CosmicTypes';
+import { AnyItem, CommandMessage, Inventory, Item, ShopListing, User } from './CosmicTypes';
 import { CosmicData } from './CosmicData';
 import { ITEMS } from "./CosmicItems";
-import { CosmicClient } from './CosmicClient';
+import { CosmicClient, CosmicClientAny } from './CosmicClient';
 import { CosmicFFI } from './CosmicFFI';
-const { Command, CosmicCommandHandler } = require('./CosmicCommandHandler');
-const { Cosmic } = require('./Cosmic');
+import { CosmicWork } from './CosmicWork';
+import { Command, CosmicCommandHandler } from './CosmicCommandHandler';
+import { Cosmic } from './Cosmic';
 
 /**
  * Module-level declarations
@@ -43,6 +44,18 @@ CosmicCommandHandler.registerCommand(new Command(
     true, // visible
     'info',
     (msg, cl) => {
+        let isDM = false;
+
+        try {
+            if (msg.original_message) {
+                if (msg.original_message.original_message) {
+                    isDM = msg.original_message.original_message.m == 'dm'
+                }
+            }
+        } catch (err) {
+            isDM = false;
+        }
+
         if (!msg.argv[1]) {
             for (let group of CosmicCommandHandler.commandGroups) {
                 // let out = '🌠 Commands:';
@@ -59,7 +72,8 @@ CosmicCommandHandler.registerCommand(new Command(
                 }
 
                 out = CosmicUtil.trimListString(out);
-                cl.sendChat(out);
+                console.log(msg);
+                cl.emit('send chat message', { dm: isDM ? msg.sender._id : undefined, message: out });
             }
 
             // return out;
@@ -243,7 +257,7 @@ CosmicCommandHandler.registerCommand(new Command(
             isDM = false;
         }
 
-        response = CosmicCakeFactory.startBaking(msg.sender, cl, isDM);
+        response = await CosmicCakeFactory.startBaking(msg.sender, cl, isDM);
         // response = CosmicCakeFactory.startBaking(msg.sender, cl);
         return response;
     }
@@ -293,14 +307,33 @@ CosmicCommandHandler.registerCommand(new Command(
 CosmicCommandHandler.registerCommand(new Command(
     'balance',
     [ 'balance', 'bal', 'money' ],
-    '%PREFIX%balance',
-    `Show the user's balance.`,
+    '%PREFIX%balance [user_id]',
+    `Show a user's balance.`,
     [ 'default' ],
     true,
     'cake',
     async (msg, cl) => {
-        const inventory = await CosmicData.getInventory(msg.sender._id);
-        return `Balance: ${CosmicData.formatBalance(inventory.balance)}`;
+        let _id = msg.sender._id;
+        let argcat = msg.argv.join(' ').substring(msg.argv[0].length).trim();
+        if (msg.argv[1]) {
+            if (cl.platform == 'mpp') {
+                _id = cl.getPart(argcat)._id;
+                if (!_id) _id = argcat;
+            } else {
+                _id = argcat;
+            }
+        }
+        try {
+            const inventory = await CosmicData.getInventory(_id);
+            const user = await CosmicData.getUser(_id);
+            if (_id !== msg.sender._id) {
+                return `${CosmicUtil.formatUserString(user)}'s Balance: ${CosmicData.formatBalance(inventory.balance)}`;
+            } else {
+                return `Balance: ${CosmicData.formatBalance(inventory.balance)}`;
+            }
+        } catch (err) {
+            return `Unable to find user '${_id}'.`;
+        }
     }
 ));
 
@@ -711,10 +744,7 @@ CosmicCommandHandler.registerCommand(new Command(
             `The cake eats you and you get `,
             `There is cake all over your face and you get `,
             `Your cake is `,
-            `cake taste good become `,
-            `cake is `,
-            `the cake `,
-            `cake `
+            `Cake taste good become `,
         ];
 
         let randomMessage = await CosmicUtil.getRandomValueFromArray(randomMessages);
@@ -907,7 +937,7 @@ CosmicCommandHandler.registerCommand(new Command(
     [ 'default' ],
     true,
     'cake',
-    async (msg: CosmicTypes.CommandMessage, cl: CosmicClient) => {
+    async (msg: CommandMessage, cl: CosmicClient) => {
         const search = msg.argv[1];
 
         if (!search) {
@@ -1170,7 +1200,7 @@ CosmicCommandHandler.registerCommand(new Command(
 CosmicCommandHandler.registerCommand(new Command(
     'removegroup',
     [ 'removegroup', 'rmg', 'rmgroup', 'grouprm' ],
-    '%PREFIX%addgroup <userID> <groupID>',
+    '%PREFIX%removegroup <userID> <groupID>',
     `Remove a group from a user profile.`,
     [ 'admin' ],
     false,
@@ -1184,7 +1214,7 @@ CosmicCommandHandler.registerCommand(new Command(
             const user = await CosmicData.getGroups(userID);
             return `Successfully removed \`${user._id}\` from group \`${groupID}\``;
         } catch (err) {
-            return `Unable to add user to group.`;
+            return `Unable to remove user from group.`;
         }
     }
 ));
@@ -1273,6 +1303,33 @@ CosmicCommandHandler.registerCommand(new Command(
     async (msg, cl) => {
         const output = CosmicFFI.clib.handleMessage(msg.argv.length, msg.argv);
         return output;
+    },
+    'mpp'
+));
+
+CosmicCommandHandler.registerCommand(new Command(
+    'work',
+    [ 'work' ],
+    '%PREFIX%work',
+    undefined,
+    [ 'default' ],
+    false,
+    'fun',
+    async (msg, cl) => {
+        let isDM = false;
+
+        try {
+            if (msg.original_message) {
+                if (msg.original_message.original_message) {
+                    isDM = msg.original_message.original_message.m == 'dm'
+                }
+            }
+        } catch (err) {
+            isDM = false;
+        }
+
+        let user = await CosmicData.getUser(msg.sender._id);
+        return await CosmicWork.startWorking(cl, user, isDM);
     },
     'mpp'
 ));

@@ -10,13 +10,13 @@ import { CosmicClient, CosmicClientDiscord } from "./CosmicClient";
 import { CosmicData } from "./CosmicData";
 import { ITEMS } from "./CosmicItems";
 import { CosmicLogger, red } from "./CosmicLogger";
-import { Cosmic, User } from "./CosmicTypes";
+import { Cake, User } from "./CosmicTypes";
 import { CosmicUtil } from "./CosmicUtil";
 import { FoodItem, Item } from './CosmicTypes';
 
 import { cakes, uncommon_cakes, rare_cakes, ultra_rare_cakes, secret_cakes } from './CosmicCakes';
 
-const CHECK_INTERVAL = 15000;
+const CHECK_INTERVAL = 25000;
 const RANDOM_CHANCE = 0.02;
 
 class CosmicCakeFactory {
@@ -27,7 +27,7 @@ class CosmicCakeFactory {
 
     public static async generateRandomCake() {
         const rarity = Math.random();
-        let c: Cosmic.Cake = await CosmicUtil.getRandomValueFromArray(cakes);
+        let c: Cake = await CosmicUtil.getRandomValueFromArray(cakes);
         if (rarity < 0.1) {
             c = await CosmicUtil.getRandomValueFromArray(uncommon_cakes);
         }
@@ -40,8 +40,8 @@ class CosmicCakeFactory {
         return c;
     }
 
-    public static startBaking(user: User, cl: CosmicClient, isDM: boolean = false): string {
-        let response: string = `${user.name} started baking.`;
+    public static async startBaking(user: User, cl: CosmicClient, isDM: boolean = false): Promise<string> {
+        let response: string = `${CosmicUtil.formatUserString(user)} started baking.`;
 
         if (this.isAlreadyBaking(user._id)) {
             const already_answers = [
@@ -57,6 +57,12 @@ class CosmicCakeFactory {
 
             return already_answers[Math.floor(Math.random() * already_answers.length)];
         }
+
+        if (!(await this.hasCakeMix(user._id))) {
+            return `You have no cake mix. Maybe you could go to the store?`;
+        }
+
+        await CosmicData.removeOneItem(user._id, ITEMS.CAKE_MIX.id);
 
         this.bakingUsers.push({
             _id: user._id,
@@ -74,7 +80,7 @@ class CosmicCakeFactory {
         let user = this.bakingUsers.find(u => u._id == _id);
         if (user) {
             this.bakingUsers.splice(this.bakingUsers.indexOf(user), 1);
-            return `${user.name} stopped baking.`;
+            return `${CosmicUtil.formatUserString(user)} stopped baking.`;
         } else {
             let replies = [
                 `I don't think you're baking.`,
@@ -90,10 +96,11 @@ class CosmicCakeFactory {
         }
     }
     
-    public static async finishBaking(_id: string): Promise<void> {
+    public static async finishBaking(_id: string, multiplier: number = 1): Promise<void> {
         let user = this.bakingUsers.find(u => u._id == _id);
 
         let cake = await this.generateRandomCake();
+        cake.value *= multiplier;
         await CosmicData.addItem(user._id, cake);
 
         this.bakingUsers.splice(this.bakingUsers.indexOf(user), 1);
@@ -103,6 +110,14 @@ class CosmicCakeFactory {
         if (user.hasOwnProperty('cl')) {
             if (user.dm) {
                 // user.cl.sendChat(`${user.name} finished baking and got: ${CosmicUtil.formatItemString(cake.displayName, cake.emoji, cake.count)}`, user.channel);
+
+                let finishedBakingAnswers = [
+                    `${CosmicUtil.formatUserString(user)} finished baking and got: ${cakeMessage}`,
+                    `${CosmicUtil.formatUserString(user)} took the cake out of the oven and got: ${cakeMessage}`
+                ];
+
+                let answer = CosmicUtil.getRandomValueFromArray(finishedBakingAnswers);
+
                 user.cl.emit('send chat message', {
                     type: 'chat',
                     sender: {
@@ -112,16 +127,20 @@ class CosmicCakeFactory {
                     },
                     dm: user._id,
                     timestamp: Date.now(),
-                    message: `${CosmicUtil.formatUserString(user)} finished baking and got: ${cakeMessage}`
+                    message: answer
                 });
             } else {
-                user.cl.sendChat(`${user.name} finished baking and got: ${cakeMessage}`);
+                user.cl.sendChat();
             }
         }
     }
 
     public static isAlreadyBaking(_id: string): boolean {
         return typeof this.bakingUsers.find(u => u._id == _id) !== 'undefined';
+    }
+
+    public static async hasCakeMix(_id: string): Promise<boolean> {
+        return await CosmicData.hasItem(_id, ITEMS.CAKE_MIX.id) == true;
     }
 }
 
@@ -133,12 +152,17 @@ setInterval(async () => {
     if (u) {
         let inv = await CosmicData.getInventory(u._id);
         let bias = 1;
+        let multiplier = 1;
 
         for (let upgradeItem of Object.values(ITEMS)) {
             if (!upgradeItem.id.startsWith('upgrade_')) continue;
             if (await CosmicData.hasItem(u._id, upgradeItem.id)) {
                 if (upgradeItem.hasOwnProperty('cake_bonus')) {
                     bias *= upgradeItem['cake_bonus'];
+                }
+
+                if (upgradeItem.hasOwnProperty('cake_multiply')) {
+                    multiplier *= upgradeItem['cake_multiply'];
                 }
             }
         }
@@ -147,7 +171,7 @@ setInterval(async () => {
         // console.log(`${r} / ${bias} = ${biasedRando}`);
 
         if (r * biasedRando < RANDOM_CHANCE * CosmicCakeFactory.bakingUsers.length) {
-            CosmicCakeFactory.finishBaking(u._id);
+            CosmicCakeFactory.finishBaking(u._id, multiplier);
         }
     }
 }, CHECK_INTERVAL);

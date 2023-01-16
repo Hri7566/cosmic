@@ -1,4 +1,3 @@
 global:
-  # Global prefixes can be used anywhere
-  - '*'
-  # - '**'
+  # - '*'
+  - '**'
