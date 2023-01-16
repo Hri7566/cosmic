@@ -17,7 +17,4 @@ export const SHOP_ITEMS: ShopListing[] = [
     {
         item: ITEMS.GIANT_EGGS
     },
-    {
-        item: ITEMS.RICHER_CHOCOLATE
-    }
 ]

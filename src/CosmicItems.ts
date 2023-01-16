@@ -293,16 +293,5 @@ export const ITEMS: Record<string | symbol, AnyItem> = {
         count: 1,
         sellable: true,
         value: 300
-    },
-    RICHER_CHOCOLATE: {
-        id: 'upgrade_richer_chocolate',
-        displayName: 'Upgrade: Richer Chocolate',
-        emoji: '🍫',
-        count: 1,
-        description: `Bake slightly faster`,
-        value: 2000,
-        sellable: false,
-        cake_bonus: 1.05,
-        max_stack: 1
     }
 }
