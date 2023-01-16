@@ -301,6 +301,11 @@ export class CosmicClientMPP extends CosmicClientToken {
                 url: 'minecraft/item/nether_star'
             }], { mode: 'id', id: msg._original_sender, global: false });
         });
+
+        this.cmapi.on('cosmic', msg => {
+            // TODO implement cosmic message
+            //? for userscript?
+        });
     }
 
     /**
