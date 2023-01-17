@@ -15,7 +15,7 @@ import { evaluate } from 'mathjs';
 
 /**
  * Local module imports
- */
+*/
 
 import { CosmicCakeFactory } from './CosmicCakeFactory';
 import { CosmicShop } from './CosmicShop';
@@ -1303,8 +1303,7 @@ CosmicCommandHandler.registerCommand(new Command(
     async (msg, cl) => {
         const output = CosmicFFI.clib.handleMessage(msg.argv.length, msg.argv);
         return output;
-    },
-    'mpp'
+    }
 ));
 
 CosmicCommandHandler.registerCommand(new Command(
@@ -1330,6 +1329,32 @@ CosmicCommandHandler.registerCommand(new Command(
 
         let user = await CosmicData.getUser(msg.sender._id);
         return await CosmicWork.startWorking(cl, user, isDM);
+    }
+));
+
+CosmicCommandHandler.registerCommand(new Command(
+    'bonk',
+    [ 'bonk' ],
+    '%PREFIX%bonk <user>',
+    undefined,
+    [ 'default' ],
+    false,
+    'fun',
+    async (msg, cl) => {
+        let user = await CosmicData.getUser(msg.sender._id);
+        
+        if (!(await CosmicData.hasItem(user._id, ITEMS.HAMMER.id))) {
+            return `You have no hammer.`;
+        }
+
+        let p = cl.getPart(msg.argv[1]);
+        
+        if (p) {
+            return `${msg.sender.name} bonks ${p.name} on the head with a hammer.`;
+        } else {
+            return `User '${msg.argv[1]}' not found.`;
+        }
     },
     'mpp'
 ));
+

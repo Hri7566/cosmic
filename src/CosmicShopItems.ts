@@ -19,5 +19,8 @@ export const SHOP_ITEMS: ShopListing[] = [
     },
     {
         item: ITEMS.RICHER_CHOCOLATE
+    },
+    {
+        item: ITEMS.HAMMER
     }
 ]

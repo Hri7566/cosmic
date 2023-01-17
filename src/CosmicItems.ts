@@ -304,5 +304,14 @@ export const ITEMS: Record<string | symbol, AnyItem> = {
         sellable: false,
         cake_bonus: 1.05,
         max_stack: 1
+    },
+    HAMMER: {
+        id: 'hammer',
+        displayName: 'Hammer',
+        emoji: '🔨',
+        count: 1,
+        description: 'A hammer to bonk with',
+        value: 300,
+        sellable: true
     }
 }
