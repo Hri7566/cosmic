@@ -14,6 +14,7 @@ file(GLOB_RECURSE libcosmic_src
     "src/*.cpp"
     "src/*.cxx"
     "src/*.hpp"
+    "src/*.hxx"
 )
 
 message(${libcosmic_src})

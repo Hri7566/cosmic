@@ -1219,18 +1219,18 @@ CosmicCommandHandler.registerCommand(new Command(
     }
 ));
 
-CosmicCommandHandler.registerCommand(new Command(
-    'ctest',
-    [ 'ctest' ],
-    '%PREFIX%ctest',
-    undefined,
-    [ 'default' ],
-    false,
-    'info',
-    async (msg, cl) => {
-        return CosmicFFI.clib.get_test_string(undefined);
-    }
-));
+// CosmicCommandHandler.registerCommand(new Command(
+//     'ctest',
+//     [ 'ctest' ],
+//     '%PREFIX%ctest',
+//     undefined,
+//     [ 'default' ],
+//     false,
+//     'info',
+//     async (msg, cl) => {
+//         return CosmicFFI.clib.get_test_string(undefined);
+//     }
+// ));
 
 CosmicCommandHandler.registerCommand(new Command(
     'additemcount',

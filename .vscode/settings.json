@@ -6,5 +6,6 @@
     ],
     "cmake.configureOnOpen": false,
     "dotenv.enableAutocloaking": true,
-    "cmake.sourceDirectory": "${workspaceFolder}/c"
+    "cmake.sourceDirectory": "${workspaceFolder}/c",
+    "C_Cpp.errorSquiggles": "enabled"
 }
