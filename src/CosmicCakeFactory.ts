@@ -108,15 +108,15 @@ class CosmicCakeFactory {
         const cakeMessage = `${cake.emoji || ''}${cake.displayName} (x${cake.count})`;
 
         if (user.hasOwnProperty('cl')) {
+            let finishedBakingAnswers = [
+                `${CosmicUtil.formatUserString(user)} finished baking and got: ${cakeMessage}`,
+                `${CosmicUtil.formatUserString(user)} took the cake out of the oven and got: ${cakeMessage}`
+            ];
+
+            let answer = CosmicUtil.getRandomValueFromArray(finishedBakingAnswers);
+            
             if (user.dm) {
                 // user.cl.sendChat(`${user.name} finished baking and got: ${CosmicUtil.formatItemString(cake.displayName, cake.emoji, cake.count)}`, user.channel);
-
-                let finishedBakingAnswers = [
-                    `${CosmicUtil.formatUserString(user)} finished baking and got: ${cakeMessage}`,
-                    `${CosmicUtil.formatUserString(user)} took the cake out of the oven and got: ${cakeMessage}`
-                ];
-
-                let answer = CosmicUtil.getRandomValueFromArray(finishedBakingAnswers);
 
                 user.cl.emit('send chat message', {
                     type: 'chat',
@@ -130,7 +130,7 @@ class CosmicCakeFactory {
                     message: answer
                 });
             } else {
-                user.cl.sendChat();
+                user.cl.sendChat(answer);
             }
         }
     }
