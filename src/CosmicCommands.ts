@@ -1357,4 +1357,3 @@ CosmicCommandHandler.registerCommand(new Command(
     },
     'mpp'
 ));
-
