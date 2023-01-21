@@ -444,7 +444,7 @@ class CosmicData {
      * @returns Formatted balance string
      */
     // public static formatBalance(bal: number, currency: string = " star bits", before: boolean = false, fixate: number = 0) {
-    public static formatBalance(bal: number, currency: string = " Cosmic nickels", before: boolean = false, fixate: number = 0) {
+    public static formatBalance(bal: number, currency: string = " green", before: boolean = false, fixate: number = 0) {
         if (before) {
             return `${currency}${bal.toFixed(fixate)}`;
         } else {
