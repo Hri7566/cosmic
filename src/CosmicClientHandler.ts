@@ -13,6 +13,7 @@
 import { CosmicClientDiscord } from "./CosmicClient";
 import { CosmicLogger, red } from "./CosmicLogger";
 import { CosmicClient, CosmicClientMPP, ChannelConstructionPreset } from './CosmicClient';
+import { Cosmic } from "./Cosmic";
 
 /**
  * Module-level declarations
@@ -30,14 +31,14 @@ class CosmicClientHandler {
     private static clients = [];
     public static logger = new CosmicLogger('Client Handler', red);
 
-    public static startMPPClient(uri: string, channel: ChannelConstructionPreset): boolean {
-        if (this.clients.length > MPP_HARD_CLIENT_LIMIT) return false;
+    public static startMPPClient(uri: string, channel: ChannelConstructionPreset): CosmicClient {
+        if (this.clients.length > MPP_HARD_CLIENT_LIMIT) return;
 
         let cl = new CosmicClientMPP(uri, channel, MPPCLONE_TOKEN);
         this.clients.push(cl);
         cl.start();
 
-        return true;
+        return cl;
     }
 
     public static stopAllClients(): void {
@@ -54,6 +55,7 @@ class CosmicClientHandler {
         cl.start(DISCORD_TOKEN);
         
         this.clients.push(cl);
+        Cosmic.emit('client started', cl);
     }
 
     public static getClientCount(): number {

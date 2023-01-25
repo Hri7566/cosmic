@@ -171,6 +171,8 @@ export class CosmicClientMPP extends CosmicClientToken {
     public cursor: Cursor;
     public platform: string = 'mpp';
     public cmapi: typeof cmapi;
+    public dmOnlyCommands: string[];
+    public disabledCommands: string[];
 
     constructor(uri: string, channel: ChannelConstructionPreset, token: string, ClientClass: any = Client) {
         super();
@@ -242,6 +244,10 @@ export class CosmicClientMPP extends CosmicClientToken {
             this.cursor.start();
 
             this.logger.log(`Connected to ${this.client.uri}`);
+
+            this.client.ws.on('error', err => {
+                console.error(err);
+            })
         });
 
         // TODO maybe move this setInterval to somewhere else?
@@ -253,7 +259,7 @@ export class CosmicClientMPP extends CosmicClientToken {
             let set = this.client.getOwnParticipant();
             
             if (set.name !== this.desiredUser.name || set.color !== this.desiredUser.color) {
-                this.logger.debug('sending userset');
+                // this.logger.debug('sending userset');
                 this.client.sendArray([{
                     m: 'userset',
                     set: this.desiredUser
@@ -295,7 +301,7 @@ export class CosmicClientMPP extends CosmicClientToken {
         });
 
         this.cmapi.on('?hat', msg => {
-            this.logger.debug('cmapi hat');
+            // this.logger.debug('cmapi hat');
             this.cmapi.sendArray([{
                 m: 'update hat',
                 url: 'minecraft/item/nether_star'

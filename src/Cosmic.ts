@@ -127,7 +127,10 @@ class Cosmic {
     private static startMPPClients() {
         for (const uri of Object.keys(channels)) {
             for (const ch of channels[uri]) {
-                CosmicClientHandler.startMPPClient(uri, ch);
+                let cl = CosmicClientHandler.startMPPClient(uri, ch);
+                if (!cl) continue;
+
+                this.emit('client started', cl);
             }
         }
     }
