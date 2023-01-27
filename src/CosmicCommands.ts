@@ -239,7 +239,7 @@ CosmicCommandHandler.registerCommand(new Command(
     'bake',
     [ 'bake', 'b' ],
     '%PREFIX%bake',
-    `Bake a cake. (WIP)`,
+    `Bake a cake.`,
     [ 'default' ],
     true,
     'cake',

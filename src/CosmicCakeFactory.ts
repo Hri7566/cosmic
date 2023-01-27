@@ -17,7 +17,8 @@ import { FoodItem, Item } from './CosmicTypes';
 import { cakes, uncommon_cakes, rare_cakes, ultra_rare_cakes, secret_cakes } from './CosmicCakes';
 
 const CHECK_INTERVAL = 25000;
-const RANDOM_CHANCE = 0.02;
+// const RANDOM_CHANCE = 0.02;
+const RANDOM_CHANCE = 1;
 
 class CosmicCakeFactory {
     public static bakingUsers = [];
@@ -113,7 +114,7 @@ class CosmicCakeFactory {
                 `${CosmicUtil.formatUserString(user)} took the cake out of the oven and got: ${cakeMessage}`
             ];
 
-            let answer = CosmicUtil.getRandomValueFromArray(finishedBakingAnswers);
+            let answer = await CosmicUtil.getRandomValueFromArray(finishedBakingAnswers);
             
             if (user.dm) {
                 // user.cl.sendChat(`${user.name} finished baking and got: ${CosmicUtil.formatItemString(cake.displayName, cake.emoji, cake.count)}`, user.channel);
@@ -130,7 +131,16 @@ class CosmicCakeFactory {
                     message: answer
                 });
             } else {
-                user.cl.sendChat(answer);
+                user.cl.emit('send chat message', {
+                    type: 'chat',
+                    sender: {
+                        name: 'internal',
+                        _id: 'internal',
+                        color: '#ffffff'
+                    },
+                    timestamp: Date.now(),
+                    message: answer
+                });
             }
         }
     }

@@ -49,6 +49,21 @@ export class CosmicExperience {
             displayName: 'Eukaryote Bacteria',
             requiredExp: 500
         });
+
+        this.addLevel({
+            displayName: 'Appendicular Tetrapod',
+            requiredExp: 600
+        });
+
+        this.addLevel({
+            displayName: 'Squirrel',
+            requiredExp: 700
+        });
+
+        this.addLevel({
+            displayName: '',
+            requiredExp: 400
+        });
     }
 }
 
