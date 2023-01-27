@@ -17,8 +17,8 @@ import { FoodItem, Item } from './CosmicTypes';
 import { cakes, uncommon_cakes, rare_cakes, ultra_rare_cakes, secret_cakes } from './CosmicCakes';
 
 const CHECK_INTERVAL = 25000;
-// const RANDOM_CHANCE = 0.02;
-const RANDOM_CHANCE = 1;
+const RANDOM_CHANCE = 0.02;
+// const RANDOM_CHANCE = 1;
 
 class CosmicCakeFactory {
     public static bakingUsers = [];

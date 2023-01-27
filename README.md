@@ -12,7 +12,7 @@ This project was created on July 31, 2022.
 
 *Please* only run this under POSIX-based environments. The yarn scripts just call shell scripts for POSIX-based environments and everything would have to be done by hand on Windows.
 
-This project uses TypeScript and esbuild. Originally, there was planned support for C, Nim, and Deno integration, but interoperability has been deprecated to keep the project maintainable.
+This project uses TypeScript, esbuild, and the GNU Compiler Collection.
 
 ```sh
 $ yarn
