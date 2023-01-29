@@ -64,6 +64,7 @@ export interface Inventory {
     _id: string; //* this should be the user id
     items: Item[];
     balance: number;
+    experience: number;
 }
 
 export interface ChannelSettings {

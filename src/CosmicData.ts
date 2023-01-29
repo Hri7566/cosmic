@@ -30,6 +30,7 @@ const MONGODB_CONNECTION_URI = process.env.MONGODB_CONNECTION_URI;
 const MONGODB_DATABASE = process.env.MONGODB_DATABASE;
 
 const DEFAULT_BALANCE = 10;
+const DEFAULT_EXPERIENCE = 0;
 const DEFAULT_INVENTORY = [];
 
 class CosmicData {
@@ -49,6 +50,7 @@ class CosmicData {
      */
     public static async start(): Promise<void> {
         this.logger.log("Connecting to database...");
+        this.logger.debug(MONGODB_CONNECTION_URI);
 
         try {
             await this.client.connect();
@@ -67,7 +69,8 @@ class CosmicData {
 
             this.logger.log(`Connected to database '${MONGODB_DATABASE}'`);
         } catch(err) {
-            this.logger.error(err);
+            this.logger.error(`Unable to connect to database:`, err);
+            process.exit();
         } finally {
             // await this.client.close();
         }
@@ -253,7 +256,8 @@ class CosmicData {
             const result = await this.inventories.insertOne({
                 _id: _id,
                 balance: balance || DEFAULT_BALANCE,
-                items: items || DEFAULT_INVENTORY
+                items: items || DEFAULT_INVENTORY,
+                experience: DEFAULT_EXPERIENCE
             });
 
             return result;
@@ -497,6 +501,35 @@ class CosmicData {
                     balance: amount
                 }
             });
+            return res;
+        } catch(err) {
+            return err;
+        }
+    }
+
+
+    public static async getExperience(_id: string) {
+        try {
+            let inv: Inventory = await this.getInventory(_id);
+            
+            if (!inv.experience) {
+                this.setExperience(_id, DEFAULT_EXPERIENCE);
+            }
+
+            return inv.experience;
+        } catch (err) {
+            return err;
+        }
+    }
+
+    public static setExperience(_id: string, amount: number) {
+        try {
+            let res = this.inventories.updateOne({ _id }, {
+                $set: {
+                    experience: amount
+                }
+            });
+
             return res;
         } catch(err) {
             return err;

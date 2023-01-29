@@ -30,6 +30,7 @@ import { CosmicFFI } from './CosmicFFI';
 import { CosmicWork } from './CosmicWork';
 import { Command, CosmicCommandHandler } from './CosmicCommandHandler';
 import { Cosmic } from './Cosmic';
+import { CosmicExperience } from './CosmicExperience';
 
 /**
  * Module-level declarations
@@ -1356,4 +1357,26 @@ CosmicCommandHandler.registerCommand(new Command(
         }
     },
     'mpp'
+));
+
+CosmicCommandHandler.registerCommand(new Command(
+    'level',
+    [ 'level' ],
+    '%PREFIX%level',
+    `Get your current EXP level.`,
+    [ 'default' ],
+    false,
+    'fun',
+    async (msg, cl) => {
+        let exp = await CosmicData.getExperience(msg.p._id);
+        // try {
+        //     exp = parseInt(msg.argv[1]);
+        // } catch (err) { exp = 0; }
+
+        let level = CosmicExperience.getLevelFromExperience(exp);
+        let index = CosmicExperience.levels.indexOf(level);
+        let nextLevel = CosmicExperience.levels[index + 1];
+
+        return `EXP: ${exp} | Current Level: ${level.displayName} [${CosmicExperience.levels.indexOf(level)}]${nextLevel ? ` | Next Level: ${nextLevel.displayName} [${CosmicExperience.levels.indexOf(nextLevel)}]` : ''}`;
+    }
 ));
