@@ -5,9 +5,9 @@
  */
 
 import { EventEmitter } from 'events';
-import { Item, ShopListing } from './CosmicTypes';
+import { Item, ShopListing } from '../util/CosmicTypes';
 import { SHOP_ITEMS } from './CosmicShopItems';
-import { CosmicSeasonDetection } from './CosmicSeasonDetection';
+import { CosmicSeasonDetection } from '../util/CosmicSeasonDetection';
 
 const DEFAULT_PRICE = 10;
 

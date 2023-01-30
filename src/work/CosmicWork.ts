@@ -1,7 +1,7 @@
 import { CosmicClient } from "../CosmicClient";
 import { CosmicData } from "../CosmicData";
-import { User } from "../CosmicTypes";
-import { CosmicUtil } from "../CosmicUtil";
+import { User } from "../util/CosmicTypes";
+import { CosmicUtil } from "../util/CosmicUtil";
 
 const CHECK_INTERVAL = 15000;
 

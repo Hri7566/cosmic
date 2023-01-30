@@ -1,4 +1,4 @@
-import { CosmicUtil } from "./CosmicUtil";
+import { CosmicUtil } from "../util/CosmicUtil";
 
 export interface Level {
     displayName: string;

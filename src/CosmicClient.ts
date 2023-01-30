@@ -23,8 +23,8 @@ const cmapi = require('mppclone-cmapi');
 
 const { Cosmic } = require('./Cosmic');
 import { CosmicCommandHandler } from './CosmicCommandHandler';
-import { CosmicSeasonDetection } from './CosmicSeasonDetection';
-import  { Token, ChatMessage, Vector2, Participant } from './CosmicTypes';
+import { CosmicSeasonDetection } from './util/CosmicSeasonDetection';
+import  { Token, ChatMessage, Vector2, Participant } from './util/CosmicTypes';
 const { CosmicFFI } = require('./CosmicFFI');
 const { CosmicLogger, white, magenta, hex } = require('./CosmicLogger');
 const { CosmicForeignMessageHandler } = require('./CosmicForeignMessageHandler');
@@ -437,8 +437,10 @@ export class CosmicClientDiscord extends CosmicClientToken {
             str = str.split(char).join(`\\${char}`);
         }
 
-        if (interaction.isChatInputCommand()) {
-            interaction.reply(`\u034f${str}`);
+        if (interaction) {
+            if (interaction.isChatInputCommand()) {
+                interaction.reply(`\u034f${str}`);
+            }
         } else {
             try {
                 if (channel) {

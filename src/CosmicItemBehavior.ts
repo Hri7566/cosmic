@@ -1,4 +1,4 @@
-import { BehaviorMessage } from "./CosmicTypes";
+import { BehaviorMessage } from "./util/CosmicTypes";
 
 type BehaviorCallback = (msg: BehaviorMessage) => (string | void);
 

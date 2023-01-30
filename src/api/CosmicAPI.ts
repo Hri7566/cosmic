@@ -10,11 +10,11 @@ import { readFile, readFileSync } from "fs";
 import { dirname, resolve } from "path";
 import * as http from 'http';
 import * as https from 'https';
-import { CosmicClientHandler } from "./CosmicClientHandler";
-import { Cosmic } from "./Cosmic";
-import { CosmicShop } from "./CosmicShop";
-import { CosmicSeasonDetection } from "./CosmicSeasonDetection";
-import { CosmicUtil } from "./CosmicUtil";
+import { CosmicClientHandler } from "../CosmicClientHandler";
+import { Cosmic } from "../Cosmic";
+import { CosmicShop } from "../shop/CosmicShop";
+import { CosmicSeasonDetection } from "../util/CosmicSeasonDetection";
+import { CosmicUtil } from "../util/CosmicUtil";
 import * as YAML from "yaml";
 
 import EventEmitter = require("events");

@@ -4,7 +4,7 @@
  * Cake Hall of Fame
  */
 
-import { Cake } from './CosmicTypes';
+import { Cake } from '../util/CosmicTypes';
 
 export const cakes: Array<Cake> = [
     {

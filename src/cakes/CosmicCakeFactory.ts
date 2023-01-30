@@ -6,13 +6,13 @@
  * Cake generator for money game
  */
 
-import { CosmicClient, CosmicClientDiscord } from "./CosmicClient";
-import { CosmicData } from "./CosmicData";
-import { ITEMS } from "./CosmicItems";
-import { CosmicLogger, red } from "./CosmicLogger";
-import { Cake, User } from "./CosmicTypes";
-import { CosmicUtil } from "./CosmicUtil";
-import { FoodItem, Item } from './CosmicTypes';
+import { CosmicClient, CosmicClientDiscord } from "../CosmicClient";
+import { CosmicData } from "../CosmicData";
+import { ITEMS } from "../CosmicItems";
+import { CosmicLogger, red } from "../CosmicLogger";
+import { Cake, User } from "../util/CosmicTypes";
+import { CosmicUtil } from "../util/CosmicUtil";
+import { FoodItem, Item } from '../util/CosmicTypes';
 
 import { cakes, uncommon_cakes, rare_cakes, ultra_rare_cakes, secret_cakes } from './CosmicCakes';
 

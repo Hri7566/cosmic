@@ -4,15 +4,15 @@
  * Utility module
  */
 
-import { Cosmic } from "./Cosmic";
-import { CosmicLogger, red } from "./CosmicLogger";
+import { Cosmic } from "../Cosmic";
+import { CosmicLogger, red } from "../CosmicLogger";
 import { User } from "./CosmicTypes";
 
 /**
  * Local module imports
  */
 
-import { CosmicData } from './CosmicData';
+import { CosmicData } from '../CosmicData';
 
 /**
  * Module-level declarations

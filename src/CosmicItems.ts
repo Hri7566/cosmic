@@ -4,7 +4,7 @@
  * Item list
  */
 
-import { Item, FoodItem, AnyItem } from "./CosmicTypes";
+import { Item, FoodItem, AnyItem } from "./util/CosmicTypes";
 
 export const ITEMS: Record<string | symbol, AnyItem> = {
     LARGER_EGGS: {

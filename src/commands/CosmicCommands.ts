@@ -17,20 +17,20 @@ import { evaluate } from 'mathjs';
  * Local module imports
 */
 
-import { CosmicCakeFactory } from './CosmicCakeFactory';
-import { CosmicShop } from './CosmicShop';
-import { CosmicUtil } from './CosmicUtil';
-import { Cosmic as CosmicColor } from './CosmicColor';
-import { CosmicSeasonDetection } from './CosmicSeasonDetection';
-import { AnyItem, CommandMessage, Inventory, Item, ShopListing, User } from './CosmicTypes';
-import { CosmicData } from './CosmicData';
-import { ITEMS } from "./CosmicItems";
-import { CosmicClient, CosmicClientAny } from './CosmicClient';
-import { CosmicFFI } from './CosmicFFI';
-import { CosmicWork } from './CosmicWork';
-import { Command, CosmicCommandHandler } from './CosmicCommandHandler';
-import { Cosmic } from './Cosmic';
-import { CosmicExperience } from './CosmicExperience';
+import { CosmicCakeFactory } from '../cakes/CosmicCakeFactory';
+import { CosmicShop } from '../shop/CosmicShop';
+import { CosmicUtil } from '../util/CosmicUtil';
+import { Cosmic as CosmicColor } from '../CosmicColor';
+import { CosmicSeasonDetection } from '../util/CosmicSeasonDetection';
+import { AnyItem, CommandMessage, Inventory, Item, ShopListing, User } from '../util/CosmicTypes';
+import { CosmicData } from '../CosmicData';
+import { ITEMS } from "../CosmicItems";
+import { CosmicClient, CosmicClientAny } from '../CosmicClient';
+import { CosmicFFI } from '../foreign/CosmicFFI';
+import { CosmicWork } from '../work';
+import { Command, CosmicCommandHandler } from '../CosmicCommandHandler';
+import { Cosmic } from '../Cosmic';
+import { CosmicExperience } from '../exp/CosmicExperience';
 
 /**
  * Module-level declarations
@@ -1243,7 +1243,7 @@ CosmicCommandHandler.registerCommand(new Command(
     'info',
     async (msg, cl) => {
         const userID = msg.argv[1];
-        const itemID = msg.argv[2];
+        const itemID: string = msg.argv[2];
         let count = msg.argv[3];
 
         if (!userID) {
@@ -1261,7 +1261,7 @@ CosmicCommandHandler.registerCommand(new Command(
         }
 
         if (await CosmicData.hasItem(userID, itemID)) {
-            const res = await CosmicData.addItem(userID, { id: itemID, count });
+            const res = await CosmicData.addItem(userID, ({ id: itemID, count } as any));
             return `Added ${count} to item ${itemID} at inventory ${userID}`;
         } else {
             return `Epic fail`;
@@ -1359,24 +1359,24 @@ CosmicCommandHandler.registerCommand(new Command(
     'mpp'
 ));
 
-CosmicCommandHandler.registerCommand(new Command(
-    'level',
-    [ 'level' ],
-    '%PREFIX%level',
-    `Get your current EXP level.`,
-    [ 'default' ],
-    false,
-    'fun',
-    async (msg, cl) => {
-        let exp = await CosmicData.getExperience(msg.p._id);
-        // try {
-        //     exp = parseInt(msg.argv[1]);
-        // } catch (err) { exp = 0; }
+// CosmicCommandHandler.registerCommand(new Command(
+//     'level',
+//     [ 'level' ],
+//     '%PREFIX%level',
+//     `Get your current EXP level.`,
+//     [ 'default' ],
+//     false,
+//     'fun',
+//     async (msg, cl) => {
+//         let exp = await CosmicData.getExperience(msg.p._id);
+//         // try {
+//         //     exp = parseInt(msg.argv[1]);
+//         // } catch (err) { exp = 0; }
 
-        let level = CosmicExperience.getLevelFromExperience(exp);
-        let index = CosmicExperience.levels.indexOf(level);
-        let nextLevel = CosmicExperience.levels[index + 1];
+//         let level = CosmicExperience.getLevelFromExperience(exp);
+//         let index = CosmicExperience.levels.indexOf(level);
+//         let nextLevel = CosmicExperience.levels[index + 1];
 
-        return `EXP: ${exp} | Current Level: ${level.displayName} [${CosmicExperience.levels.indexOf(level)}]${nextLevel ? ` | Next Level: ${nextLevel.displayName} [${CosmicExperience.levels.indexOf(nextLevel)}]` : ''}`;
-    }
-));
+//         return `EXP: ${exp} | Current Level: ${level.displayName} [${CosmicExperience.levels.indexOf(level)}]${nextLevel ? ` | Next Level: ${nextLevel.displayName} [${CosmicExperience.levels.indexOf(nextLevel)}]` : ''}`;
+//     }
+// ));

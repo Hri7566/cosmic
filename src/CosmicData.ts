@@ -8,19 +8,20 @@
 
 import { ObjectID } from "bson";
 import { Collection } from "mongodb";
-import { CosmicAPI } from "./CosmicAPI";
-import { APIKeyProfile, Inventory } from "./CosmicTypes";
+import { CosmicAPI } from "./api/CosmicAPI";
 
 /**
  * Global module imports
  */
-const { MongoClient } = require('mongodb');
+
+import { MongoClient } from 'mongodb';
 
 /**
  * Local module imports
  */
-const { CosmicLogger, green } = require('./CosmicLogger');
-const { User, Inventory, Item } = require('./CosmicTypes');
+
+import { CosmicLogger, green } from './CosmicLogger';
+import { APIKeyProfile, Inventory, User, Item } from "./util/CosmicTypes";
 
 /**
  * Module-level declarations
@@ -38,10 +39,10 @@ class CosmicData {
     public static logger = new CosmicLogger('Cosmic Data', green);
 
     public static db;
-    public static users: Collection;
+    public static users: Collection<User>;
     public static permissions: Collection;
     public static inventories: Collection<Inventory>;
-    public static items: Collection;
+    public static items: Collection<Item>;
     public static util: Collection;
     public static apiKeyProfiles: Collection<APIKeyProfile>;
 
@@ -106,7 +107,7 @@ class CosmicData {
      * @param user User to insert
      * @returns Operation result or error
      */
-    public static async insertUser(user: typeof User) {
+    public static async insertUser(user: User) {
         try {
             const result = await this.users.insertOne(user);
 
@@ -122,7 +123,7 @@ class CosmicData {
      * @param user User data to modify
      * @returns Operation result or error
      */
-    public static async updateUser(_id: string, user: typeof User) {
+    public static async updateUser(_id: string, user: User) {
         try {
             const result = await this.users.updateOne({ _id }, {
                 $set: user
@@ -140,7 +141,7 @@ class CosmicData {
      * @param user User data to replace with
      * @returns Operation result or error
      */
-    public static async replaceUser(_id: string, user: typeof User) {
+    public static async replaceUser(_id: string, user: User) {
         try {
             const result = await this.users.replaceOne({ _id }, user);
 
@@ -251,7 +252,7 @@ class CosmicData {
      * @param items Starting inventory
      * @returns Operation result or error
      */
-    public static async createInventory(_id: string, balance?: number, items?: Array<typeof Item>) {
+    public static async createInventory(_id: string, balance?: number, items?: Array<Item>) {
         try {
             const result = await this.inventories.insertOne({
                 _id: _id,
@@ -324,7 +325,7 @@ class CosmicData {
      * @param item Item
      * @returns Operation result or error
      */
-    public static async addItem(_id: string, item: typeof Item) {
+    public static async addItem(_id: string, item: Item) {
         try {
             if (await this.hasItem(_id, item.id)) {
                 // console.debug('already has item');
@@ -414,7 +415,7 @@ class CosmicData {
      * @param _id User ID
      * @returns Operation result or error
      */
-    public static async getInventory(_id: string): Promise<typeof Inventory> {
+    public static async getInventory(_id: string): Promise<Inventory> {
         try {
             const result = await this.inventories.findOne({ _id: _id });
             return result;
@@ -494,9 +495,9 @@ class CosmicData {
      * @param amount Amount to set balance to
      * @returns Operation result or error
      */
-    public static setBalance(_id: string, amount: number) {
+    public static async setBalance(_id: string, amount: number) {
         try {
-            let res = this.inventories.updateOne({ _id }, {
+            let res = await this.inventories.updateOne({ _id }, {
                 $set: {
                     balance: amount
                 }
@@ -522,9 +523,9 @@ class CosmicData {
         }
     }
 
-    public static setExperience(_id: string, amount: number) {
+    public static async setExperience(_id: string, amount: number) {
         try {
-            let res = this.inventories.updateOne({ _id }, {
+            let res = await this.inventories.updateOne({ _id }, {
                 $set: {
                     experience: amount
                 }
@@ -900,7 +901,7 @@ class CosmicData {
      */
     public static async removeAPIUserID(ip: string): Promise<boolean> {
         try {
-            let res = this.apiKeyProfiles.updateOne({ ip }, {
+            let res = await this.apiKeyProfiles.updateOne({ ip }, {
                 $unset: {
                     user_id: ''
                 }
@@ -919,7 +920,7 @@ class CosmicData {
      */
     public static async setAPIIP(ip: string, new_ip: string): Promise<boolean> {
         try {
-            let res = this.apiKeyProfiles.updateOne({ ip }, {
+            let res = await this.apiKeyProfiles.updateOne({ ip }, {
                 $set: {
                     ip: new_ip
                 }
