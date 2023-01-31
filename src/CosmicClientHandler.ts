@@ -10,9 +10,10 @@
  * Local module imports
 */
 
-import { CosmicClientDiscord } from "./CosmicClient";
 import { CosmicLogger, red } from "./CosmicLogger";
-import { CosmicClient, CosmicClientMPP, ChannelConstructionPreset } from './CosmicClient';
+import { CosmicClient, ChannelConstructionPreset } from './CosmicClient';
+import { CosmicClientMPP } from "./MPP/CosmicClientMPP";
+import { CosmicClientDiscord } from "./Discord/CosmicClientDiscord";
 import { Cosmic } from "./Cosmic";
 
 /**

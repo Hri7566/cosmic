@@ -101,6 +101,7 @@ export interface ChatMessage extends Message {
     message: string;
     platform: string;
     original_channel?: string; //* for discord
+    original_message?: any;
     prefix?: Prefix;
 }
 

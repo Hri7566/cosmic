@@ -1,7 +1,7 @@
 default:
   canSetPermissions: false
   canSetAllPermissions: false
-  canGenerateKeys: false
+  canGenerateKeys: true
   canGenerateInfiniteKeys: false
 
 admin:

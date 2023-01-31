@@ -6,7 +6,8 @@
  * Cake generator for money game
  */
 
-import { CosmicClient, CosmicClientDiscord } from "../CosmicClient";
+import { CosmicClient } from "../CosmicClient";
+import { CosmicClientDiscord } from "../Discord/CosmicClientDiscord";
 import { CosmicData } from "../CosmicData";
 import { ITEMS } from "../CosmicItems";
 import { CosmicLogger, red } from "../CosmicLogger";
@@ -20,7 +21,7 @@ const CHECK_INTERVAL = 25000;
 const RANDOM_CHANCE = 0.02;
 // const RANDOM_CHANCE = 1;
 
-class CosmicCakeFactory {
+export class CosmicCakeFactory {
     public static bakingUsers = [];
     public static DEFAULT_CAKE_VALUE = 15;
 
@@ -185,7 +186,3 @@ setInterval(async () => {
         }
     }
 }, CHECK_INTERVAL);
-
-export {
-    CosmicCakeFactory
-}

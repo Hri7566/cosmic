@@ -851,7 +851,7 @@ class CosmicData {
      * @param ip IP address
      * @returns Permissions of API key profile
      */
-    public static async getAPIPermissions(ip: string): Promise<string[]> {
+    public static async getAPIPermissions(ip: string): Promise<any[]> {
         try {
             let res = await this.apiKeyProfiles.findOne({ ip });
             return res.permissions;

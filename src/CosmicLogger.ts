@@ -9,7 +9,7 @@
  */
 
 // Local imports
-import { Cosmic as CosmicColor } from "./CosmicColor";
+import { CosmicColor } from "./CosmicColor";
 
 /**
  * Module-level declarations
@@ -79,7 +79,7 @@ function white(...args): string {
 
 function hex(hexstr: string, ...args: any[]): string {
     // https://tintin.mudhalla.net/info/ansicolor/
-    let c = new CosmicColor.Color(hexstr);
+    let c = new CosmicColor(hexstr);
     let str = ``;
     
     for (let i = 0; i < args.length; i++) {

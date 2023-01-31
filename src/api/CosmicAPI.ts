@@ -16,15 +16,14 @@ import { CosmicShop } from "../shop/CosmicShop";
 import { CosmicSeasonDetection } from "../util/CosmicSeasonDetection";
 import { CosmicUtil } from "../util/CosmicUtil";
 import * as YAML from "yaml";
-
 import EventEmitter = require("events");
 import crypto = require('crypto');
+import { CosmicAPIWebSocketClient } from "./CosmicAPIWebSocketClient";
+import { CosmicData } from '../CosmicData';
 
 const express = require('express');
 const path = require('path');
 const WebSocket = require('ws');
-
-const { CosmicData } = require('./CosmicData');
 const { CosmicLogger, yellow } = require('./CosmicLogger');
 
 const PORT = process.env.PORT || 3000;
@@ -190,7 +189,7 @@ class CosmicAPI {
 
         let hasPermission = false;
 
-        console.log(group);
+        // console.log(group);
 
         for (let perm of Object.keys(group as any)) {
             if (perm == permission) {
@@ -341,14 +340,21 @@ class CosmicAPI {
             if (!canGenerateKey) {
                 return res.json({
                     error: 'Key request denied',
-                    canGenerateKey
+                    canGenerateKey,
+                    ip: req.ip
                 });
             }
 
-            console.log(req.ip);
+            // console.log(req.ip);
+            let key = this.generateAPIKey();
+
+            // save key
+            CosmicData.addAPIKey(req.ip, key);
+
             res.json({
-                key: this.generateAPIKey(),
-                canGenerateKey
+                key: key,
+                canGenerateKey,
+                ip: req.ip
             });
         });
 
@@ -454,7 +460,8 @@ class CosmicAPI {
         });
 
         this.api.get('*', async (req, res) => {
-            res.status(404).json({ error: 'SORRY NOTHING' });
+            // res.status(404).json({ error: 'SORRY NOTHING' });
+            res.status(404).json({ error: 'invalid request' });
         });
         
         this.app.use(express.static(path.resolve(__dirname, '../../frontend')));
@@ -475,84 +482,6 @@ class CosmicAPI {
                 }
             });
         });
-    }
-}
-
-class CosmicAPIWebSocketClient extends EventEmitter {
-    public connected = false;
-    public ip: string;
-
-    constructor(
-        public ws: WebSocket,
-        req: http.ClientRequest
-    ) {
-        super();
-
-        this.connected = true;
-        this.bindEventListeners();
-    }
-
-    public send(data: Record<string, any>): void {
-        if (!this.connected) return;
-        
-        this.ws.send(JSON.stringify(data));
-    }
-
-    public destroy(): boolean {
-        try {
-            if (!this.connected) return;
-            this.ws.close();
-            delete this.ws;
-            this.connected = false;
-
-            CosmicAPI.removeClient(this);
-
-            return true;
-        } catch (err) {
-            return false;
-        }
-    }
-
-    protected bindEventListeners() {
-        this.ws.addEventListener('message', async (data: any) => {
-            if (!this.connected) return;
-                try {
-                    let msg = JSON.parse(data.toString());
-                    
-                    switch (msg.m) {
-                        case 'hi':
-                            this.send({ m: 'hi' });
-                            break;
-                        case 'bye':
-                            this.destroy();
-                            break;
-                        case 'inventory':
-                            if (!msg.id) return;
-
-                            let inventory = await CosmicData.getInventory(msg.id);
-                            if (!inventory) {
-                                return this.send({ m: 'error', error: 'inventory not found' });
-                            }
-
-                            this.send({ m: 'inventory', inventory });
-                            break;
-                    }
-                } catch (err) {}
-        });
-    }
-
-    public async verifyAPIKey(key: Uint8Array) {
-        let keys = await CosmicData.getAPIKeys(this.ip);
-        let hasKey = false;
-
-        for (let k of keys) {
-            if (key == k) {
-                hasKey = true;
-                break;
-            }
-        }
-
-        return hasKey;
     }
 }
 

@@ -5,7 +5,7 @@
  */
 
 const { EventEmitter } = require('events');
-const { Message, ChatMessage } = require('./CosmicTypes');
+import { Message, ChatMessage } from '../util/CosmicTypes';
 
 class CosmicForeignMessageHandler {
     public static on = EventEmitter.prototype.on;
@@ -21,15 +21,16 @@ class CosmicForeignMessageHandler {
 
     }
 
-    public static convertMessage(type: string, omsg: any): typeof Message | undefined {
+    public static convertMessage(type: string, omsg: any): Message | undefined {
         if (type == 'chat') {
-            let msg: typeof ChatMessage = {
+            let msg: ChatMessage = {
                 type: 'chat',
                 sender: omsg.p,
                 message: omsg.a,
                 timestamp: Date.now(),
                 original_channel: omsg.original_channel,
-                original_message: omsg
+                original_message: omsg,
+                platform: 'internal'
             }
 
             return msg;
