@@ -292,7 +292,7 @@ export const ITEMS: Record<string | symbol, AnyItem> = {
         emoji: '📦',
         count: 1,
         sellable: true,
-        value: 300
+        value: 10
     },
     RICHER_CHOCOLATE: {
         id: 'upgrade_richer_chocolate',
