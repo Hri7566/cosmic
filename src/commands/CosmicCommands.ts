@@ -3,37 +3,7 @@
  * 
  * Cosmic commands
  * 
- * Command logic for entire innards (complexity warning)
- */
-
-/**
- * Global module imports
- */
-
-const crypto = require('crypto');
-import { evaluate, i } from 'mathjs';
-
-/**
- * Local module imports
-*/
-
-import { CosmicCakeFactory } from '../cakes/CosmicCakeFactory';
-import { CosmicShop } from '../shop/CosmicShop';
-import { CosmicUtil } from '../util/CosmicUtil';
-import { CosmicColor } from '../CosmicColor';
-import { CosmicSeasonDetection } from '../util/CosmicSeasonDetection';
-import { AnyItem, CommandMessage, Inventory, Item, ShopListing, User } from '../util/CosmicTypes';
-import { CosmicData } from '../CosmicData';
-import { ITEMS } from "../CosmicItems";
-import { CosmicClient, CosmicClientAny } from '../CosmicClient';
-import { CosmicFFI } from '../foreign/CosmicFFI';
-import { CosmicWork } from '../work';
-import { Command, CosmicCommandHandler } from '../CosmicCommandHandler';
-import { Cosmic } from '../Cosmic';
-import { CosmicExperience } from '../exp/CosmicExperience';
-
-/**
- * Module-level declarations
+ * Command imports
  */
 
 import './help';
@@ -77,4 +47,4 @@ import './additemcount';
 import './screamdownears';
 import './chandle';
 import './work';
-// import './level';
+import './level';
