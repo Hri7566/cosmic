@@ -17,7 +17,7 @@ const Client = require('mppclone-client');
  * Module-level declarations
  */
 
-const CURSOR_SEND_RATE = 20;
+const CURSOR_SEND_RATE = 15;
 const CURSOR_UPDATE_RATE = 60;
 
 export class Cursor {
