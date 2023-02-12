@@ -51,7 +51,6 @@ class CosmicData {
      */
     public static async start(): Promise<void> {
         this.logger.log("Connecting to database...");
-        this.logger.debug(MONGODB_CONNECTION_URI);
 
         try {
             await this.client.connect();

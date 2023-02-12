@@ -173,7 +173,7 @@ export class CosmicClientMPP extends CosmicClientToken {
             type: 'chat',
             sender: this.client.getOwnParticipant(),
             platform: 'mpp',
-            message: str
+            message: str.split('*').join('\\*').split('_').join('\\_')
         });
     }
 

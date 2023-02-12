@@ -74,7 +74,7 @@ CosmicCommandHandler.registerCommand(new Command(
                 `Did you want to eat less?`,
                 `There is not ${amount_to_remove} of that here.`
             ]
-            console.debug(amount_to_remove, mod_it.count);
+
             return CosmicUtil.getRandomValueFromArray(not_enough_answers);
         }
 
