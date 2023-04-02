@@ -1,12 +1,12 @@
 /**
  *   .    .     *       .      *    * .       *        .  *
- * .    *        .   *           .    *     .    .         
+ * .    *        .   *           .    *     .    .
  *   .     *   __|   _ \    __|   \  | _ _|   __|     *   .
- * .          (     (   | \__ \  |\/ |   |   (     *    .  
+ * .          (     (   | \__ \  |\/ |   |   (     *    .
  *     . *   \___| \___/  ____/ _|  _| ___| \___|    .    *
- *   .       .  *       . *        *    .     *        .   
+ *   .       .  *       . *        *    .     *        .
  * .   .   *     .  *      .     *    .         .  *   .  *
- * 
+ *
  * COSMIC PROJECT
  *
  * AUTHOR: Hri7566
@@ -14,25 +14,40 @@
  * DESCRIPTION: Bot as a service for multiple platforms
  */
 
-console.time('Load time');
+console.time("Load time");
 
-process.stdout.write('\x1b[35m\n\n');
-process.stdout.write('  .    .     *       .      *    * .       *        .  *     \n');
-process.stdout.write('.    *        .   *           .    *     .    .              \n');
-process.stdout.write('  .     *   __|   _ \\    __|   \\  | _ _|   __|     *   .   \n');
-process.stdout.write('.          (     (   | \\__ \\  |\\/ |   |   (     *    .    \n');
-process.stdout.write('    . *   \\___| \\___/  ____/ _|  _| ___| \\___|    .    *  \n');
-process.stdout.write('  .       .  *       . *        *    .     *        .        \n');
-process.stdout.write('.   .   *     .  *      .     *    .         .  *   .  *     \n');
-process.stdout.write('\x1b[0m\n\n');
+process.stdout.write("\x1b[35m\n\n");
+process.stdout.write(
+    "  .    .     *       .      *    * .       *        .  *     \n"
+);
+process.stdout.write(
+    ".    *        .   *           .    *     .    .              \n"
+);
+process.stdout.write(
+    "  .     *   __|   _ \\    __|   \\  | _ _|   __|     *   .   \n"
+);
+process.stdout.write(
+    ".          (     (   | \\__ \\  |\\/ |   |   (     *    .    \n"
+);
+process.stdout.write(
+    "    . *   \\___| \\___/  ____/ _|  _| ___| \\___|    .    *  \n"
+);
+process.stdout.write(
+    "  .       .  *       . *        *    .     *        .        \n"
+);
+process.stdout.write(
+    ".   .   *     .  *      .     *    .         .  *   .  *     \n"
+);
+process.stdout.write("\x1b[0m\n\n");
 
-console.log('Loading Cosmic...');
+console.log("Loading Cosmic...");
 
-require('dotenv').config();
+import { config as dotEnvConfig } from "dotenv";
+dotEnvConfig();
 
-import { CosmicLogger, white } from './CosmicLogger';
+import { CosmicLogger, white } from "./CosmicLogger";
 
-const logger = new CosmicLogger('Cosmic Root', white);
+const logger = new CosmicLogger("Cosmic Root", white);
 
 // let logger = new CosmicLogger('Cosmic Root', white);
 // logger.log("This class works.");
@@ -40,13 +55,13 @@ const logger = new CosmicLogger('Cosmic Root', white);
 // logger.warn("This is a warning.");
 // logger.debug("This is a debug message.");
 
-import { Cosmic } from './Cosmic';
-console.timeEnd('Load time');
-process.stdout.write('\n');
+import { Cosmic } from "./Cosmic";
+console.timeEnd("Load time");
+process.stdout.write("\n");
 
 // process.stdout.write("Starting Cosmic...\n");
 
-logger.log('Cosmic loaded, initializing services...');
+logger.log("Cosmic loaded, initializing services...");
 Cosmic.start();
 
 // setTimeout(() => {
@@ -54,17 +69,17 @@ Cosmic.start();
 // });
 
 // TODO fix sigint handle
-process.on('SIGINT', () => {
-    console.log('');
+process.on("SIGINT", () => {
+    console.log("");
     Cosmic.stop();
     process.exit(0);
 });
 
-process.stdin.on('data', d => {
-    let str = d.toString().split('\n').join(' ').trim();
+process.stdin.on("data", d => {
+    let str = d.toString().split("\n").join(" ").trim();
     // console.log(str);
-    
-    if (str.toLowerCase() == 'stop') {
+
+    if (str.toLowerCase() == "stop") {
         Cosmic.stop();
         process.exit(0);
     }

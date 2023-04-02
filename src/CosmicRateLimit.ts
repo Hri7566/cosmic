@@ -1,6 +1,6 @@
 /**
  * COSMIC PROJECT
- * 
+ *
  * Rate limit module
  * This module was originally written by Brandon Lockaby circa 2012.
  * It was released on Brandon's GitHub Gist account publicly.
@@ -21,7 +21,7 @@ export class CosmicRateLimit {
 
     public attempt(time: number = Date.now()): boolean {
         if (time < this.after) return false;
-        
+
         this.after = time + this.interval_ms;
         return true;
     }
@@ -64,13 +64,13 @@ export class CosmicDataRateLimit {
         this.limit = limit;
         this.interval_ms = interval_ms || 0;
     }
-    
+
     attempt(size: number, time: number = Date.now()) {
         if (time >= this.after) {
             this.size = 0;
             this.after = time + this.interval_ms;
         }
-        
+
         if (this.size + size <= this.limit) {
             this.size += size;
             return true;

@@ -1,10 +1,16 @@
+/**
+ * COSMIC PROJECT
+ *
+ * Discord client
+ */
+
 import { CosmicClientToken } from "../CosmicClient";
 import { CosmicForeignMessageHandler } from "../foreign/CosmicForeignMessageHandler";
 import * as Discord from "discord.js";
 
 // ANCHOR Discord client
 export class CosmicClientDiscord extends CosmicClientToken {
-    public platform: string = 'discord';
+    public platform: string = "discord";
     public previousChannel: string;
 
     public client: Discord.Client;
@@ -19,8 +25,8 @@ export class CosmicClientDiscord extends CosmicClientToken {
                 Discord.GatewayIntentBits.Guilds,
                 Discord.GatewayIntentBits.GuildMessages,
                 Discord.GatewayIntentBits.MessageContent,
-                Discord.GatewayIntentBits.GuildMembers
-            ]
+                Discord.GatewayIntentBits.GuildMembers,
+            ],
         });
 
         this.bindEventListeners();
@@ -34,9 +40,9 @@ export class CosmicClientDiscord extends CosmicClientToken {
         this.client.login(token);
 
         // setup REST for slash commands
-        this.rest = new Discord.REST({ version: '10' }).setToken(token);
+        this.rest = new Discord.REST({ version: "10" }).setToken(token);
     }
-    
+
     /**
      * Stop Discord client
      */
@@ -49,18 +55,15 @@ export class CosmicClientDiscord extends CosmicClientToken {
      * @param str Message
      * @param channel Optional channel ID
      */
-    public async sendChat(str: string, channel?: string, interaction?: Discord.ChatInputCommandInteraction): Promise<void> {
+    public async sendChat(
+        str: string,
+        channel?: string,
+        interaction?: Discord.ChatInputCommandInteraction
+    ): Promise<void> {
         if (!str) return;
 
-        let special_chars = [
-            '/',
-            '\\',
-            '*',
-            '_',
-            '>',
-            '-'
-        ];
-        
+        let special_chars = ["/", "\\", "*", "_", ">", "-"];
+
         for (const char of special_chars) {
             str = str.split(char).join(`\\${char}`);
         }
@@ -72,14 +75,20 @@ export class CosmicClientDiscord extends CosmicClientToken {
         } else {
             try {
                 if (channel) {
-                    (await this.client.channels.cache.get(channel) as any).send(`\u034f${str}`);
+                    (
+                        (await this.client.channels.cache.get(channel)) as any
+                    ).send(`\u034f${str}`);
                 } else {
                     if (this.previousChannel) {
-                        (await this.client.channels.cache.get(this.previousChannel) as any).send(`\u034f${str}`);
+                        (
+                            (await this.client.channels.cache.get(
+                                this.previousChannel
+                            )) as any
+                        ).send(`\u034f${str}`);
                     }
                 }
             } catch (err) {
-                this.logger.error('Unable to send chat message:', err);
+                this.logger.error("Unable to send chat message:", err);
             }
         }
     }
@@ -87,29 +96,29 @@ export class CosmicClientDiscord extends CosmicClientToken {
     protected bindEventListeners(): void {
         super.bindEventListeners();
 
-        this.client.on('ready', () => {
-            this.logger.log('Online on Discord');
+        this.client.on("ready", () => {
+            this.logger.log("Online on Discord");
         });
 
-        this.client.on('messageCreate', msg => {
-            let newmsg = CosmicForeignMessageHandler.convertMessage('chat', {
+        this.client.on("messageCreate", msg => {
+            let newmsg = CosmicForeignMessageHandler.convertMessage("chat", {
                 a: msg.content,
                 p: {
                     name: msg.author.username,
                     _id: msg.author.id,
-                    color: msg.member.displayHexColor
+                    color: msg.member.displayHexColor,
                 },
                 original_channel: {
                     id: msg.channel.id,
-                    _id: (msg.channel as any).name
-                }
+                    _id: (msg.channel as any).name,
+                },
             });
-            
+
             this.previousChannel = msg.channel.id;
-            this.emit('chat', newmsg);
+            this.emit("chat", newmsg);
         });
 
-        this.on('send chat message', msg => {
+        this.on("send chat message", msg => {
             let channel = this.previousChannel;
             if (msg.channel) channel = msg.channel;
 

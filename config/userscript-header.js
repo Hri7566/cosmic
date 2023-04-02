@@ -12,6 +12,6 @@
 // @match       http://mpp.*.*/*
 // @grant       none
 // @version     1.0
-// @author      Hri7566
+// @author      Hri7566, yourfriend
 // @description 10/14/2022, 2:51:42 PM
 // ==/UserScript==

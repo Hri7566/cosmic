@@ -1,8 +1,8 @@
 /**
  * COSMIC PROJECT
- * 
+ *
  * Data module
- * 
+ *
  * Database connection loader and data interface
  */
 
@@ -14,13 +14,13 @@ import { CosmicAPI } from "./api/CosmicAPI";
  * Global module imports
  */
 
-import { MongoClient } from 'mongodb';
+import { MongoClient } from "mongodb";
 
 /**
  * Local module imports
  */
 
-import { CosmicLogger, green } from './CosmicLogger';
+import { CosmicLogger, green } from "./CosmicLogger";
 import { APIKeyProfile, Inventory, User, Item } from "./util/CosmicTypes";
 
 /**
@@ -36,7 +36,7 @@ const DEFAULT_INVENTORY = [];
 
 class CosmicData {
     public static client = new MongoClient(MONGODB_CONNECTION_URI);
-    public static logger = new CosmicLogger('Cosmic Data', green);
+    public static logger = new CosmicLogger("Cosmic Data", green);
 
     public static db;
     public static users: Collection<User>;
@@ -55,9 +55,9 @@ class CosmicData {
         try {
             await this.client.connect();
             this.db = await this.client.db(MONGODB_DATABASE);
-            
+
             await this.db.command({
-                ping: 1
+                ping: 1,
             });
 
             this.users = await this.db.collection("users");
@@ -68,7 +68,7 @@ class CosmicData {
             this.apiKeyProfiles = await this.db.collection("apikeyprofiles");
 
             this.logger.log(`Connected to database '${MONGODB_DATABASE}'`);
-        } catch(err) {
+        } catch (err) {
             this.logger.error(`Unable to connect to database:`, err);
             process.exit();
         } finally {
@@ -111,7 +111,7 @@ class CosmicData {
             const result = await this.users.insertOne(user);
 
             return result;
-        } catch(err) {
+        } catch (err) {
             return err;
         }
     }
@@ -124,12 +124,15 @@ class CosmicData {
      */
     public static async updateUser(_id: string, user: User) {
         try {
-            const result = await this.users.updateOne({ _id }, {
-                $set: user
-            });
+            const result = await this.users.updateOne(
+                { _id },
+                {
+                    $set: user,
+                }
+            );
 
             return result;
-        } catch(err) {
+        } catch (err) {
             return err;
         }
     }
@@ -145,7 +148,7 @@ class CosmicData {
             const result = await this.users.replaceOne({ _id }, user);
 
             return result;
-        } catch(err) {
+        } catch (err) {
             return err;
         }
     }
@@ -160,7 +163,7 @@ class CosmicData {
             const result = await this.users.deleteOne({ _id: _id });
 
             return result;
-        } catch(err) {
+        } catch (err) {
             return err;
         }
     }
@@ -175,7 +178,7 @@ class CosmicData {
             const result = await this.users.findOne({ _id: _id });
 
             return result;
-        } catch(err) {
+        } catch (err) {
             return err;
         }
     }
@@ -190,11 +193,11 @@ class CosmicData {
         try {
             const result = await this.permissions.insertOne({
                 _id: _id as unknown as ObjectID,
-                groups: groups || [ 'default' ]
+                groups: groups || ["default"],
             });
 
             return result;
-        } catch(err) {
+        } catch (err) {
             return err;
         }
     }
@@ -207,12 +210,15 @@ class CosmicData {
      */
     public static async addGroup(_id: string, group: string) {
         try {
-            const result = await this.permissions.updateOne({ _id }, {
-                $push: { "groups": group }
-            });
+            const result = await this.permissions.updateOne(
+                { _id },
+                {
+                    $push: { groups: group },
+                }
+            );
 
             return result;
-        } catch(err) {
+        } catch (err) {
             return err;
         }
     }
@@ -225,12 +231,15 @@ class CosmicData {
      */
     public static async removeGroup(_id: string, group: string) {
         try {
-            const result = await this.permissions.updateOne({ _id }, {
-                $pull: { "groups": group }
-            });
+            const result = await this.permissions.updateOne(
+                { _id },
+                {
+                    $pull: { groups: group },
+                }
+            );
 
             return result;
-        } catch(err) {
+        } catch (err) {
             return err;
         }
     }
@@ -251,17 +260,21 @@ class CosmicData {
      * @param items Starting inventory
      * @returns Operation result or error
      */
-    public static async createInventory(_id: string, balance?: number, items?: Array<Item>) {
+    public static async createInventory(
+        _id: string,
+        balance?: number,
+        items?: Array<Item>
+    ) {
         try {
             const result = await this.inventories.insertOne({
                 _id: _id,
                 balance: balance || DEFAULT_BALANCE,
                 items: items || DEFAULT_INVENTORY,
-                experience: DEFAULT_EXPERIENCE
+                experience: DEFAULT_EXPERIENCE,
             });
 
             return result;
-        } catch(err) {
+        } catch (err) {
             return err;
         }
     }
@@ -272,10 +285,13 @@ class CosmicData {
      * @param item_id Item ID
      * @returns Boolean or operation error
      */
-    public static async hasItem(_id: string, item_id: string): Promise<boolean | Error> {
+    public static async hasItem(
+        _id: string,
+        item_id: string
+    ): Promise<boolean | Error> {
         try {
             const response = await this.inventories.findOne({
-                _id
+                _id,
             });
 
             if (response) {
@@ -287,7 +303,7 @@ class CosmicData {
             } else {
                 return false;
             }
-        } catch(err) {
+        } catch (err) {
             this.logger.error(err);
             return err;
         }
@@ -302,7 +318,7 @@ class CosmicData {
     public static async findItem(_id: string, item_id: string) {
         try {
             const response = await this.inventories.findOne({
-                _id
+                _id,
             });
 
             if (response) {
@@ -312,7 +328,7 @@ class CosmicData {
                     }
                 }
             }
-        } catch(err) {
+        } catch (err) {
             this.logger.error(err);
             return err;
         }
@@ -328,24 +344,30 @@ class CosmicData {
         try {
             if (await this.hasItem(_id, item.id)) {
                 // console.debug('already has item');
-                let res = await this.inventories.updateOne({
-                    _id,
-                    "items.id": item.id
-                }, {
-                    $inc: {
-                        'items.$.count': item.count
+                let res = await this.inventories.updateOne(
+                    {
+                        _id,
+                        "items.id": item.id,
+                    },
+                    {
+                        $inc: {
+                            "items.$.count": item.count,
+                        },
                     }
-                });
+                );
                 return res;
             }
-            const result = await this.inventories.updateOne({ _id }, {
-                $push: {
-                    items: item
+            const result = await this.inventories.updateOne(
+                { _id },
+                {
+                    $push: {
+                        items: item,
+                    },
                 }
-            });
+            );
 
             return result;
-        } catch(err) {
+        } catch (err) {
             this.logger.error(err);
             return err;
         }
@@ -359,18 +381,21 @@ class CosmicData {
      */
     public static async removeItem(_id: string, item_id: string) {
         try {
-            let result = await this.inventories.updateOne({
-                _id
-            }, {
-                $pull: {
-                    items: {
-                        id: item_id
-                    }
+            let result = await this.inventories.updateOne(
+                {
+                    _id,
+                },
+                {
+                    $pull: {
+                        items: {
+                            id: item_id,
+                        },
+                    },
                 }
-            });
+            );
 
             return result;
-        } catch(err) {
+        } catch (err) {
             return err;
         }
     }
@@ -382,19 +407,26 @@ class CosmicData {
      * @param amount Amount to remove
      * @returns Operation result or error
      */
-    public static async removeOneItem(_id: string, item_id: string, amount: number = 1) {
+    public static async removeOneItem(
+        _id: string,
+        item_id: string,
+        amount: number = 1
+    ) {
         try {
             if (await this.hasItem(_id, item_id)) {
                 let it = await this.findItem(_id, item_id);
                 if (it.count > 1) {
-                    let res = await this.inventories.updateOne({
-                        _id,
-                        "items.id": item_id
-                    }, {
-                        $inc: {
-                            'items.$.count': -amount
+                    let res = await this.inventories.updateOne(
+                        {
+                            _id,
+                            "items.id": item_id,
+                        },
+                        {
+                            $inc: {
+                                "items.$.count": -amount,
+                            },
                         }
-                    });
+                    );
 
                     return res;
                 } else {
@@ -404,11 +436,11 @@ class CosmicData {
             } else {
                 throw new Error(`Inventory does not have item`);
             }
-        } catch(err) {
+        } catch (err) {
             return err;
         }
     }
-    
+
     /**
      * Get a user's inventory profile
      * @param _id User ID
@@ -418,7 +450,7 @@ class CosmicData {
         try {
             const result = await this.inventories.findOne({ _id: _id });
             return result;
-        } catch(err) {
+        } catch (err) {
             return err;
         }
     }
@@ -429,12 +461,18 @@ class CosmicData {
      * @param sellable Whether item should be sold or not
      * @returns Operation result as boolean
      */
-    public static async setExistingItemSellable(item_id: string, sellable: boolean): Promise<boolean> {
+    public static async setExistingItemSellable(
+        item_id: string,
+        sellable: boolean
+    ): Promise<boolean> {
         try {
-            let res = await this.inventories.updateMany({ 'items.id': item_id }, { $set: { 'item.$.sellable': sellable } } as any);
-            
+            let res = await this.inventories.updateMany(
+                { "items.id": item_id },
+                { $set: { "item.$.sellable": sellable } } as any
+            );
+
             return true;
-        } catch(err) {
+        } catch (err) {
             return false;
         }
     }
@@ -448,14 +486,19 @@ class CosmicData {
      * @returns Formatted balance string
      */
     // public static formatBalance(bal: number, currency: string = " star bits", before: boolean = false, fixate: number = 0) {
-    public static formatBalance(bal: number, currency: string = " star bits", before: boolean = false, fixate: number = 0) {
+    public static formatBalance(
+        bal: number,
+        currency: string = " star bits",
+        before: boolean = false,
+        fixate: number = 0
+    ) {
         if (before) {
             return `${currency}${bal.toFixed(fixate)}`;
         } else {
             return `${bal.toFixed(fixate)}${currency}`;
         }
     }
-    
+
     /**
      * Get a user's balance
      * @param _id User ID
@@ -465,7 +508,7 @@ class CosmicData {
         try {
             let inv: Inventory = await this.getInventory(_id);
             return inv.balance;
-        } catch(err) {
+        } catch (err) {
             return err;
         }
     }
@@ -478,12 +521,15 @@ class CosmicData {
      */
     public static addBalance(_id: string, amount: number) {
         try {
-            this.inventories.updateOne({ _id }, {
-                $inc: {
-                    balance: amount
+            this.inventories.updateOne(
+                { _id },
+                {
+                    $inc: {
+                        balance: amount,
+                    },
                 }
-            })
-        } catch(err) {
+            );
+        } catch (err) {
             return err;
         }
     }
@@ -496,22 +542,24 @@ class CosmicData {
      */
     public static async setBalance(_id: string, amount: number) {
         try {
-            let res = await this.inventories.updateOne({ _id }, {
-                $set: {
-                    balance: amount
+            let res = await this.inventories.updateOne(
+                { _id },
+                {
+                    $set: {
+                        balance: amount,
+                    },
                 }
-            });
+            );
             return res;
-        } catch(err) {
+        } catch (err) {
             return err;
         }
     }
 
-
     public static async getExperience(_id: string) {
         try {
             let inv: Inventory = await this.getInventory(_id);
-            
+
             if (!inv.experience) {
                 this.setExperience(_id, DEFAULT_EXPERIENCE);
             }
@@ -524,14 +572,17 @@ class CosmicData {
 
     public static async setExperience(_id: string, amount: number) {
         try {
-            let res = await this.inventories.updateOne({ _id }, {
-                $set: {
-                    experience: amount
+            let res = await this.inventories.updateOne(
+                { _id },
+                {
+                    $set: {
+                        experience: amount,
+                    },
                 }
-            });
+            );
 
             return res;
-        } catch(err) {
+        } catch (err) {
             return err;
         }
     }
@@ -543,22 +594,25 @@ class CosmicData {
      * @param _id Document ID
      * @returns Operation result or error
      */
-    public static async utilSet(key: string, value: any, _id: string = 'util') {
+    public static async utilSet(key: string, value: any, _id: string = "util") {
         try {
             try {
                 await this.util.insertOne({
                     _id: _id as unknown as ObjectID,
-                    [key]: value
-                });
-            } catch(err) {};
-            let res = await this.util.updateOne({ _id }, {
-                $set: {
                     [key]: value,
-                    lastUpdated: Date.now()
+                });
+            } catch (err) {}
+            let res = await this.util.updateOne(
+                { _id },
+                {
+                    $set: {
+                        [key]: value,
+                        lastUpdated: Date.now(),
+                    },
                 }
-            });
+            );
             return res;
-        } catch(err) {
+        } catch (err) {
             return err;
         }
     }
@@ -569,11 +623,11 @@ class CosmicData {
      * @param _id Document ID
      * @returns Utility value or operation error
      */
-    public static async utilGet(key: string, _id: string = 'util') {
+    public static async utilGet(key: string, _id: string = "util") {
         try {
             let res = await this.util.findOne({ _id });
             return res[key];
-        } catch(err) {
+        } catch (err) {
             return undefined;
         }
     }
@@ -584,9 +638,9 @@ class CosmicData {
      */
     public static async getTopBalances() {
         try {
-            let res = await (this.inventories.find().sort({ 'balance': -1 }));
+            let res = await this.inventories.find().sort({ balance: -1 });
             return res;
-        } catch(err) {
+        } catch (err) {
             return undefined;
         }
     }
@@ -600,12 +654,24 @@ class CosmicData {
      * @param user_id User ID
      * @returns Operation result as boolean
      */
-    public static async createAPIKeyProfile(ip: string, keys: string[] = [], permissions: string[] = [], permissionGroups: string[] = [ 'default' ], user_id?: string): Promise<boolean> {
+    public static async createAPIKeyProfile(
+        ip: string,
+        keys: string[] = [],
+        permissions: string[] = [],
+        permissionGroups: string[] = ["default"],
+        user_id?: string
+    ): Promise<boolean> {
         try {
-            let profile: APIKeyProfile = { ip, keys, permissions, user_id, permissionGroups };
+            let profile: APIKeyProfile = {
+                ip,
+                keys,
+                permissions,
+                user_id,
+                permissionGroups,
+            };
             this.apiKeyProfiles.insertOne(profile);
             return true;
-        } catch(err) {
+        } catch (err) {
             return false;
         }
     }
@@ -623,7 +689,7 @@ class CosmicData {
                 return await this.apiKeyProfiles.findOne({ ip });
             }
             return res;
-        } catch(err) {
+        } catch (err) {
             return undefined;
         }
     }
@@ -636,12 +702,15 @@ class CosmicData {
      */
     public static async addAPIKey(ip: string, key: string): Promise<boolean> {
         try {
-            let res = await this.apiKeyProfiles.updateOne({ ip }, {
-                $push: { keys: key }
-            });
+            let res = await this.apiKeyProfiles.updateOne(
+                { ip },
+                {
+                    $push: { keys: key },
+                }
+            );
 
             return true;
-        } catch(err) {
+        } catch (err) {
             return false;
         }
     }
@@ -655,7 +724,7 @@ class CosmicData {
         try {
             let res = await this.apiKeyProfiles.findOne({ user_id: _id });
             return res;
-        } catch(err) {
+        } catch (err) {
             return;
         }
     }
@@ -666,16 +735,22 @@ class CosmicData {
      * @param key API key
      * @returns Operation result as boolean
      */
-    public static async removeAPIKey(ip: string, key: string): Promise<boolean> {
+    public static async removeAPIKey(
+        ip: string,
+        key: string
+    ): Promise<boolean> {
         try {
-            let res = await this.apiKeyProfiles.updateOne({ ip }, {
-                $pull: {
-                    keys: key
+            let res = await this.apiKeyProfiles.updateOne(
+                { ip },
+                {
+                    $pull: {
+                        keys: key,
+                    },
                 }
-            });
+            );
 
             return true;
-        } catch(err) {
+        } catch (err) {
             return false;
         }
     }
@@ -687,14 +762,17 @@ class CosmicData {
      */
     public static async removeAllAPIKeys(ip: string): Promise<boolean> {
         try {
-            let res = await this.apiKeyProfiles.updateOne({ ip }, {
-                $set: {
-                    keys: []
+            let res = await this.apiKeyProfiles.updateOne(
+                { ip },
+                {
+                    $set: {
+                        keys: [],
+                    },
                 }
-            });
+            );
 
             return true;
-        } catch(err) {
+        } catch (err) {
             return false;
         }
     }
@@ -708,7 +786,7 @@ class CosmicData {
         try {
             let res = await this.apiKeyProfiles.findOne({ ip });
             return res.keys;
-        } catch(err) {
+        } catch (err) {
             return;
         }
     }
@@ -719,16 +797,22 @@ class CosmicData {
      * @param permission Permission to add
      * @returns Operation result as boolean
      */
-    public static async addAPIPermission(ip: string, permission: string): Promise<boolean> {
+    public static async addAPIPermission(
+        ip: string,
+        permission: string
+    ): Promise<boolean> {
         try {
-            let res = await this.apiKeyProfiles.updateOne({ ip }, {
-                $push: {
-                    permissions: permission
+            let res = await this.apiKeyProfiles.updateOne(
+                { ip },
+                {
+                    $push: {
+                        permissions: permission,
+                    },
                 }
-            });
-            
+            );
+
             return true;
-        } catch(err) {
+        } catch (err) {
             return false;
         }
     }
@@ -739,16 +823,22 @@ class CosmicData {
      * @param permission Permission to remove
      * @returns Operation result as boolean
      */
-    public static async removeAPIPermission(ip: string, permission: string): Promise<boolean> {
+    public static async removeAPIPermission(
+        ip: string,
+        permission: string
+    ): Promise<boolean> {
         try {
-            let res = await this.apiKeyProfiles.updateOne({ ip }, {
-                $pull: {
-                    permissions: permission
+            let res = await this.apiKeyProfiles.updateOne(
+                { ip },
+                {
+                    $pull: {
+                        permissions: permission,
+                    },
                 }
-            });
+            );
 
             return true;
-        } catch(err) {
+        } catch (err) {
             return false;
         }
     }
@@ -760,14 +850,17 @@ class CosmicData {
      */
     public static async removeAllAPIPermissions(ip: string): Promise<boolean> {
         try {
-            let res = await this.apiKeyProfiles.updateOne({ ip }, {
-                $set: {
-                    permissions: []
+            let res = await this.apiKeyProfiles.updateOne(
+                { ip },
+                {
+                    $set: {
+                        permissions: [],
+                    },
                 }
-            });
+            );
 
             return true;
-        } catch(err) {
+        } catch (err) {
             return false;
         }
     }
@@ -778,16 +871,22 @@ class CosmicData {
      * @param permissionGroupID ID of permission group
      * @returns Operation result as boolean
      */
-    public static async addAPIPermissionGroup(ip: string, permissionGroupID: string): Promise<boolean> {
+    public static async addAPIPermissionGroup(
+        ip: string,
+        permissionGroupID: string
+    ): Promise<boolean> {
         try {
-            let res = await this.apiKeyProfiles.updateOne({ ip }, {
-                $push: {
-                    permissionGroups: permissionGroupID
+            let res = await this.apiKeyProfiles.updateOne(
+                { ip },
+                {
+                    $push: {
+                        permissionGroups: permissionGroupID,
+                    },
                 }
-            });
+            );
 
             return true;
-        } catch(err) {
+        } catch (err) {
             return false;
         }
     }
@@ -798,16 +897,22 @@ class CosmicData {
      * @param permissionGroupID ID of permission group
      * @returns Operation result as boolean
      */
-    public static async removeAPIPermissionGroup(ip: string, permissionGroupID: string): Promise<boolean> {
+    public static async removeAPIPermissionGroup(
+        ip: string,
+        permissionGroupID: string
+    ): Promise<boolean> {
         try {
-            let res = await this.apiKeyProfiles.updateOne({ ip }, {
-                $pull: {
-                    permissionGroups: permissionGroupID
+            let res = await this.apiKeyProfiles.updateOne(
+                { ip },
+                {
+                    $pull: {
+                        permissionGroups: permissionGroupID,
+                    },
                 }
-            });
-            
+            );
+
             return true;
-        } catch(err) {
+        } catch (err) {
             return false;
         }
     }
@@ -817,16 +922,21 @@ class CosmicData {
      * @param ip IP address
      * @returns Operation result as boolean
      */
-    public static async removeAllAPIPermissionGroups(ip: string): Promise<boolean> {
+    public static async removeAllAPIPermissionGroups(
+        ip: string
+    ): Promise<boolean> {
         try {
-            let res = await this.apiKeyProfiles.updateOne({ ip }, {
-                $set: {
-                    permissionGroups: []
+            let res = await this.apiKeyProfiles.updateOne(
+                { ip },
+                {
+                    $set: {
+                        permissionGroups: [],
+                    },
                 }
-            });
-            
+            );
+
             return true;
-        } catch(err) {
+        } catch (err) {
             return false;
         }
     }
@@ -840,7 +950,7 @@ class CosmicData {
         try {
             let res = await this.apiKeyProfiles.findOne({ ip });
             return res.permissionGroups;
-        } catch(err) {
+        } catch (err) {
             return;
         }
     }
@@ -854,7 +964,7 @@ class CosmicData {
         try {
             let res = await this.apiKeyProfiles.findOne({ ip });
             return res.permissions;
-        } catch(err) {
+        } catch (err) {
             return;
         }
     }
@@ -865,16 +975,22 @@ class CosmicData {
      * @param userID User ID
      * @returns Operation result as boolean
      */
-    public static async setAPIUserID(ip: string, userID: string): Promise<boolean> {
+    public static async setAPIUserID(
+        ip: string,
+        userID: string
+    ): Promise<boolean> {
         try {
-            let res = await this.apiKeyProfiles.updateOne({ ip }, {
-                $set: {
-                    user_id: userID
+            let res = await this.apiKeyProfiles.updateOne(
+                { ip },
+                {
+                    $set: {
+                        user_id: userID,
+                    },
                 }
-            });
+            );
 
             return true;
-        } catch(err) {
+        } catch (err) {
             return false;
         }
     }
@@ -888,7 +1004,7 @@ class CosmicData {
         try {
             let res = await this.apiKeyProfiles.findOne({ ip });
             return res.user_id;
-        } catch(err) {
+        } catch (err) {
             return;
         }
     }
@@ -900,13 +1016,16 @@ class CosmicData {
      */
     public static async removeAPIUserID(ip: string): Promise<boolean> {
         try {
-            let res = await this.apiKeyProfiles.updateOne({ ip }, {
-                $unset: {
-                    user_id: ''
+            let res = await this.apiKeyProfiles.updateOne(
+                { ip },
+                {
+                    $unset: {
+                        user_id: "",
+                    },
                 }
-            });
+            );
             return true;
-        } catch(err) {
+        } catch (err) {
             return false;
         }
     }
@@ -919,11 +1038,14 @@ class CosmicData {
      */
     public static async setAPIIP(ip: string, new_ip: string): Promise<boolean> {
         try {
-            let res = await this.apiKeyProfiles.updateOne({ ip }, {
-                $set: {
-                    ip: new_ip
+            let res = await this.apiKeyProfiles.updateOne(
+                { ip },
+                {
+                    $set: {
+                        ip: new_ip,
+                    },
                 }
-            });
+            );
 
             return true;
         } catch (err) {
@@ -936,6 +1058,4 @@ class CosmicData {
  * Module-level exports
  */
 
-export {
-    CosmicData
-}
+export { CosmicData };

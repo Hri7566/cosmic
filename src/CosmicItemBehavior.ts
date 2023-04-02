@@ -1,12 +1,12 @@
 /**
  * COSMIC PROJECT
- * 
+ *
  * Item behavior module
  */
 
 import { BehaviorMessage } from "./util/CosmicTypes";
 
-type BehaviorCallback = (msg: BehaviorMessage) => (string | void);
+type BehaviorCallback = (msg: BehaviorMessage) => string | void;
 
 export class CosmicItemBehavior {
     constructor(
@@ -22,8 +22,8 @@ function addBehavior(id: string, bh: BehaviorCallback, consume?: boolean) {
     ITEM_BEHAVIORS.set(id, new CosmicItemBehavior(id, bh, consume));
 }
 
-addBehavior('hot_sauce', (msg: BehaviorMessage) => {
-    return 'burning hot fire!!!';
+addBehavior("hot_sauce", (msg: BehaviorMessage) => {
+    return "burning hot fire!!!";
 });
 
-export { ITEM_BEHAVIORS }
+export { ITEM_BEHAVIORS };

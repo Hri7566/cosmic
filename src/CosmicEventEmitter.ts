@@ -1,6 +1,6 @@
 /**
  * COSMIC PROJECT
- * 
+ *
  * Custom event emitter subsystem module
  */
 
@@ -8,7 +8,7 @@
  * Global module imports
  */
 
-import { EventEmitter } from 'events';
+import { EventEmitter } from "events";
 
 /**
  * Module-level declarations
@@ -25,17 +25,26 @@ class CosmicEventEmitter extends EventEmitter {
         this.bindDefaultListeners();
     }
 
-    public override on(eventName: string | symbol, listener: (...args: any[]) => void): any {
+    public override on(
+        eventName: string | symbol,
+        listener: (...args: any[]) => void
+    ): any {
         super.on(eventName, listener);
         return this;
     }
 
-    public override off(eventName: string | symbol, listener: (...args: any[]) => void): any {
+    public override off(
+        eventName: string | symbol,
+        listener: (...args: any[]) => void
+    ): any {
         super.off(eventName, listener);
         return this;
     }
 
-    public override once(eventName: string | symbol, listener: (...args: any[]) => void): any {
+    public override once(
+        eventName: string | symbol,
+        listener: (...args: any[]) => void
+    ): any {
         super.once(eventName, listener);
         return this;
     }
@@ -45,15 +54,11 @@ class CosmicEventEmitter extends EventEmitter {
         return this;
     }
 
-    private bindDefaultListeners(): void {
-
-    }
+    private bindDefaultListeners(): void {}
 }
 
 /**
  * Module exports
  */
 
-export {
-    CosmicEventEmitter
-}
+export { CosmicEventEmitter };

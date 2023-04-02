@@ -1,16 +1,20 @@
+/**
+ * COSMIC PROJECT
+ *
+ * I forgot what this does
+ */
+
 import { EventEmitter } from "ws";
-import * as http from 'http';
+import * as http from "http";
 import { CosmicAPI } from "./CosmicAPI";
 import { CosmicData } from "../CosmicData";
+import type { WebSocket } from "ws";
 
 export class CosmicAPIWebSocketClient extends EventEmitter {
     public connected = false;
     public ip: string;
 
-    constructor(
-        public ws: WebSocket,
-        req: http.ClientRequest
-    ) {
+    constructor(public ws: WebSocket, req: http.ClientRequest) {
         super();
 
         this.connected = true;
@@ -19,7 +23,7 @@ export class CosmicAPIWebSocketClient extends EventEmitter {
 
     public send(data: Record<string, any>): void {
         if (!this.connected) return;
-        
+
         this.ws.send(JSON.stringify(data));
     }
 
@@ -39,30 +43,33 @@ export class CosmicAPIWebSocketClient extends EventEmitter {
     }
 
     protected bindEventListeners() {
-        this.ws.addEventListener('message', async (data: any) => {
+        this.ws.addEventListener("message", async (data: any) => {
             if (!this.connected) return;
-                try {
-                    let msg = JSON.parse(data.toString());
-                    
-                    switch (msg.m) {
-                        case 'hi':
-                            this.send({ m: 'hi' });
-                            break;
-                        case 'bye':
-                            this.destroy();
-                            break;
-                        case 'inventory':
-                            if (!msg.id) return;
+            try {
+                let msg = JSON.parse(data.toString());
 
-                            let inventory = await CosmicData.getInventory(msg.id);
-                            if (!inventory) {
-                                return this.send({ m: 'error', error: 'inventory not found' });
-                            }
+                switch (msg.m) {
+                    case "hi":
+                        this.send({ m: "hi" });
+                        break;
+                    case "bye":
+                        this.destroy();
+                        break;
+                    case "inventory":
+                        if (!msg.id) return;
 
-                            this.send({ m: 'inventory', inventory });
-                            break;
-                    }
-                } catch (err) {}
+                        let inventory = await CosmicData.getInventory(msg.id);
+                        if (!inventory) {
+                            return this.send({
+                                m: "error",
+                                error: "inventory not found",
+                            });
+                        }
+
+                        this.send({ m: "inventory", inventory });
+                        break;
+                }
+            } catch (err) {}
         });
     }
 

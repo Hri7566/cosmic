@@ -1,8 +1,8 @@
 /**
  * COSMIC PROJECT
- * 
+ *
  * Main Cosmic module
- * 
+ *
  * This file itself really isn't that large, but it loads everything else.
  */
 
@@ -10,37 +10,39 @@
  * Global module imports
  */
 
-const fs = require('fs');
-import * as path from 'path';
-import * as YAML from 'yaml';
-const { EventEmitter } = require('events');
+const fs = require("fs");
+import * as path from "path";
+import * as YAML from "yaml";
+const { EventEmitter } = require("events");
 
 /**
  * Local module imports
  */
 
-import { CosmicClientHandler } from './CosmicClientHandler';
-import { CosmicData } from './CosmicData';
-const { CosmicLogger, magenta } = require('./CosmicLogger');
-const { CosmicAPI } = require('./CosmicAPI');
+import { CosmicClientHandler } from "./CosmicClientHandler";
+import { CosmicData } from "./CosmicData";
+import { CosmicLogger, magenta } from "./CosmicLogger";
+import { CosmicAPI } from "./api/CosmicAPI";
 
 /**
  * Module-level declarations
  */
 
-const ENABLE_MPP = process.env.ENABLE_MPP || 'true';
-const ENABLE_DISCORD = process.env.ENABLE_DISCORD || 'true';
+const ENABLE_MPP = process.env.ENABLE_MPP || "true";
+const ENABLE_DISCORD = process.env.ENABLE_DISCORD || "true";
 
-const channelsFile = fs.readFileSync(path.resolve(__dirname, '../../config/mpp_channels.yml')).toString();
+const channelsFile = fs
+    .readFileSync(path.resolve(__dirname, "../../config/mpp_channels.yml"))
+    .toString();
 const channels = YAML.parse(channelsFile);
 
 class Cosmic {
     get [Symbol.toStringTag]() {
-        return 'Cosmic'
+        return "Cosmic";
     }
 
     // magenta is a beautiful space color :D
-    public static logger = new CosmicLogger('Cosmic', magenta);
+    public static logger = new CosmicLogger("Cosmic", magenta);
 
     // event emitter prototypal
     public static on = EventEmitter.prototype.on;
@@ -64,20 +66,20 @@ class Cosmic {
 
         // connect to database
         await CosmicData.start();
-        
-        this.logger.log('Starting clients...');
 
-        if (ENABLE_MPP == 'true') {
+        this.logger.log("Starting clients...");
+
+        if (ENABLE_MPP == "true") {
             this.startMPPClients();
         }
-        
-        if (ENABLE_DISCORD == 'true') {
+
+        if (ENABLE_DISCORD == "true") {
             CosmicClientHandler.startDiscordClient();
         }
 
         CosmicAPI.start();
 
-        this.emit('ready');
+        this.emit("ready");
     }
 
     /**
@@ -100,27 +102,27 @@ class Cosmic {
         if (this.alreadyBound) return;
         this.alreadyBound = true;
 
-        this.on('ready', () => {
-            this.logger.log('Ready');
+        this.on("ready", () => {
+            this.logger.log("Ready");
         });
 
-        this.on('log', (msg: any) => {
+        this.on("log", (msg: any) => {
             this.logger.log(msg.message);
         });
 
-        this.on('hi', () => {
-            this.logger.debug('hi!');
-            this.emit('hello');
+        this.on("hi", () => {
+            this.logger.debug("hi!");
+            this.emit("hello");
         });
 
-        this.on('bonk', (msg: any) => {
-            this.emit('log', { message: 'bonked' });
+        this.on("bonk", (msg: any) => {
+            this.emit("log", { message: "bonked" });
             try {
-                msg.r.emit('bonk', {
-                    m: 'bonk',
-                    from: 'Cosmic'
+                msg.r.emit("bonk", {
+                    m: "bonk",
+                    from: "Cosmic",
                 });
-            } catch(err) {}
+            } catch (err) {}
         });
     }
 
@@ -130,7 +132,7 @@ class Cosmic {
                 let cl = CosmicClientHandler.startMPPClient(uri, ch);
                 if (!cl) continue;
 
-                this.emit('client started', cl);
+                this.emit("client started", cl);
             }
         }
     }
@@ -140,6 +142,4 @@ class Cosmic {
  * Module-level exports
  */
 
-export {
-    Cosmic
-}
+export { Cosmic };
