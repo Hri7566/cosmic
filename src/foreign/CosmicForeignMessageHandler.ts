@@ -1,11 +1,11 @@
 /**
  * COSMIC PROJECT
- * 
+ *
  * Foreign message handler module
  */
 
-const { EventEmitter } = require('events');
-import { Message, ChatMessage } from '../util/CosmicTypes';
+import { EventEmitter } from "events";
+import { Message, ChatMessage } from "../util/CosmicTypes";
 
 class CosmicForeignMessageHandler {
     public static on = EventEmitter.prototype.on;
@@ -17,27 +17,23 @@ class CosmicForeignMessageHandler {
         this.bindEventListeners();
     }
 
-    private static bindEventListeners(): void {
-
-    }
+    private static bindEventListeners(): void {}
 
     public static convertMessage(type: string, omsg: any): Message | undefined {
-        if (type == 'chat') {
+        if (type == "chat") {
             let msg: ChatMessage = {
-                type: 'chat',
+                type: "chat",
                 sender: omsg.p,
                 message: omsg.a,
                 timestamp: Date.now(),
                 original_channel: omsg.original_channel,
                 original_message: omsg,
-                platform: 'internal'
-            }
+                platform: "internal",
+            };
 
             return msg;
         }
     }
 }
 
-export {
-    CosmicForeignMessageHandler
-}
+export { CosmicForeignMessageHandler };

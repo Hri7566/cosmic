@@ -1,5 +1,3 @@
-import { CosmicWork } from './CosmicWork'
+import { CosmicWork } from "./CosmicWork";
 
-export {
-    CosmicWork
-}
+export { CosmicWork };

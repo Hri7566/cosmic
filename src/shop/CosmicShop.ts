@@ -1,19 +1,19 @@
 /**
  * COSMIC PROJECT
- * 
+ *
  * Item shop module
  */
 
-import { EventEmitter } from 'events';
-import { Item, ShopListing } from '../util/CosmicTypes';
-import { SHOP_ITEMS } from './CosmicShopItems';
-import { CosmicSeasonDetection } from '../util/CosmicSeasonDetection';
+import { EventEmitter } from "events";
+import { Item, ShopListing } from "../util/CosmicTypes";
+import { SHOP_ITEMS } from "./CosmicShopItems";
+import { CosmicSeasonDetection } from "../util/CosmicSeasonDetection";
 
 const DEFAULT_PRICE = 10;
 
 class CosmicShop {
     protected static list: ShopListing[] = SHOP_ITEMS;
-    public static emoji = '🛒';
+    public static emoji = "🛒";
 
     /**
      * Get the current item listings in the shop
@@ -24,7 +24,9 @@ class CosmicShop {
 
         for (const ls of this.list) {
             if (ls.season) {
-                if (CosmicSeasonDetection.getSeason().displayName == ls.season) {
+                if (
+                    CosmicSeasonDetection.getSeason().displayName == ls.season
+                ) {
                     rendered.push(ls);
                 }
             } else {
@@ -60,11 +62,15 @@ class CosmicShop {
         }
     }
 
-    public static addItemListing(it: Item, overridePrice?: number, season?: string): void {
+    public static addItemListing(
+        it: Item,
+        overridePrice?: number,
+        season?: string
+    ): void {
         this.list.push({
             item: it,
             overridePrice,
-            season
+            season,
         });
     }
 
@@ -75,11 +81,9 @@ class CosmicShop {
                 return true;
             }
         }
-        
+
         return false;
     }
 }
 
-export {
-    CosmicShop
-}
+export { CosmicShop };

@@ -1,11 +1,11 @@
 default:
-  canSetPermissions: false
-  canSetAllPermissions: false
-  canGenerateKeys: true
-  canGenerateInfiniteKeys: false
+    canSetPermissions: false
+    canSetAllPermissions: false
+    canGenerateKeys: true
+    canGenerateInfiniteKeys: false
 
 admin:
-  canSetPermissions: true
-  canSetAllPermissions: true
-  canGenerateKeys: true
-  canGenerateInfiniteKeys: true
+    canSetPermissions: true
+    canSetAllPermissions: true
+    canGenerateKeys: true
+    canGenerateInfiniteKeys: true

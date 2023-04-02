@@ -1,8 +1,8 @@
 /**
  * COSMIC PROJECT
- * 
+ *
  * Cake factory module
- * 
+ *
  * Cake generator for money game
  */
 
@@ -13,9 +13,15 @@ import { ITEMS } from "../CosmicItems";
 import { CosmicLogger, red } from "../CosmicLogger";
 import { Cake, User } from "../util/CosmicTypes";
 import { CosmicUtil } from "../util/CosmicUtil";
-import { FoodItem, Item } from '../util/CosmicTypes';
+import { FoodItem, Item } from "../util/CosmicTypes";
 
-import { cakes, uncommon_cakes, rare_cakes, ultra_rare_cakes, secret_cakes } from './CosmicCakes';
+import {
+    cakes,
+    uncommon_cakes,
+    rare_cakes,
+    ultra_rare_cakes,
+    secret_cakes,
+} from "./CosmicCakes";
 
 const CHECK_INTERVAL = 25000;
 const RANDOM_CHANCE = 0.02;
@@ -25,7 +31,7 @@ export class CosmicCakeFactory {
     public static bakingUsers = [];
     public static DEFAULT_CAKE_VALUE = 15;
 
-    public static logger = new CosmicLogger('Cake Factory', red);
+    public static logger = new CosmicLogger("Cake Factory", red);
 
     public static async generateRandomCake() {
         const rarity = Math.random();
@@ -42,8 +48,14 @@ export class CosmicCakeFactory {
         return c;
     }
 
-    public static async startBaking(user: User, cl: CosmicClient, isDM: boolean = false): Promise<string> {
-        let response: string = `${CosmicUtil.formatUserString(user)} started baking.`;
+    public static async startBaking(
+        user: User,
+        cl: CosmicClient,
+        isDM: boolean = false
+    ): Promise<string> {
+        let response: string = `${CosmicUtil.formatUserString(
+            user
+        )} started baking.`;
 
         if (this.isAlreadyBaking(user._id)) {
             const already_answers = [
@@ -54,10 +66,12 @@ export class CosmicCakeFactory {
                 `The oven is already full.`,
                 `The oven has cake in it already.`,
                 `The oven is full of cake.`,
-                `You can't bake more, the oven still has cake.`
+                `You can't bake more, the oven still has cake.`,
             ];
 
-            return already_answers[Math.floor(Math.random() * already_answers.length)];
+            return already_answers[
+                Math.floor(Math.random() * already_answers.length)
+            ];
         }
 
         if (!(await this.hasCakeMix(user._id))) {
@@ -71,8 +85,11 @@ export class CosmicCakeFactory {
             name: user.name,
             start: Date.now(),
             cl: cl,
-            channel: cl.platform == 'discord' ? (cl as CosmicClientDiscord).previousChannel : undefined,
-            dm: isDM
+            channel:
+                cl.platform == "discord"
+                    ? (cl as CosmicClientDiscord).previousChannel
+                    : undefined,
+            dm: isDM,
         });
 
         return response;
@@ -91,14 +108,17 @@ export class CosmicCakeFactory {
                 `Maybe starting is a good thing to do before you stop.`,
                 `Stopping... wait, you haven't started.`,
                 `Error: start baking first`,
-                `Have you ever even baked before?`
+                `Have you ever even baked before?`,
             ];
 
             return replies[Math.floor(Math.random() * replies.length)];
         }
     }
-    
-    public static async finishBaking(_id: string, multiplier: number = 1): Promise<void> {
+
+    public static async finishBaking(
+        _id: string,
+        multiplier: number = 1
+    ): Promise<void> {
         let user = this.bakingUsers.find(u => u._id == _id);
 
         let cake = await this.generateRandomCake();
@@ -107,58 +127,69 @@ export class CosmicCakeFactory {
 
         this.bakingUsers.splice(this.bakingUsers.indexOf(user), 1);
 
-        const cakeMessage = `${cake.emoji || ''}${cake.displayName} (x${cake.count})`;
+        const cakeMessage = `${cake.emoji || ""}${cake.displayName} (x${
+            cake.count
+        })`;
 
-        if (user.hasOwnProperty('cl')) {
+        if (user.hasOwnProperty("cl")) {
             let finishedBakingAnswers = [
-                `${CosmicUtil.formatUserString(user)} finished baking and got: ${cakeMessage}`,
-                `${CosmicUtil.formatUserString(user)} took the cake out of the oven and got: ${cakeMessage}`
+                `${CosmicUtil.formatUserString(
+                    user
+                )} finished baking and got: ${cakeMessage}`,
+                `${CosmicUtil.formatUserString(
+                    user
+                )} took the cake out of the oven and got: ${cakeMessage}`,
             ];
 
-            let answer = await CosmicUtil.getRandomValueFromArray(finishedBakingAnswers);
-            
+            let answer = await CosmicUtil.getRandomValueFromArray(
+                finishedBakingAnswers
+            );
+
             if (user.dm) {
                 // user.cl.sendChat(`${user.name} finished baking and got: ${CosmicUtil.formatItemString(cake.displayName, cake.emoji, cake.count)}`, user.channel);
 
-                user.cl.emit('send chat message', {
-                    type: 'chat',
+                user.cl.emit("send chat message", {
+                    type: "chat",
                     sender: {
-                        name: 'internal',
-                        _id: 'internal',
-                        color: '#ffffff'
+                        name: "internal",
+                        _id: "internal",
+                        color: "#ffffff",
                     },
                     dm: user._id,
                     timestamp: Date.now(),
-                    message: answer
+                    message: answer,
                 });
             } else {
-                user.cl.emit('send chat message', {
-                    type: 'chat',
+                user.cl.emit("send chat message", {
+                    type: "chat",
                     sender: {
-                        name: 'internal',
-                        _id: 'internal',
-                        color: '#ffffff'
+                        name: "internal",
+                        _id: "internal",
+                        color: "#ffffff",
                     },
                     timestamp: Date.now(),
-                    message: answer
+                    message: answer,
                 });
             }
         }
     }
 
     public static isAlreadyBaking(_id: string): boolean {
-        return typeof this.bakingUsers.find(u => u._id == _id) !== 'undefined';
+        return typeof this.bakingUsers.find(u => u._id == _id) !== "undefined";
     }
 
     public static async hasCakeMix(_id: string): Promise<boolean> {
-        return await CosmicData.hasItem(_id, ITEMS.CAKE_MIX.id) == true;
+        return (await CosmicData.hasItem(_id, ITEMS.CAKE_MIX.id)) == true;
     }
 }
 
 setInterval(async () => {
     let r = Math.random();
-    
-    let u = CosmicCakeFactory.bakingUsers[Math.floor(Math.random() * CosmicCakeFactory.bakingUsers.length)];
+
+    let u =
+        CosmicCakeFactory.bakingUsers[
+            Math.floor(Math.random() * CosmicCakeFactory.bakingUsers.length)
+        ];
 
     if (u) {
         let inv = await CosmicData.getInventory(u._id);
@@ -166,14 +197,14 @@ setInterval(async () => {
         let multiplier = 1;
 
         for (let upgradeItem of Object.values(ITEMS)) {
-            if (!upgradeItem.id.startsWith('upgrade_')) continue;
+            if (!upgradeItem.id.startsWith("upgrade_")) continue;
             if (await CosmicData.hasItem(u._id, upgradeItem.id)) {
-                if (upgradeItem.hasOwnProperty('cake_bonus')) {
-                    bias *= upgradeItem['cake_bonus'];
+                if (upgradeItem.hasOwnProperty("cake_bonus")) {
+                    bias *= upgradeItem["cake_bonus"];
                 }
 
-                if (upgradeItem.hasOwnProperty('cake_multiply')) {
-                    multiplier *= upgradeItem['cake_multiply'];
+                if (upgradeItem.hasOwnProperty("cake_multiply")) {
+                    multiplier *= upgradeItem["cake_multiply"];
                 }
             }
         }
@@ -181,7 +212,10 @@ setInterval(async () => {
         let biasedRando = r / bias;
         // console.log(`${r} / ${bias} = ${biasedRando}`);
 
-        if (r * biasedRando < RANDOM_CHANCE * CosmicCakeFactory.bakingUsers.length) {
+        if (
+            r * biasedRando <
+            RANDOM_CHANCE * CosmicCakeFactory.bakingUsers.length
+        ) {
             CosmicCakeFactory.finishBaking(u._id, multiplier);
         }
     }

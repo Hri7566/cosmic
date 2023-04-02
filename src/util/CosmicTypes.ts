@@ -1,6 +1,6 @@
 /**
  * COSMIC PROJECT
- * 
+ *
  * Type definitions
  */
 
@@ -9,7 +9,7 @@
  */
 
 type NoteStringOctave = -1 | -2 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
-type NoteStringTone = 'a' | 'b' | 'c' | 'd' | 'e' | 'f';
+type NoteStringTone = "a" | "b" | "c" | "d" | "e" | "f";
 type NoteString = `${NoteStringTone}${NoteStringOctave}`;
 
 export interface Note {
@@ -75,8 +75,8 @@ export interface ChannelSettings {
     lobby?: boolean;
     crownsolo?: boolean;
     owner_id?: string;
-    'no cussing'?: boolean;
-    'lyrical notes'?: boolean;
+    "no cussing"?: boolean;
+    "lyrical notes"?: boolean;
 }
 
 export interface Channel {
@@ -95,55 +95,59 @@ export interface Message {
     timestamp?: number;
 }
 
+export interface AnyMPPMessage {
+    m: string;
+}
+
 export interface ChatMessage extends Message {
-    type: 'chat';
+    type: "chat";
     sender: Participant;
     message: string;
     platform: string;
     original_channel?: string; //* for discord
-    original_message?: any;
+    original_message?: AnyMPPMessage;
     prefix?: Prefix;
 }
 
 export interface HeartbeatMessage extends Message {
-    type: 'heartbeat';
+    type: "heartbeat";
     timestamp: number;
     foreign_timestamp?: number;
 }
 
 export interface ConnectionMessage extends Message {
-    type: 'connection';
+    type: "connection";
     received_user: User;
     motd: string;
     version: string | number;
 }
 
 export interface ChannelUpdateMessage extends Message {
-    type: 'channel_update';
+    type: "channel_update";
     channel: Channel;
 }
 
 export interface ChannelSettingsMessage extends Message {
-    type: 'channel_settings';
+    type: "channel_settings";
     set: ChannelSettings;
 }
 
 export interface ChannelListMessage extends Message {
-    type: 'channel_list';
+    type: "channel_list";
     complete: boolean;
     channels: Channel[];
 }
 
 export interface ChannelListSubscribeMessage extends Message {
-    type: 'channel_list_subscribe';
+    type: "channel_list_subscribe";
 }
 
 export interface ChannelListUnsubscribeMessage extends Message {
-    type: 'channel_list_unsubscribe';
+    type: "channel_list_unsubscribe";
 }
 
 export interface LogMessage extends Message {
-    type: 'log';
+    type: "log";
     args: any[];
 }
 
@@ -161,35 +165,37 @@ export interface Vector3 extends Vector2 {
 }
 
 export interface CursorMessage extends Message {
-    type: 'cursor';
+    type: "cursor";
     position: Vector2;
 }
 
 export interface NoteMessage extends Message {
-    type: 'note';
+    type: "note";
     notes: Note[];
 }
 
 export interface ChatDirectMessage extends Message {
-    type: 'direct_message';
+    type: "direct_message";
     message: string;
     _id: string;
 }
 
 //? maybe use this as "admin"-only message type?
 export interface RootMessage extends Message {
-    type: 'root';
+    type: "root";
     message: Message;
 }
 
 export interface CommandMessage extends Message {
-    type: 'command';
+    type: "command";
     argv: string[];
     sender: User;
+    original_message: ChatMessage;
+    prefix: Prefix;
 }
 
 export interface BehaviorMessage extends Message {
-    type: 'behavior';
+    type: "behavior";
     argv: string[];
     sender: User;
 }
@@ -233,7 +239,7 @@ export interface Season {
 }
 
 export interface SeasonMessage extends Message, Season {
-    type: 'season';
+    type: "season";
 }
 
 export interface Holiday {
@@ -242,7 +248,7 @@ export interface Holiday {
     timestamp: Timestamp;
 }
 
-export interface RangeHoliday extends Omit<Holiday, 'timestamp'> {
+export interface RangeHoliday extends Omit<Holiday, "timestamp"> {
     start: Timestamp;
     end: Timestamp;
 }

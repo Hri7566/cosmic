@@ -1,8 +1,8 @@
 /**
  * COSMIC PROJECT
- * 
+ *
  * Cosmic command handler module
- * 
+ *
  * Command loader and interface
  */
 
@@ -10,20 +10,25 @@
  * Global module imports
  */
 
-const { EventEmitter } = require('events');
-const YAML = require('yaml');
-const path = require('path');
-const fs = require('fs');
+import { EventEmitter } from "events";
+import * as YAML from "yaml";
+import * as path from "path";
+import * as fs from "fs";
 
 /**
  * Local module imports
  */
 
-const { Message, CommandMessage, Prefix, PermissionGroupIdentifier } = require('./CosmicTypes');
-const { CosmicClient } = require('./CosmicClient');
-const { CosmicUtil } = require('./CosmicUtil');
-const { CosmicLogger, magenta } = require('./CosmicLogger');
-const { CosmicData } = require('./CosmicData');
+import type {
+    CommandMessage,
+    Prefix,
+    PermissionGroupIdentifier,
+    ChatMessage,
+} from "./util/CosmicTypes";
+import { CosmicClient } from "./CosmicClient";
+import { CosmicUtil } from "./util/CosmicUtil";
+import { CosmicLogger, magenta } from "./CosmicLogger";
+import { CosmicData } from "./CosmicData";
 
 /**
  * Module-level declarations
@@ -34,18 +39,33 @@ export interface CommandGroup {
     displayName: string;
 }
 
+export type CommandCallback = (
+    msg: CommandMessage,
+    cl: CosmicClient
+) => Promise<string> | string | undefined;
+
 export class Command {
     public id: string;
     public accessors: string[];
     public usage: string;
     public description: string;
-    public permissionGroups: Array<typeof PermissionGroupIdentifier>;
+    public permissionGroups: Array<PermissionGroupIdentifier>;
     public commandGroup: string;
     public visible: boolean;
-    public callback: (msg: typeof Message, cl: typeof CosmicClient) => Promise<string> | string | undefined;
+    public callback: CommandCallback;
     public platform: string;
 
-    constructor(id: string, accessors: string[], usage: string = 'No usage', description: string | 'No description', permissionGroups: string[], visible: boolean, commandGroup: string, callback: (msg: typeof Message, cl: typeof CosmicClient) => Promise<string> | string | undefined, platform?: string) {
+    constructor(
+        id: string,
+        accessors: string[],
+        usage: string = "No usage",
+        description: string | "No description",
+        permissionGroups: string[],
+        visible: boolean,
+        commandGroup: string,
+        callback: CommandCallback,
+        platform?: string
+    ) {
         this.id = id;
         this.accessors = accessors;
         this.usage = usage;
@@ -54,7 +74,7 @@ export class Command {
         this.visible = visible;
         this.commandGroup = commandGroup;
         this.callback = callback;
-        this.platform = platform || 'all';
+        this.platform = platform || "all";
     }
 
     /**
@@ -63,7 +83,7 @@ export class Command {
      * @param prefix Prefix
      */
     public static replaceUsageVars(usage: string, prefix: string): string {
-        return usage.split('%PREFIX%').join(prefix);
+        return usage.split("%PREFIX%").join(prefix);
     }
 }
 
@@ -73,28 +93,34 @@ class CosmicCommandHandler {
     public static once = EventEmitter.prototype.once;
     public static emit = EventEmitter.prototype.emit;
 
-    public static prefixes: typeof Prefix[] = [];
+    public static prefixes: Prefix[] = [];
     public static commands: Array<Command> = [];
 
-    public static logger: typeof CosmicLogger = new CosmicLogger('Command Handler', magenta);
+    public static logger: CosmicLogger = new CosmicLogger(
+        "Command Handler",
+        magenta
+    );
 
     public static commandGroups: Array<CommandGroup> = [
-        { id: 'info', displayName: '🌠 Info Commands' },
-        { id: 'fun', displayName: '🎆 Fun Commands' },
-        { id: 'cake', displayName: '🎂 Cake Commands' }
-    ]
+        { id: "info", displayName: "🌠 Info Commands" },
+        { id: "fun", displayName: "🎆 Fun Commands" },
+        { id: "cake", displayName: "🎂 Cake Commands" },
+    ];
 
     /**
      * Check a chat message for commands
      * @param cmsg Chat message
      */
-     public static async checkCommand(cmsg: typeof Message, cl: typeof CosmicClient): Promise<void> {
-        let msg: typeof CommandMessage = {
-            type: 'command',
-            argv: cmsg.message.split(' '),
+    public static async checkCommand(
+        cmsg: ChatMessage,
+        cl: CosmicClient
+    ): Promise<void> {
+        let msg: Partial<CommandMessage> = {
+            type: "command",
+            argv: cmsg.message.split(" "),
             sender: cmsg.sender,
             timestamp: cmsg.timestamp,
-            original_message: cmsg
+            original_message: cmsg,
         };
 
         // check prefix
@@ -115,8 +141,7 @@ class CosmicCommandHandler {
             let enteredCommand = msg.argv[0].substring(prefix.prefix.length);
             let pass = false;
 
-            accessorLoop:
-            for (let acc of cmd.accessors) {
+            accessorLoop: for (let acc of cmd.accessors) {
                 // console.debug('Comparing:', enteredCommand, acc);
                 if (acc == enteredCommand) {
                     pass = true;
@@ -128,7 +153,7 @@ class CosmicCommandHandler {
             const groups = await CosmicData.getGroups(msg.sender._id);
 
             let hasPerms = false;
-            
+
             for (let g of cmd.permissionGroups) {
                 if (groups.groups.indexOf(g) !== -1) hasPerms = true;
             }
@@ -136,34 +161,39 @@ class CosmicCommandHandler {
             if (!pass || !hasPerms) continue;
 
             // check platform
-            if (cmd.platform !== cl.platform && cmd.platform !== 'all') continue;
+            if (cmd.platform !== cl.platform && cmd.platform !== "all")
+                continue;
 
             let out;
-            
+
             try {
-                out = await cmd.callback(msg, cl);
+                out = await cmd.callback(msg as CommandMessage, cl);
             } catch (err) {
-                if (err == 'usage') {
-                    let usage = Command.replaceUsageVars(cmd.usage, msg.prefix.prefix);
+                if (err == "usage") {
+                    let usage = Command.replaceUsageVars(
+                        cmd.usage,
+                        msg.prefix.prefix
+                    );
                     out = `Usage: ${usage}`;
                 } else {
                     this.logger.error(err);
-                    out = 'The cosmos have misaligned and an error has occurred, sorry for the inconvenience.';
+                    out =
+                        "The cosmos have misaligned and an error has occurred, sorry for the inconvenience.";
                 }
             }
 
             if (out) {
-                if (typeof out !== 'string') return;
+                if (typeof out !== "string") return;
                 out = out.trim();
-                if (out == '') return;
-                cl.emit('send chat message', {
-                    type: 'chat',
+                if (out == "") return;
+                cl.emit("send chat message", {
+                    type: "chat",
                     sender: {
-                        name: 'internal',
-                        _id: 'internal',
-                        color: '#ffffff'
+                        name: "internal",
+                        _id: "internal",
+                        color: "#ffffff",
                     },
-                    dm: cmsg.original_channel.dm_id,
+                    dm: cmsg.original_channel,
                     message: out,
                     timestamp: Date.now(),
                 });
@@ -177,7 +207,7 @@ class CosmicCommandHandler {
      * Check a string for prefixes
      * @param str Input string
      */
-    public static hasPrefix(str: string): typeof Prefix | undefined {
+    public static hasPrefix(str: string): Prefix | undefined {
         for (let p of this.prefixes) {
             if (CosmicUtil.stringHasPrefix(str, p.prefix)) return p;
         }
@@ -195,21 +225,21 @@ class CosmicCommandHandler {
     }
 }
 
-const prefixConfigFile = fs.readFileSync(path.resolve(__dirname, '../../config/prefixes.yml')).toString();
+const prefixConfigFile = fs
+    .readFileSync(path.resolve(__dirname, "../../config/prefixes.yml"))
+    .toString();
 const prefixes = YAML.parse(prefixConfigFile);
 
 for (let pre of prefixes.global) {
     CosmicCommandHandler.prefixes.push({
-        prefix: pre
+        prefix: pre,
     });
 }
 
-require('./CosmicCommands');
+require("./commands/CosmicCommands");
 
 /**
  * Module exports
  */
 
-export {
-    CosmicCommandHandler
-}
+export { CosmicCommandHandler };

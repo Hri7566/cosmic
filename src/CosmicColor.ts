@@ -1,12 +1,12 @@
 /**
  * COSMIC PROJECT
- * 
+ *
  * Color module
  * This module was originally written by Brandon Lockaby circa 2012.
  * It was released under GPL3 along with the rest of the site files
  * with permission from the new owner. It has been repurposed for use
  * here to get the names of colors.
- * 
+ *
  * I was given explicit permission to use this module in private
  * projects.
  */
@@ -19,27 +19,28 @@ export class CosmicColor {
     r: number | undefined;
     g: number | undefined;
     b: number | undefined;
-    
+
     constructor(...args: number[] | string[]) {
         let r: number;
         let g: number;
         let b: number;
-        
+
         if (args.length === 1) {
             let hexa = (args[0] as string).toLowerCase();
 
             if (hexa.match(/^#[0-9a-f]{6}$/i)) {
-                (hexa as any) = /^#?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i.exec(hexa);
-                if(hexa && hexa.length === 4) {
+                (hexa as any) =
+                    /^#?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i.exec(hexa);
+                if (hexa && hexa.length === 4) {
                     r = parseInt(hexa[1], 16);
                     g = parseInt(hexa[2], 16);
                     b = parseInt(hexa[3], 16);
                 }
             }
         } else if (args.length === 3) {
-            r = (args[0] as number);
-            g = (args[1] as number);
-            b = (args[2] as number);
+            r = args[0] as number;
+            g = args[1] as number;
+            b = args[2] as number;
         }
 
         this.r = ~~r || 0;
@@ -67,7 +68,7 @@ export class CosmicColor {
         this.r += r;
         this.g += g;
         this.b += b;
-        
+
         if (this.r < 0) {
             this.r = 0;
         } else if (this.r > 255) {
@@ -75,7 +76,7 @@ export class CosmicColor {
         }
 
         if (this.g < 0) {
-            this.g = 0
+            this.g = 0;
         } else if (this.g > 255) {
             this.g = 255;
         }
@@ -96,7 +97,7 @@ export class CosmicColor {
         if (g.length == 1) g = "0" + g;
         if (b.length == 1) b = "0" + b;
 
-        return "#"+r+g+b;
+        return "#" + r + g + b;
     }
 
     getName(): string {
@@ -107,13 +108,17 @@ export class CosmicColor {
             if (!CosmicColor.map.hasOwnProperty(n)) {
                 continue;
             }
-            
+
             const color: any = CosmicColor.map[n];
 
-            if (color.r === this.r && color.g === this.g && color.b === this.b) {
+            if (
+                color.r === this.r &&
+                color.g === this.g &&
+                color.b === this.b
+            ) {
                 return n;
             }
-            
+
             const dist = this.distance(color);
             if (dist < low) {
                 low = dist;
@@ -126,7 +131,7 @@ export class CosmicColor {
         } else {
             name = "A shade of " + name;
         }
-        
+
         return name;
     }
 }

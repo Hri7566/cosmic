@@ -1,47 +1,47 @@
 /**
  * COSMIC PROJECT
- * 
+ *
  * Express API module
- * 
+ *
  * This is a mess.
  */
 
 import { readFile, readFileSync } from "fs";
 import { dirname, resolve } from "path";
-import * as http from 'http';
-import * as https from 'https';
+import * as http from "http";
+import * as https from "https";
 import { CosmicClientHandler } from "../CosmicClientHandler";
 import { Cosmic } from "../Cosmic";
 import { CosmicShop } from "../shop/CosmicShop";
 import { CosmicSeasonDetection } from "../util/CosmicSeasonDetection";
 import { CosmicUtil } from "../util/CosmicUtil";
 import * as YAML from "yaml";
-import EventEmitter = require("events");
-import crypto = require('crypto');
+import { EventEmitter } from "events";
+import * as crypto from "crypto";
 import { CosmicAPIWebSocketClient } from "./CosmicAPIWebSocketClient";
-import { CosmicData } from '../CosmicData';
+import { CosmicData } from "../CosmicData";
 
-const express = require('express');
-const path = require('path');
-const WebSocket = require('ws');
-const { CosmicLogger, yellow } = require('./CosmicLogger');
+import * as express from "express";
+import * as path from "path";
+import { WebSocket, WebSocketServer } from "ws";
+import { CosmicLogger, yellow } from "../CosmicLogger";
 
 const PORT = process.env.PORT || 3000;
-const SSL = process.env.SSL || 'false';
+const SSL = process.env.SSL || "false";
 
 let cert;
 let key;
 
-if (SSL == 'true') {
+if (SSL == "true") {
     try {
-        cert = readFileSync(resolve(__dirname, '../../ssl/cert.pem'));
+        cert = readFileSync(resolve(__dirname, "../../ssl/cert.pem"));
     } catch (err) {
         console.error(`Couldn't load SSL certificate:`, err);
         process.exit(4);
     }
 
     try {
-        key = readFileSync(resolve(__dirname, '../../ssl/key.pem'));
+        key = readFileSync(resolve(__dirname, "../../ssl/key.pem"));
     } catch (err) {
         console.error(`Couldn't read SSL key:`, err);
         process.exit(5);
@@ -49,41 +49,45 @@ if (SSL == 'true') {
 }
 
 class CosmicAPI {
-    public static logger = new CosmicLogger('Cosmic API', yellow);
+    public static logger = new CosmicLogger("Cosmic API", yellow);
 
     public static app = express();
     public static api = express.Router();
     public static server: http.Server;
-    public static wss: typeof WebSocket.Server;
+    public static wss: WebSocketServer;
     public static wsClients = [];
     public static keyLimit = 5;
     public static permissionGroups: Record<string, Record<string, boolean>>;
 
     public static validPermissions = {
-        'canSetPermissions': 'boolean',
-        'canSetAllPermissions': 'boolean',
-        'canGenerateKeys': 'boolean',
-        'canGenerateInfiniteKeys': 'boolean',
-    }
+        canSetPermissions: "boolean",
+        canSetAllPermissions: "boolean",
+        canGenerateKeys: "boolean",
+        canGenerateInfiniteKeys: "boolean",
+    };
 
     public static messages = {
         ERROR_PERMISSION_DENIED: {
-            error: 'Permission denied'
-        }
-    }
+            error: "Permission denied",
+        },
+    };
 
     public static start() {
-        this.logger.log('Starting...');
+        this.logger.log("Starting...");
 
         //* use req.ip
-        this.app.set('trust proxy', true);
+        this.app.set("trust proxy", true);
 
         this.setupRoutes();
-        
-        if (SSL == 'true') {
-            this.server = https.createServer({
-                cert, key
-            }, this.app);
+
+        if (SSL == "true") {
+            this.server = https.createServer(
+                {
+                    cert,
+                    key,
+                },
+                this.app
+            );
         } else {
             this.server = http.createServer(this.app);
         }
@@ -91,28 +95,30 @@ class CosmicAPI {
             this.logger.log(`Listening on port ${PORT}`);
         });
 
-        this.wss = new WebSocket.Server({
-            noServer: true
+        this.wss = new WebSocketServer({
+            noServer: true,
             // server: this.server
         });
 
-        this.server.on('upgrade', (req, socket, head) => {
+        this.server.on("upgrade", (req, socket, head) => {
             this.wss.handleUpgrade(req, socket, head, ws => {
-                this.wss.emit('connection', ws, req);
-            })
-        });
-
-        this.server.on('connection', sock => {
-            sock.on('data', d => {
-                try {
-                    // console.log(d.toString());
-                } catch (err) {};
+                this.wss.emit("connection", ws, req);
             });
         });
 
-        this.wss.on('error', (err: Error) => { this.logger.error(err) });
+        this.server.on("connection", sock => {
+            sock.on("data", d => {
+                try {
+                    // console.log(d.toString());
+                } catch (err) {}
+            });
+        });
 
-        this.wss.on('connection', (ws: WebSocket, req: http.ClientRequest) => {
+        this.wss.on("error", (err: Error) => {
+            this.logger.error(err);
+        });
+
+        this.wss.on("connection", (ws: WebSocket, req: http.ClientRequest) => {
             // console.log('websocket connection');
             // let cl: {
             //     ws: WebSocket;
@@ -133,9 +139,9 @@ class CosmicAPI {
     }
 
     public static stop() {
-        this.logger.log('Stopping server...');
+        this.logger.log("Stopping server...");
         this.server.close();
-        this.logger.log('Stopped.');
+        this.logger.log("Stopped.");
     }
 
     public static addClient(cl: CosmicAPIWebSocketClient): void {
@@ -165,7 +171,10 @@ class CosmicAPI {
         }
     }
 
-    public static permissionIsValid(permissionName: string, value: any): boolean {
+    public static permissionIsValid(
+        permissionName: string,
+        value: any
+    ): boolean {
         for (let key of Object.keys(this.validPermissions)) {
             let type = this.validPermissions[key];
             if (permissionName !== key) continue;
@@ -183,7 +192,10 @@ class CosmicAPI {
         return true;
     }
 
-    public static async permissionGroupHasPermission(grp: string, permission: string): Promise<boolean> {
+    public static async permissionGroupHasPermission(
+        grp: string,
+        permission: string
+    ): Promise<boolean> {
         let group = this.permissionGroups[grp];
         if (!group) return false;
 
@@ -193,12 +205,12 @@ class CosmicAPI {
 
         for (let perm of Object.keys(group as any)) {
             if (perm == permission) {
-                if (this.validPermissions[perm] == 'boolean') {
+                if (this.validPermissions[perm] == "boolean") {
                     if (group[perm] == true) {
                         hasPermission = true;
                         break;
                     }
-                } else if (typeof this.validPermissions[perm] == 'function') {
+                } else if (typeof this.validPermissions[perm] == "function") {
                     try {
                         if (this.validPermissions[perm]()) {
                             hasPermission = true;
@@ -215,18 +227,24 @@ class CosmicAPI {
         return hasPermission;
     }
 
-    public static async hasPermission(ip: string, permission: string): Promise<boolean> {
+    public static async hasPermission(
+        ip: string,
+        permission: string
+    ): Promise<boolean> {
         let permissions = await CosmicData.getAPIPermissions(ip);
         let permissionGroups = await CosmicData.getAPIPermissionGroups(ip);
 
         if (!permissions) return false;
 
         let hasPermission = false;
-        
+
         if (permissionGroups) {
             // check group permission
             for (let group of permissionGroups) {
-                hasPermission = await this.permissionGroupHasPermission(group, permission);
+                hasPermission = await this.permissionGroupHasPermission(
+                    group,
+                    permission
+                );
                 if (hasPermission) break;
             }
         }
@@ -234,12 +252,12 @@ class CosmicAPI {
         // check normal permissions
         for (let perm of permissions) {
             if (perm == permission) {
-                if (this.validPermissions[perm] == 'boolean') {
+                if (this.validPermissions[perm] == "boolean") {
                     if (perm == true) {
                         hasPermission = true;
                         break;
                     }
-                } else if (typeof this.validPermissions[perm] == 'function') {
+                } else if (typeof this.validPermissions[perm] == "function") {
                     try {
                         if (this.validPermissions[perm]()) {
                             hasPermission = true;
@@ -257,22 +275,22 @@ class CosmicAPI {
     }
 
     private static setupRoutes(): void {
-        this.api.get('/', async (req, res) => {
+        this.api.get("/", async (req, res) => {
             res.json({
-                status: 'online',
+                status: "online",
                 environment: process.env.NODE_ENV,
                 clients: CosmicClientHandler.getClientCount(),
-                uptime: Date.now() - Cosmic.startTime
+                uptime: Date.now() - Cosmic.startTime,
             });
         });
 
-        this.api.get('/uptime', async (req, res) => {
+        this.api.get("/uptime", async (req, res) => {
             res.json({
-                uptime: Date.now() - Cosmic.startTime
+                uptime: Date.now() - Cosmic.startTime,
             });
         });
 
-        this.api.get('/users', async (req, res) => {
+        this.api.get("/users", async (req, res) => {
             const cursor = await CosmicData.users.find();
             let users = [];
 
@@ -283,12 +301,12 @@ class CosmicAPI {
             res.json(users);
         });
 
-        this.api.get('/user', async (req, res) => {
+        this.api.get("/user", async (req, res) => {
             if (!req.query.id) return;
             let user = await CosmicData.getUser(req.query.id);
             if (!user) {
                 res.json({
-                    error: 'user not found'
+                    error: "user not found",
                 });
             } else {
                 res.json(user);
@@ -300,38 +318,44 @@ class CosmicAPI {
             let inventory = await CosmicData.getInventory(req.query.id);
             if (!inventory) {
                 res.json({
-                    error: 'inventory not found'
+                    error: "inventory not found",
                 });
             } else {
                 res.json(inventory);
             }
         });
 
-        this.api.get('/shop', async (req, res) => {
+        this.api.get("/shop", async (req, res) => {
             res.json(CosmicShop.getListings());
         });
 
-        this.api.get('/season', async (req, res) => {
+        this.api.get("/season", async (req, res) => {
             res.json({
                 season: CosmicSeasonDetection.getSeason(req.query.t),
-                holiday: CosmicSeasonDetection.getHoliday(req.query.t)
+                holiday: CosmicSeasonDetection.getHoliday(req.query.t),
             });
         });
 
-        this.api.get('/utilget', async (req, res) => {
+        this.api.get("/utilget", async (req, res) => {
             res.json(CosmicUtil.get(req.key, req._id));
         });
 
-        this.api.get('/genkey', async (req, res) => {
+        this.api.get("/genkey", async (req, res) => {
             await CosmicData.createAPIKeyProfile(req.ip);
 
             let canGenerateKey = false;
-            canGenerateKey = await this.hasPermission(req.ip, 'canGenerateKeys');
+            canGenerateKey = await this.hasPermission(
+                req.ip,
+                "canGenerateKeys"
+            );
 
-            let canGenerateInfiniteKeys = await this.hasPermission(req.ip, 'canGenerateInfiniteKeys');
+            let canGenerateInfiniteKeys = await this.hasPermission(
+                req.ip,
+                "canGenerateInfiniteKeys"
+            );
             if (!canGenerateInfiniteKeys) {
                 let keys = await CosmicData.getAPIKeys(req.ip);
-                if (typeof keys !== 'undefined') {
+                if (typeof keys !== "undefined") {
                     let amountOfKeys = keys.length;
                     if (amountOfKeys > this.keyLimit) canGenerateKey = false;
                 }
@@ -339,9 +363,9 @@ class CosmicAPI {
 
             if (!canGenerateKey) {
                 return res.json({
-                    error: 'Key request denied',
+                    error: "Key request denied",
                     canGenerateKey,
-                    ip: req.ip
+                    ip: req.ip,
                 });
             }
 
@@ -354,37 +378,37 @@ class CosmicAPI {
             res.json({
                 key: key,
                 canGenerateKey,
-                ip: req.ip
+                ip: req.ip,
             });
         });
 
-        this.api.get('/wipekeys', async (req, res) => {
+        this.api.get("/wipekeys", async (req, res) => {
             let result = await CosmicData.removeAllAPIKeys(req.ip);
             res.json({ result });
         });
 
-        this.api.get('/keyprofile', async (req, res) => {
+        this.api.get("/keyprofile", async (req, res) => {
             let result = await CosmicData.getAPIKeyProfile(req.ip);
             res.json({ result });
         });
-        
-        this.api.get('/tool', async (req, res) => {
+
+        this.api.get("/tool", async (req, res) => {
             let answers: any = {
                 // 'What?': `I don't know`,
-                'Where am I?': `Under the Newmaker Plane`,
-                'Who am I?': `Newmaker`,
-                'Who are you?': `TOOL`,
-                'Remember being born?': `I'm not Tiara`,
-                'Where is my house?': `You'll never go home`,
-                'Where is the school?': `You can't go back in time`,
-                'What month is it?': `📅`,
-                'What year is it?': `📆`,
-                'Where was the windmill?': `█████`
-            }
+                "Where am I?": `Under the Newmaker Plane`,
+                "Who am I?": `Newmaker`,
+                "Who are you?": `TOOL`,
+                "Remember being born?": `I'm not Tiara`,
+                "Where is my house?": `You'll never go home`,
+                "Where is the school?": `You can't go back in time`,
+                "What month is it?": `📅`,
+                "What year is it?": `📆`,
+                "Where was the windmill?": `█████`,
+            };
 
-            if (!req.query.q) req.query.q = 'What?';
+            if (!req.query.q) req.query.q = "What?";
 
-            if (!req.query.q.endsWith('?')) req.query.q = `${req.query.q}?`;
+            if (!req.query.q.endsWith("?")) req.query.q = `${req.query.q}?`;
             // req.query.q = `${req.query.q.substring(0, 1).toUpperCase()}${req.query.q.substring(1).toLowerCase()}`;
 
             let answer = `I don't know`;
@@ -395,14 +419,14 @@ class CosmicAPI {
                     break;
                 }
             }
-            
+
             res.json(answer);
         });
 
         this.api.get(/\/set(permission|perm)/, async (req, res) => {
             if (!(await this.verifyKey(req))) return;
 
-            if (!(await this.hasPermission(req.ip, 'canSetPermissions'))) {
+            if (!(await this.hasPermission(req.ip, "canSetPermissions"))) {
                 res.json(this.messages.ERROR_PERMISSION_DENIED);
                 return;
             }
@@ -410,7 +434,7 @@ class CosmicAPI {
             let perm = req.query.permission;
             if (!perm) {
                 res.json({
-                    error: 'No permission'
+                    error: "No permission",
                 });
 
                 return;
@@ -419,7 +443,7 @@ class CosmicAPI {
             let value = req.query.value;
             if (!value) {
                 res.json({
-                    error: 'No value'
+                    error: "No value",
                 });
 
                 return;
@@ -427,7 +451,7 @@ class CosmicAPI {
 
             if (!this.permissionIsValid(perm, value)) {
                 res.json({
-                    error: 'Invalid permission'
+                    error: "Invalid permission",
                 });
 
                 return;
@@ -437,7 +461,7 @@ class CosmicAPI {
             if (!given_ip) {
                 given_ip = req.ip;
             } else {
-                if (!this.hasPermission(req.ip, 'canChangeAllPermissions')) {
+                if (!this.hasPermission(req.ip, "canChangeAllPermissions")) {
                     res.json(this.messages.ERROR_PERMISSION_DENIED);
                 }
             }
@@ -455,55 +479,65 @@ class CosmicAPI {
 
         this.api.get(/\/get(permission|perm)/, (req, res) => {
             return res.json({
-                error: 'unfinished'
+                error: "unfinished",
             });
         });
 
-        this.api.get('*', async (req, res) => {
+        this.api.get("*", async (req, res) => {
             // res.status(404).json({ error: 'SORRY NOTHING' });
-            res.status(404).json({ error: 'invalid request' });
+            res.status(404).json({ error: "invalid request" });
         });
-        
-        this.app.use(express.static(path.resolve(__dirname, '../../frontend')));
-        this.app.use('/assets', express.static(path.resolve(__dirname, '../../assets')));
-        this.app.use('/api', this.api);
-        
-        this.app.get('*', (req, res) => {
-            readFile(resolve(__dirname, '../../frontend/index.html'), (err, data) => {
-                if (err) {
-                    res.status(502).end('oops');
-                    return;
-                }
 
-                try {
-                    res.send(data.toString());
-                } catch (err) {
-                    res.status(502).end('really bad things happened :(');
+        this.app.use(express.static(path.resolve(__dirname, "../../frontend")));
+        this.app.use(
+            "/assets",
+            express.static(path.resolve(__dirname, "../../assets"))
+        );
+        this.app.use("/api", this.api);
+
+        this.app.get("*", (req, res) => {
+            readFile(
+                resolve(__dirname, "../../frontend/index.html"),
+                (err, data) => {
+                    if (err) {
+                        res.status(502).end("oops");
+                        return;
+                    }
+
+                    try {
+                        res.send(data.toString());
+                    } catch (err) {
+                        res.status(502).end("really bad things happened :(");
+                    }
                 }
-            });
+            );
         });
     }
 }
 
 try {
-    CosmicAPI.permissionGroups = YAML.parse(readFileSync(resolve(__dirname, '../../config/apiPermissionGroups.yml')).toString());
+    CosmicAPI.permissionGroups = YAML.parse(
+        readFileSync(
+            resolve(__dirname, "../../../config/apiPermissionGroups.yml")
+        ).toString()
+    );
 } catch (err) {
-    CosmicAPI.logger.error('Unable to read permission group configuration, using default configuration instead');
-    
+    CosmicAPI.logger.error(
+        "Unable to read permission group configuration, using default configuration instead"
+    );
+
     CosmicAPI.permissionGroups = {
-        'default': {
-            'canSetPermissions': false,
-            'canSetAllPermissions': false,
-            'canGenerateKey': false
+        default: {
+            canSetPermissions: false,
+            canSetAllPermissions: false,
+            canGenerateKey: false,
         },
-        'admin': {
-            'canSetPermissions': true,
-            'canSetAllPermissions': true,
-            'canGenerateKey': true
-        }
-    }
+        admin: {
+            canSetPermissions: true,
+            canSetAllPermissions: true,
+            canGenerateKey: true,
+        },
+    };
 }
 
-export {
-    CosmicAPI
-}
+export { CosmicAPI };

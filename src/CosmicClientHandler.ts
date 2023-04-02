@@ -1,17 +1,17 @@
 /**
  * COSMIC PROJECT
- * 
+ *
  * Cosmic client handler
- * 
+ *
  * Loader for CosmicClient-type modules
  */
 
 /**
  * Local module imports
-*/
+ */
 
 import { CosmicLogger, red } from "./CosmicLogger";
-import { CosmicClient, ChannelConstructionPreset } from './CosmicClient';
+import { CosmicClient, ChannelConstructionPreset } from "./CosmicClient";
 import { CosmicClientMPP } from "./MPP/CosmicClientMPP";
 import { CosmicClientDiscord } from "./Discord/CosmicClientDiscord";
 import { Cosmic } from "./Cosmic";
@@ -26,13 +26,16 @@ const DISCORD_TOKEN: string = process.env.DISCORD_TOKEN;
 
 type CosmicClientList = {
     [key: string]: typeof CosmicClient;
-}
+};
 
 class CosmicClientHandler {
     private static clients = [];
-    public static logger = new CosmicLogger('Client Handler', red);
+    public static logger = new CosmicLogger("Client Handler", red);
 
-    public static startMPPClient(uri: string, channel: ChannelConstructionPreset): CosmicClient {
+    public static startMPPClient(
+        uri: string,
+        channel: ChannelConstructionPreset
+    ): CosmicClient {
         if (this.clients.length > MPP_HARD_CLIENT_LIMIT) return;
 
         let cl = new CosmicClientMPP(uri, channel, MPPCLONE_TOKEN);
@@ -52,11 +55,11 @@ class CosmicClientHandler {
 
     public static startDiscordClient(): void {
         let cl = new CosmicClientDiscord();
-        
+
         cl.start(DISCORD_TOKEN);
-        
+
         this.clients.push(cl);
-        Cosmic.emit('client started', cl);
+        Cosmic.emit("client started", cl);
     }
 
     public static getClientCount(): number {
@@ -68,6 +71,4 @@ class CosmicClientHandler {
  * Module export
  */
 
-export {
-    CosmicClientHandler
-}
+export { CosmicClientHandler };
