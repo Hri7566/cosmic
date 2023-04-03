@@ -15,6 +15,7 @@ import { CosmicClient, ChannelConstructionPreset } from "./CosmicClient";
 import { CosmicClientMPP } from "./MPP/CosmicClientMPP";
 import { CosmicClientDiscord } from "./Discord/CosmicClientDiscord";
 import { Cosmic } from "./Cosmic";
+import { CosmicClientStdin } from "./stdin/CosmicClientStdin";
 
 /**
  * Module-level declarations
@@ -57,6 +58,15 @@ class CosmicClientHandler {
         let cl = new CosmicClientDiscord();
 
         cl.start(DISCORD_TOKEN);
+
+        this.clients.push(cl);
+        Cosmic.emit("client started", cl);
+    }
+
+    public static startStdinClient(): void {
+        let cl = new CosmicClientStdin();
+
+        cl.start();
 
         this.clients.push(cl);
         Cosmic.emit("client started", cl);

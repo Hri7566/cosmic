@@ -28,13 +28,20 @@ import { CosmicAPI } from "./api/CosmicAPI";
  * Module-level declarations
  */
 
-const ENABLE_MPP = process.env.ENABLE_MPP || "true";
-const ENABLE_DISCORD = process.env.ENABLE_DISCORD || "true";
+// const ENABLE_MPP = process.env.ENABLE_MPP || "true";
+// const ENABLE_DISCORD = process.env.ENABLE_DISCORD || "true";
 
-const channelsFile = fs
-    .readFileSync(path.resolve(__dirname, "../../config/mpp_channels.yml"))
-    .toString();
+const channelsFile = fs.readFileSync("config/mpp_channels.yml").toString();
 const channels = YAML.parse(channelsFile);
+
+interface ServicesConfig {
+    enablestdin: boolean;
+    enableDiscord: boolean;
+    enableMPP: boolean;
+}
+
+const servicesFile = fs.readFileSync("config/services.yml").toString();
+const services: ServicesConfig = YAML.parse(servicesFile);
 
 class Cosmic {
     get [Symbol.toStringTag]() {
@@ -69,15 +76,19 @@ class Cosmic {
 
         this.logger.log("Starting clients...");
 
-        if (ENABLE_MPP == "true") {
+        if (services.enableMPP) {
             this.startMPPClients();
         }
 
-        if (ENABLE_DISCORD == "true") {
+        if (services.enableDiscord) {
             CosmicClientHandler.startDiscordClient();
         }
 
         CosmicAPI.start();
+
+        if (services.enablestdin) {
+            CosmicClientHandler.startStdinClient();
+        }
 
         this.emit("ready");
     }
