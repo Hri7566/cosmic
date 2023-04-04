@@ -341,10 +341,10 @@ class CosmicAPI {
         });
 
         this.api.get("/genkey", async (req, res) => {
-            await CosmicData.createAPIKeyProfile(req.ip);
+            await CosmicData.getAPIKeyProfile(req.ip);
 
-            let canGenerateKey = false;
-            canGenerateKey = await this.hasPermission(
+            let canGenerateKeys = false;
+            canGenerateKeys = await this.hasPermission(
                 req.ip,
                 "canGenerateKeys"
             );
@@ -357,14 +357,14 @@ class CosmicAPI {
                 let keys = await CosmicData.getAPIKeys(req.ip);
                 if (typeof keys !== "undefined") {
                     let amountOfKeys = keys.length;
-                    if (amountOfKeys > this.keyLimit) canGenerateKey = false;
+                    if (amountOfKeys > this.keyLimit) canGenerateKeys = false;
                 }
             }
 
-            if (!canGenerateKey) {
+            if (!canGenerateKeys) {
                 return res.json({
                     error: "Key request denied",
-                    canGenerateKey,
+                    canGenerateKey: canGenerateKeys,
                     ip: req.ip,
                 });
             }
@@ -377,7 +377,7 @@ class CosmicAPI {
 
             res.json({
                 key: key,
-                canGenerateKey,
+                canGenerateKey: canGenerateKeys,
                 ip: req.ip,
             });
         });
@@ -530,12 +530,12 @@ try {
         default: {
             canSetPermissions: false,
             canSetAllPermissions: false,
-            canGenerateKey: false,
+            canGenerateKeys: false,
         },
         admin: {
             canSetPermissions: true,
             canSetAllPermissions: true,
-            canGenerateKey: true,
+            canGenerateKeys: true,
         },
     };
 }
