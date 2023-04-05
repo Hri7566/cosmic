@@ -23,7 +23,7 @@ import type {
     CommandMessage,
     Prefix,
     PermissionGroupIdentifier,
-    ChatMessage,
+    ChatMessage
 } from "./util/CosmicTypes";
 import { CosmicClient } from "./CosmicClient";
 import { CosmicUtil } from "./util/CosmicUtil";
@@ -84,7 +84,7 @@ class CosmicCommandHandler {
     public static commandGroups: Array<CommandGroup> = [
         { id: "info", displayName: "🌠 Info Commands" },
         { id: "fun", displayName: "🎆 Fun Commands" },
-        { id: "cake", displayName: "🎂 Cake Commands" },
+        { id: "cake", displayName: "🎂 Cake Commands" }
     ];
 
     /**
@@ -100,7 +100,7 @@ class CosmicCommandHandler {
             argv: cmsg.message.split(" "),
             sender: cmsg.sender,
             timestamp: cmsg.timestamp,
-            original_message: cmsg,
+            original_message: cmsg
         };
 
         // check prefix
@@ -116,13 +116,10 @@ class CosmicCommandHandler {
 
         // console.debug('--------DEBUG--------');
         for (let cmd of this.commands) {
-            // console.log('** Loop start');
-            // console.log('Command ID:', cmd.id);
             let enteredCommand = msg.argv[0].substring(prefix.prefix.length);
             let pass = false;
 
             accessorLoop: for (let acc of cmd.accessors) {
-                // console.debug('Comparing:', enteredCommand, acc);
                 if (acc == enteredCommand) {
                     pass = true;
                     break accessorLoop;
@@ -166,16 +163,33 @@ class CosmicCommandHandler {
                 if (typeof out !== "string") return;
                 out = out.trim();
                 if (out == "") return;
+                if (cl.platform == "mpp") {
+                    if (msg.original_message.original_message.m == "dm") {
+                        cl.emit("send chat message", {
+                            type: "chat",
+                            sender: {
+                                name: "internal",
+                                _id: "internal",
+                                color: "#ffffff"
+                            },
+                            dm: cmsg.sender._id,
+                            message: out,
+                            timestamp: Date.now()
+                        });
+
+                        return;
+                    }
+                }
+
                 cl.emit("send chat message", {
                     type: "chat",
                     sender: {
                         name: "internal",
                         _id: "internal",
-                        color: "#ffffff",
+                        color: "#ffffff"
                     },
-                    dm: cmsg.original_channel,
                     message: out,
-                    timestamp: Date.now(),
+                    timestamp: Date.now()
                 });
             }
 
@@ -212,7 +226,7 @@ const prefixes = YAML.parse(prefixConfigFile);
 
 for (let pre of prefixes.global) {
     CosmicCommandHandler.prefixes.push({
-        prefix: pre,
+        prefix: pre
     });
 }
 

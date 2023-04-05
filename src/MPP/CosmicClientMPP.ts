@@ -85,10 +85,7 @@ export class CosmicClientMPP extends CosmicClientToken {
             // ffi broke :(
             // console.log(CosmicFFI.clib.red(msg.a));
 
-            msg.original_channel = {
-                _id: this.client.channel._id,
-                id: this.client.channel._id
-            };
+            msg.original_channel = this.client.channel._id;
 
             let newmsg = CosmicForeignMessageHandler.convertMessage(
                 "chat",
@@ -218,7 +215,8 @@ export class CosmicClientMPP extends CosmicClientToken {
             type: "chat",
             sender: this.client.getOwnParticipant(),
             platform: "mpp",
-            message: str.split("*").join("\\*").split("_").join("\\_")
+            // message: str.split("*").join("\\*").split("_").join("\\_")
+            message: `\u034f${str}`
         });
     }
 
