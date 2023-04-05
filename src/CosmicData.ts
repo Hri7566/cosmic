@@ -7,14 +7,14 @@
  */
 
 import { ObjectID } from "bson";
-import { Collection } from "mongodb";
+import { Collection, Db } from "mongodb";
 import { CosmicAPI } from "./api/CosmicAPI";
 
 /**
  * Global module imports
  */
 
-import { MongoClient } from "mongodb";
+import { MongoClient, Document } from "mongodb";
 
 /**
  * Local module imports
@@ -38,7 +38,7 @@ class CosmicData {
     public static client = new MongoClient(MONGODB_CONNECTION_URI);
     public static logger = new CosmicLogger("Cosmic Data", green);
 
-    public static db;
+    public static db: Db;
     public static users: Collection<User>;
     public static permissions: Collection;
     public static inventories: Collection<Inventory>;
@@ -1050,6 +1050,15 @@ class CosmicData {
             return true;
         } catch (err) {
             return false;
+        }
+    }
+
+    public static async getStats(): Promise<Document> {
+        try {
+            let res = await this.db.stats();
+            return res;
+        } catch (err) {
+            console.error(err);
         }
     }
 }

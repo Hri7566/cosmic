@@ -45,37 +45,17 @@ export type CommandCallback = (
 ) => Promise<string> | string | undefined;
 
 export class Command {
-    public id: string;
-    public accessors: string[];
-    public usage: string;
-    public description: string;
-    public permissionGroups: Array<PermissionGroupIdentifier>;
-    public commandGroup: string;
-    public visible: boolean;
-    public callback: CommandCallback;
-    public platform: string;
-
     constructor(
-        id: string,
-        accessors: string[],
-        usage: string = "No usage",
-        description: string | "No description",
-        permissionGroups: string[],
-        visible: boolean,
-        commandGroup: string,
-        callback: CommandCallback,
-        platform?: string
-    ) {
-        this.id = id;
-        this.accessors = accessors;
-        this.usage = usage;
-        this.description = description;
-        this.permissionGroups = permissionGroups;
-        this.visible = visible;
-        this.commandGroup = commandGroup;
-        this.callback = callback;
-        this.platform = platform || "all";
-    }
+        public id: string,
+        public accessors: string[],
+        public usage: string = "No usage",
+        public description: string = "No description",
+        public permissionGroups: string[],
+        public visible: boolean,
+        public commandGroup: string,
+        public callback: CommandCallback,
+        public platform: string = "all"
+    ) {}
 
     /**
      * Replace the placeholder text in command usage with actual text

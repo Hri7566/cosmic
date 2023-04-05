@@ -43,7 +43,7 @@ export class CosmicAPIWebSocketClient extends EventEmitter {
     }
 
     protected bindEventListeners() {
-        this.ws.addEventListener("message", async (data: any) => {
+        this.ws.on("message", async (data: any) => {
             if (!this.connected) return;
             try {
                 let msg = JSON.parse(data.toString());

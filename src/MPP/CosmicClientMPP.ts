@@ -10,8 +10,14 @@ import { CosmicForeignMessageHandler } from "../foreign/CosmicForeignMessageHand
 import { CosmicSeasonDetection } from "../util/CosmicSeasonDetection";
 import { Vector2, Participant } from "../util/CosmicTypes";
 import { Cursor } from "./Cursor";
+import { readFileSync } from "fs";
+import { ServicesConfig } from "../Cosmic";
+import * as YAML from "yaml";
 const Client = require("mppclone-client");
 const cmapi = require("mppclone-cmapi");
+
+const servicesFile = readFileSync("config/services.yml").toString();
+const services: ServicesConfig = YAML.parse(servicesFile);
 
 // ANCHOR MPP Client
 export class CosmicClientMPP extends CosmicClientToken {
@@ -23,7 +29,7 @@ export class CosmicClientMPP extends CosmicClientToken {
             CosmicCommandHandler.commands.find(cmd => cmd.id == "help")
                 .accessors[0]
         })${process.env.NODE_ENV == "production" ? "" : " [non-production]"}`,
-        color: "#1d0054",
+        color: "#1d0054"
     };
 
     public client: typeof Client;
@@ -81,7 +87,7 @@ export class CosmicClientMPP extends CosmicClientToken {
 
             msg.original_channel = {
                 _id: this.client.channel._id,
-                id: this.client.channel._id,
+                id: this.client.channel._id
             };
 
             let newmsg = CosmicForeignMessageHandler.convertMessage(
@@ -95,7 +101,7 @@ export class CosmicClientMPP extends CosmicClientToken {
             msg.original_channel = {
                 _id: this.client.channel._id,
                 id: this.client.channel._id,
-                dm_id: msg.sender._id,
+                dm_id: msg.sender._id
             };
 
             msg.p = msg.sender;
@@ -136,12 +142,14 @@ export class CosmicClientMPP extends CosmicClientToken {
                 set.color !== this.desiredUser.color
             ) {
                 // this.logger.debug('sending userset');
-                this.client.sendArray([
-                    {
-                        m: "userset",
-                        set: this.desiredUser,
-                    },
-                ]);
+                if (services.mpp.userset) {
+                    this.client.sendArray([
+                        {
+                            m: "userset",
+                            set: this.desiredUser
+                        }
+                    ]);
+                }
             }
 
             let ch = this.client.channel;
@@ -160,16 +168,16 @@ export class CosmicClientMPP extends CosmicClientToken {
                 this.client.sendArray([
                     {
                         m: "a",
-                        message: `\u034f${msg.message}`,
-                    },
+                        message: `\u034f${msg.message}`
+                    }
                 ]);
             } else {
                 this.client.sendArray([
                     {
                         m: "dm",
                         message: `\u034f${msg.message}`,
-                        _id: msg.dm,
-                    },
+                        _id: msg.dm
+                    }
                 ]);
             }
         });
@@ -178,7 +186,7 @@ export class CosmicClientMPP extends CosmicClientToken {
             this.emit("heartbeat", {
                 type: "heartbeat",
                 timestamp: msg.t,
-                foreign_timestamp: msg.e,
+                foreign_timestamp: msg.e
             });
         });
 
@@ -188,8 +196,8 @@ export class CosmicClientMPP extends CosmicClientToken {
                 [
                     {
                         m: "update hat",
-                        url: "minecraft/item/nether_star",
-                    },
+                        url: "minecraft/item/nether_star"
+                    }
                 ],
                 { mode: "id", id: msg._original_sender, global: false }
             );
@@ -210,13 +218,13 @@ export class CosmicClientMPP extends CosmicClientToken {
             type: "chat",
             sender: this.client.getOwnParticipant(),
             platform: "mpp",
-            message: str.split("*").join("\\*").split("_").join("\\_"),
+            message: str.split("*").join("\\*").split("_").join("\\_")
         });
     }
 
     protected previousCursorPos: Vector2 = {
         x: 100,
-        y: 200,
+        y: 200
     };
 
     /**
@@ -230,8 +238,8 @@ export class CosmicClientMPP extends CosmicClientToken {
                 {
                     m: "m",
                     x,
-                    y,
-                },
+                    y
+                }
             ]);
         }
 
