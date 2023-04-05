@@ -488,16 +488,18 @@ class CosmicAPI {
             res.status(404).json({ error: "invalid request" });
         });
 
-        this.app.use(express.static(path.resolve(__dirname, "../../frontend")));
+        this.app.use(
+            express.static(path.resolve(__dirname, "../../../frontend"))
+        );
         this.app.use(
             "/assets",
-            express.static(path.resolve(__dirname, "../../assets"))
+            express.static(path.resolve(__dirname, "../../../assets"))
         );
         this.app.use("/api", this.api);
 
         this.app.get("*", (req, res) => {
             readFile(
-                resolve(__dirname, "../../frontend/index.html"),
+                resolve(__dirname, "../../../frontend/index.html"),
                 (err, data) => {
                     if (err) {
                         res.status(502).end("oops");
