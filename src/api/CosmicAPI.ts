@@ -34,14 +34,14 @@ let key;
 
 if (SSL == "true") {
     try {
-        cert = readFileSync(resolve(__dirname, "../../ssl/cert.pem"));
+        cert = readFileSync(resolve(__dirname, "../../../ssl/cert.pem"));
     } catch (err) {
         console.error(`Couldn't load SSL certificate:`, err);
         process.exit(4);
     }
 
     try {
-        key = readFileSync(resolve(__dirname, "../../ssl/key.pem"));
+        key = readFileSync(resolve(__dirname, "../../../ssl/key.pem"));
     } catch (err) {
         console.error(`Couldn't read SSL key:`, err);
         process.exit(5);
@@ -63,13 +63,13 @@ class CosmicAPI {
         canSetPermissions: "boolean",
         canSetAllPermissions: "boolean",
         canGenerateKeys: "boolean",
-        canGenerateInfiniteKeys: "boolean",
+        canGenerateInfiniteKeys: "boolean"
     };
 
     public static messages = {
         ERROR_PERMISSION_DENIED: {
-            error: "Permission denied",
-        },
+            error: "Permission denied"
+        }
     };
 
     public static start() {
@@ -84,7 +84,7 @@ class CosmicAPI {
             this.server = https.createServer(
                 {
                     cert,
-                    key,
+                    key
                 },
                 this.app
             );
@@ -96,7 +96,7 @@ class CosmicAPI {
         });
 
         this.wss = new WebSocketServer({
-            noServer: true,
+            noServer: true
             // server: this.server
         });
 
@@ -280,13 +280,13 @@ class CosmicAPI {
                 status: "online",
                 environment: process.env.NODE_ENV,
                 clients: CosmicClientHandler.getClientCount(),
-                uptime: Date.now() - Cosmic.startTime,
+                uptime: Date.now() - Cosmic.startTime
             });
         });
 
         this.api.get("/uptime", async (req, res) => {
             res.json({
-                uptime: Date.now() - Cosmic.startTime,
+                uptime: Date.now() - Cosmic.startTime
             });
         });
 
@@ -306,7 +306,7 @@ class CosmicAPI {
             let user = await CosmicData.getUser(req.query.id);
             if (!user) {
                 res.json({
-                    error: "user not found",
+                    error: "user not found"
                 });
             } else {
                 res.json(user);
@@ -318,7 +318,7 @@ class CosmicAPI {
             let inventory = await CosmicData.getInventory(req.query.id);
             if (!inventory) {
                 res.json({
-                    error: "inventory not found",
+                    error: "inventory not found"
                 });
             } else {
                 res.json(inventory);
@@ -332,7 +332,7 @@ class CosmicAPI {
         this.api.get("/season", async (req, res) => {
             res.json({
                 season: CosmicSeasonDetection.getSeason(req.query.t),
-                holiday: CosmicSeasonDetection.getHoliday(req.query.t),
+                holiday: CosmicSeasonDetection.getHoliday(req.query.t)
             });
         });
 
@@ -365,7 +365,7 @@ class CosmicAPI {
                 return res.json({
                     error: "Key request denied",
                     canGenerateKey: canGenerateKeys,
-                    ip: req.ip,
+                    ip: req.ip
                 });
             }
 
@@ -378,7 +378,7 @@ class CosmicAPI {
             res.json({
                 key: key,
                 canGenerateKey: canGenerateKeys,
-                ip: req.ip,
+                ip: req.ip
             });
         });
 
@@ -403,7 +403,7 @@ class CosmicAPI {
                 "Where is the school?": `You can't go back in time`,
                 "What month is it?": `📅`,
                 "What year is it?": `📆`,
-                "Where was the windmill?": `█████`,
+                "Where was the windmill?": `█████`
             };
 
             if (!req.query.q) req.query.q = "What?";
@@ -434,7 +434,7 @@ class CosmicAPI {
             let perm = req.query.permission;
             if (!perm) {
                 res.json({
-                    error: "No permission",
+                    error: "No permission"
                 });
 
                 return;
@@ -443,7 +443,7 @@ class CosmicAPI {
             let value = req.query.value;
             if (!value) {
                 res.json({
-                    error: "No value",
+                    error: "No value"
                 });
 
                 return;
@@ -451,7 +451,7 @@ class CosmicAPI {
 
             if (!this.permissionIsValid(perm, value)) {
                 res.json({
-                    error: "Invalid permission",
+                    error: "Invalid permission"
                 });
 
                 return;
@@ -479,7 +479,7 @@ class CosmicAPI {
 
         this.api.get(/\/get(permission|perm)/, (req, res) => {
             return res.json({
-                error: "unfinished",
+                error: "unfinished"
             });
         });
 
@@ -530,13 +530,13 @@ try {
         default: {
             canSetPermissions: false,
             canSetAllPermissions: false,
-            canGenerateKeys: false,
+            canGenerateKeys: false
         },
         admin: {
             canSetPermissions: true,
             canSetAllPermissions: true,
-            canGenerateKeys: true,
-        },
+            canGenerateKeys: true
+        }
     };
 }
 
