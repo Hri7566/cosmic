@@ -28,7 +28,7 @@ class CosmicForeignMessageHandler {
                 timestamp: Date.now(),
                 original_channel: omsg.original_channel,
                 original_message: omsg,
-                platform: "internal",
+                platform: "internal"
             };
 
             return msg;
