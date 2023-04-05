@@ -42,10 +42,14 @@ CosmicCommandHandler.registerCommand(
                         out += ` ${msg.prefix.prefix}${cmd.accessors[0]}, `;
                     }
 
+                    if (cl.platform == "mpp") {
+                        out = out.replace(/\*.*?(\*)/, "\\*");
+                    }
+
                     out = CosmicUtil.trimListString(out);
                     cl.emit("send chat message", {
                         dm: isDM ? msg.sender._id : undefined,
-                        message: out,
+                        message: out
                     });
                 }
 

@@ -34,10 +34,13 @@ import { CosmicAPI } from "./api/CosmicAPI";
 const channelsFile = fs.readFileSync("config/mpp_channels.yml").toString();
 const channels = YAML.parse(channelsFile);
 
-interface ServicesConfig {
+export interface ServicesConfig {
     enablestdin: boolean;
     enableDiscord: boolean;
     enableMPP: boolean;
+    mpp: {
+        userset: boolean;
+    };
 }
 
 const servicesFile = fs.readFileSync("config/services.yml").toString();
@@ -131,7 +134,7 @@ class Cosmic {
             try {
                 msg.r.emit("bonk", {
                     m: "bonk",
-                    from: "Cosmic",
+                    from: "Cosmic"
                 });
             } catch (err) {}
         });
