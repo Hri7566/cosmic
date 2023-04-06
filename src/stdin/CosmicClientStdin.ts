@@ -57,9 +57,9 @@ export class CosmicClientStdin extends CosmicClient {
                     _id: "stdin",
                     name: "stdin",
                     color: "#ffffff",
-                    id: "stdin",
+                    id: "stdin"
                 },
-                timestamp: Date.now(),
+                timestamp: Date.now()
             } as ChatMessage);
         });
 

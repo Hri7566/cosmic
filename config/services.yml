@@ -1,5 +1,5 @@
 enablestdin: true
-enableDiscord: false
-enableMPP: true
+enableDiscord: true
+enableMPP: false
 mpp:
     userset: false

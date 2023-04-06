@@ -1,11 +1,14 @@
 #include "color_log.h"
 
-int getStringSize(BYTE* arr, int max) {
-    BYTE* currentByte = arr;
+int getStringSize(BYTE *arr, int max)
+{
+    BYTE *currentByte = arr;
     int size = 0;
-    do {
+    do
+    {
         currentByte += 1;
-        if (size >= max) {
+        if (size >= max)
+        {
             break;
         }
         size++;
@@ -13,9 +16,10 @@ int getStringSize(BYTE* arr, int max) {
     return size;
 }
 
-char* red(char* txt) {
+char *red(char *txt)
+{
     int size = getStringSize(txt, 2048) + 5 + 4;
-    char* newStr = malloc(size);
+    char *newStr = malloc(size);
 
     newStr[0] = '\x1b';
     newStr[1] = '[';
@@ -25,7 +29,8 @@ char* red(char* txt) {
 
     int i;
 
-    for (i = 1; i < size; i++) {
+    for (i = 1; i < size; i++)
+    {
         newStr[i] = txt[i - 1];
     }
 
@@ -37,6 +42,7 @@ char* red(char* txt) {
     return newStr;
 }
 
-void freeString(char* str) {
+void freeString(char *str)
+{
     free(str);
 }

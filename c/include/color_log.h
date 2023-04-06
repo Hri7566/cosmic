@@ -6,8 +6,8 @@
 
 #define BYTE char
 
-int getStringSize(char* arr, int stopPoint);
-char* red(char* txt);
-void freeString(char* str);
+int getStringSize(char *arr, int stopPoint);
+char *red(char *txt);
+void freeString(char *str);
 
 #endif
