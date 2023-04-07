@@ -57,7 +57,7 @@ class CosmicData {
             this.db = await this.client.db(MONGODB_DATABASE);
 
             await this.db.command({
-                ping: 1,
+                ping: 1
             });
 
             this.users = await this.db.collection("users");
@@ -127,7 +127,7 @@ class CosmicData {
             const result = await this.users.updateOne(
                 { _id },
                 {
-                    $set: user,
+                    $set: user
                 }
             );
 
@@ -193,7 +193,7 @@ class CosmicData {
         try {
             const result = await this.permissions.insertOne({
                 _id: _id as unknown as ObjectID,
-                groups: groups || ["default"],
+                groups: groups || ["default"]
             });
 
             return result;
@@ -213,7 +213,7 @@ class CosmicData {
             const result = await this.permissions.updateOne(
                 { _id },
                 {
-                    $push: { groups: group },
+                    $push: { groups: group }
                 }
             );
 
@@ -234,7 +234,7 @@ class CosmicData {
             const result = await this.permissions.updateOne(
                 { _id },
                 {
-                    $pull: { groups: group },
+                    $pull: { groups: group }
                 }
             );
 
@@ -270,7 +270,7 @@ class CosmicData {
                 _id: _id,
                 balance: balance || DEFAULT_BALANCE,
                 items: items || DEFAULT_INVENTORY,
-                experience: DEFAULT_EXPERIENCE,
+                experience: DEFAULT_EXPERIENCE
             });
 
             return result;
@@ -291,7 +291,7 @@ class CosmicData {
     ): Promise<boolean | Error> {
         try {
             const response = await this.inventories.findOne({
-                _id,
+                _id
             });
 
             if (response) {
@@ -318,7 +318,7 @@ class CosmicData {
     public static async findItem(_id: string, item_id: string) {
         try {
             const response = await this.inventories.findOne({
-                _id,
+                _id
             });
 
             if (response) {
@@ -347,12 +347,12 @@ class CosmicData {
                 let res = await this.inventories.updateOne(
                     {
                         _id,
-                        "items.id": item.id,
+                        "items.id": item.id
                     },
                     {
                         $inc: {
-                            "items.$.count": item.count,
-                        },
+                            "items.$.count": item.count
+                        }
                     }
                 );
                 return res;
@@ -361,8 +361,8 @@ class CosmicData {
                 { _id },
                 {
                     $push: {
-                        items: item,
-                    },
+                        items: item
+                    }
                 }
             );
 
@@ -383,14 +383,14 @@ class CosmicData {
         try {
             let result = await this.inventories.updateOne(
                 {
-                    _id,
+                    _id
                 },
                 {
                     $pull: {
                         items: {
-                            id: item_id,
-                        },
-                    },
+                            id: item_id
+                        }
+                    }
                 }
             );
 
@@ -419,12 +419,12 @@ class CosmicData {
                     let res = await this.inventories.updateOne(
                         {
                             _id,
-                            "items.id": item_id,
+                            "items.id": item_id
                         },
                         {
                             $inc: {
-                                "items.$.count": -amount,
-                            },
+                                "items.$.count": -amount
+                            }
                         }
                     );
 
@@ -525,8 +525,8 @@ class CosmicData {
                 { _id },
                 {
                     $inc: {
-                        balance: amount,
-                    },
+                        balance: amount
+                    }
                 }
             );
         } catch (err) {
@@ -546,8 +546,8 @@ class CosmicData {
                 { _id },
                 {
                     $set: {
-                        balance: amount,
-                    },
+                        balance: amount
+                    }
                 }
             );
             return res;
@@ -576,8 +576,8 @@ class CosmicData {
                 { _id },
                 {
                     $set: {
-                        experience: amount,
-                    },
+                        experience: amount
+                    }
                 }
             );
 
@@ -599,7 +599,7 @@ class CosmicData {
             try {
                 await this.util.insertOne({
                     _id: _id as unknown as ObjectID,
-                    [key]: value,
+                    [key]: value
                 });
             } catch (err) {}
             let res = await this.util.updateOne(
@@ -607,8 +607,8 @@ class CosmicData {
                 {
                     $set: {
                         [key]: value,
-                        lastUpdated: Date.now(),
-                    },
+                        lastUpdated: Date.now()
+                    }
                 }
             );
             return res;
@@ -667,7 +667,7 @@ class CosmicData {
                 keys,
                 permissions,
                 user_id,
-                permissionGroups,
+                permissionGroups
             };
             this.apiKeyProfiles.insertOne(profile);
             return true;
@@ -705,7 +705,7 @@ class CosmicData {
             let res = await this.apiKeyProfiles.updateOne(
                 { ip },
                 {
-                    $push: { keys: key },
+                    $push: { keys: key }
                 }
             );
 
@@ -744,8 +744,8 @@ class CosmicData {
                 { ip },
                 {
                     $pull: {
-                        keys: key,
-                    },
+                        keys: key
+                    }
                 }
             );
 
@@ -766,8 +766,8 @@ class CosmicData {
                 { ip },
                 {
                     $set: {
-                        keys: [],
-                    },
+                        keys: []
+                    }
                 }
             );
 
@@ -806,8 +806,8 @@ class CosmicData {
                 { ip },
                 {
                     $push: {
-                        permissions: permission,
-                    },
+                        permissions: permission
+                    }
                 }
             );
 
@@ -832,8 +832,8 @@ class CosmicData {
                 { ip },
                 {
                     $pull: {
-                        permissions: permission,
-                    },
+                        permissions: permission
+                    }
                 }
             );
 
@@ -854,8 +854,8 @@ class CosmicData {
                 { ip },
                 {
                     $set: {
-                        permissions: [],
-                    },
+                        permissions: []
+                    }
                 }
             );
 
@@ -880,8 +880,8 @@ class CosmicData {
                 { ip },
                 {
                     $push: {
-                        permissionGroups: permissionGroupID,
-                    },
+                        permissionGroups: permissionGroupID
+                    }
                 }
             );
 
@@ -906,8 +906,8 @@ class CosmicData {
                 { ip },
                 {
                     $pull: {
-                        permissionGroups: permissionGroupID,
-                    },
+                        permissionGroups: permissionGroupID
+                    }
                 }
             );
 
@@ -930,8 +930,8 @@ class CosmicData {
                 { ip },
                 {
                     $set: {
-                        permissionGroups: [],
-                    },
+                        permissionGroups: []
+                    }
                 }
             );
 
@@ -984,8 +984,8 @@ class CosmicData {
                 { ip },
                 {
                     $set: {
-                        user_id: userID,
-                    },
+                        user_id: userID
+                    }
                 }
             );
 
@@ -1020,8 +1020,8 @@ class CosmicData {
                 { ip },
                 {
                     $unset: {
-                        user_id: "",
-                    },
+                        user_id: ""
+                    }
                 }
             );
             return true;
@@ -1042,8 +1042,8 @@ class CosmicData {
                 { ip },
                 {
                     $set: {
-                        ip: new_ip,
-                    },
+                        ip: new_ip
+                    }
                 }
             );
 
