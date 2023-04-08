@@ -32,7 +32,7 @@ CosmicCommandHandler.registerCommand(
             if (await CosmicData.hasItem(userID, itemID)) {
                 const res = await CosmicData.addItem(userID, {
                     id: itemID,
-                    count: count,
+                    count: count
                 } as any);
                 return `Added ${count} to item ${itemID} at inventory ${userID}`;
             } else {

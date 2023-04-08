@@ -12,67 +12,67 @@ let HOLIDAYS: Array<Holiday | RangeHoliday> = [
     {
         displayName: "New Year's Day",
         emoji: "🎆",
-        timestamp: `Dec 31 ${CURRENT_YEAR}`,
+        timestamp: `Dec 31 ${CURRENT_YEAR}`
     },
     {
         displayName: "Martin Luther King, Jr. Day",
         emoji: "⚖",
-        timestamp: `January 17 ${CURRENT_YEAR}`,
+        timestamp: `January 17 ${CURRENT_YEAR}`
     },
     {
         displayName: "Valentine's Day",
         emoji: "💘",
-        timestamp: `Feb 14 ${CURRENT_YEAR}`,
+        timestamp: `Feb 14 ${CURRENT_YEAR}`
     },
     {
         displayName: "Presidents' Day",
         emoji: "🏛",
-        timestamp: `February 21 ${CURRENT_YEAR}`,
+        timestamp: `February 21 ${CURRENT_YEAR}`
     },
     {
         displayName: "Saint Patrick's Day",
         emoji: "🍀",
-        timestamp: `Mar 17 ${CURRENT_YEAR}`,
+        timestamp: `Mar 17 ${CURRENT_YEAR}`
     },
     {
         displayName: "Independence Day",
         emoji: "🇺🇸",
-        timestamp: `Jul 4 ${CURRENT_YEAR}`,
+        timestamp: `Jul 4 ${CURRENT_YEAR}`
     },
     {
         displayName: "Labor Day",
         emoji: "⚒",
-        timestamp: `Sep 5 ${CURRENT_YEAR}`,
+        timestamp: `Sep 5 ${CURRENT_YEAR}`
     },
     {
         displayName: "Columbus Day",
         emoji: "⛵",
         start: `Oct 10 ${CURRENT_YEAR}`,
-        end: `Oct 13 ${CURRENT_YEAR}`,
+        end: `Oct 13 ${CURRENT_YEAR}`
     },
     {
         displayName: "Halloween",
         emoji: "🎃",
         // timestamp: `Oct 31 ${CURRENT_YEAR}`
         start: `Oct 25 ${CURRENT_YEAR}`,
-        end: `Sep 1 ${CURRENT_YEAR}`,
+        end: `Sep 1 ${CURRENT_YEAR}`
     },
     {
         displayName: "Thanksgiving",
         emoji: "🦃",
         start: `Nov 22 ${CURRENT_YEAR}`,
-        end: `Nov 28 ${CURRENT_YEAR}`,
+        end: `Nov 28 ${CURRENT_YEAR}`
     },
     {
         displayName: "Christmas",
         emoji: "🎄",
-        timestamp: `Dec 25 ${CURRENT_YEAR}`,
+        timestamp: `Dec 25 ${CURRENT_YEAR}`
     },
     {
         displayName: "New Year's Eve",
         emoji: "🎆",
-        timestamp: `Jan 1 ${CURRENT_YEAR}`,
-    },
+        timestamp: `Jan 1 ${CURRENT_YEAR}`
+    }
 ];
 
 setInterval(() => {
@@ -81,67 +81,67 @@ setInterval(() => {
         {
             displayName: "New Year's Day",
             emoji: "🎆",
-            timestamp: `Dec 31 ${CURRENT_YEAR}`,
+            timestamp: `Dec 31 ${CURRENT_YEAR}`
         },
         {
             displayName: "Martin Luther King, Jr. Day",
             emoji: "⚖",
-            timestamp: `January 17 ${CURRENT_YEAR}`,
+            timestamp: `January 17 ${CURRENT_YEAR}`
         },
         {
             displayName: "Valentine's Day",
             emoji: "💘",
-            timestamp: `Feb 14 ${CURRENT_YEAR}`,
+            timestamp: `Feb 14 ${CURRENT_YEAR}`
         },
         {
             displayName: "Presidents' Day",
             emoji: "🏛",
-            timestamp: `February 21 ${CURRENT_YEAR}`,
+            timestamp: `February 21 ${CURRENT_YEAR}`
         },
         {
             displayName: "Saint Patrick's Day",
             emoji: "🍀",
-            timestamp: `Mar 17 ${CURRENT_YEAR}`,
+            timestamp: `Mar 17 ${CURRENT_YEAR}`
         },
         {
             displayName: "Independence Day",
             emoji: "🇺🇸",
-            timestamp: `Jul 4 ${CURRENT_YEAR}`,
+            timestamp: `Jul 4 ${CURRENT_YEAR}`
         },
         {
             displayName: "Labor Day",
             emoji: "⚒",
-            timestamp: `Sep 5 ${CURRENT_YEAR}`,
+            timestamp: `Sep 5 ${CURRENT_YEAR}`
         },
         {
             displayName: "Columbus Day",
             emoji: "⛵",
             start: `Oct 10 ${CURRENT_YEAR}`,
-            end: `Oct 13 ${CURRENT_YEAR}`,
+            end: `Oct 13 ${CURRENT_YEAR}`
         },
         {
             displayName: "Halloween",
             emoji: "🎃",
             // timestamp: `Oct 31 ${CURRENT_YEAR}`
             start: `Oct 25 ${CURRENT_YEAR}`,
-            end: `Sep 1 ${CURRENT_YEAR}`,
+            end: `Sep 1 ${CURRENT_YEAR}`
         },
         {
             displayName: "Thanksgiving",
             emoji: "🦃",
             start: `Nov 22 ${CURRENT_YEAR}`,
-            end: `Nov 28 ${CURRENT_YEAR}`,
+            end: `Nov 28 ${CURRENT_YEAR}`
         },
         {
             displayName: "Christmas",
             emoji: "🎄",
-            timestamp: `Dec 25 ${CURRENT_YEAR}`,
+            timestamp: `Dec 25 ${CURRENT_YEAR}`
         },
         {
             displayName: "New Year's Eve",
             emoji: "🎆",
-            timestamp: `Jan 1 ${CURRENT_YEAR}`,
-        },
+            timestamp: `Jan 1 ${CURRENT_YEAR}`
+        }
     ];
 }, 36e5 * 24 * 14);
 
@@ -158,28 +158,28 @@ export class CosmicSeasonDetection {
         if ((month == 2 && day <= 21) || month >= 11 || month < 2) {
             return {
                 displayName: "Winter",
-                emoji: "❄️",
+                emoji: "❄️"
             };
         }
 
         if ((month == 8 && day >= 23) || month > 8) {
             return {
                 displayName: "Autumn",
-                emoji: "🍁",
+                emoji: "🍁"
             };
         }
 
         if ((month == 5 && day >= 22) || month > 5) {
             return {
                 displayName: "Summer",
-                emoji: "☀️",
+                emoji: "☀️"
             };
         }
 
         if ((month == 2 && day >= 22) || month > 2) {
             return {
                 displayName: "Spring",
-                emoji: "🌷",
+                emoji: "🌷"
             };
         }
     }

@@ -32,237 +32,237 @@ export class CosmicExperience {
 
         this.addLevel({
             displayName: "Down Quark",
-            requiredExp: 0,
+            requiredExp: 0
         });
 
         this.addLevel({
             displayName: "Up Quark",
-            requiredExp: 100,
+            requiredExp: 100
         });
 
         this.addLevel({
             displayName: "Neutron",
-            requiredExp: 200,
+            requiredExp: 200
         });
 
         this.addLevel({
             displayName: "Calcium Cluster",
-            requiredExp: 300,
+            requiredExp: 300
         });
 
         this.addLevel({
             displayName: "Unicellular Organism",
-            requiredExp: 400,
+            requiredExp: 400
         });
 
         this.addLevel({
             displayName: "Eukaryote Bacteria",
-            requiredExp: 500,
+            requiredExp: 500
         });
 
         this.addLevel({
             displayName: "Appendicular Tetrapod",
-            requiredExp: 600,
+            requiredExp: 600
         });
 
         this.addLevel({
             displayName: "Hummingbird",
-            requiredExp: 700,
+            requiredExp: 700
         });
 
         this.addLevel({
             displayName: "Cardinal",
-            requiredExp: 800,
+            requiredExp: 800
         });
 
         this.addLevel({
             displayName: "Pigeon",
-            requiredExp: 900,
+            requiredExp: 900
         });
 
         this.addLevel({
             displayName: "Ostrich",
-            requiredExp: 1000,
+            requiredExp: 1000
         });
 
         this.addLevel({
             displayName: "Parrot",
-            requiredExp: 1100,
+            requiredExp: 1100
         });
 
         this.addLevel({
             displayName: "Hawk",
-            requiredExp: 1200,
+            requiredExp: 1200
         });
 
         this.addLevel({
             displayName: "Eagle",
-            requiredExp: 1300,
+            requiredExp: 1300
         });
 
         this.addLevel({
             displayName: "Albatross",
-            requiredExp: 1400,
+            requiredExp: 1400
         });
 
         this.addLevel({
             displayName: "Condor",
-            requiredExp: 1500,
+            requiredExp: 1500
         });
 
         this.addLevel({
             displayName: "Sea Bass",
-            requiredExp: 1600,
+            requiredExp: 1600
         });
 
         this.addLevel({
             displayName: "Horse Mackerel",
-            requiredExp: 1700,
+            requiredExp: 1700
         });
 
         this.addLevel({
             displayName: "Carp",
-            requiredExp: 1800,
+            requiredExp: 1800
         });
 
         this.addLevel({
             displayName: "Cod",
-            requiredExp: 1900,
+            requiredExp: 1900
         });
 
         this.addLevel({
             displayName: "Dace",
-            requiredExp: 2000,
+            requiredExp: 2000
         });
 
         this.addLevel({
             displayName: "Puffer Fish",
-            requiredExp: 2100,
+            requiredExp: 2100
         });
 
         this.addLevel({
             displayName: "Arowana",
-            requiredExp: 2200,
+            requiredExp: 2200
         });
 
         this.addLevel({
             displayName: "Bottlenose Dolphin",
-            requiredExp: 2300,
+            requiredExp: 2300
         });
 
         this.addLevel({
             displayName: "Great White Shark",
-            requiredExp: 2400,
+            requiredExp: 2400
         });
 
         this.addLevel({
             displayName: "Blue Whale",
-            requiredExp: 2500,
+            requiredExp: 2500
         });
 
         this.addLevel({
             displayName: "Termite",
-            requiredExp: 2600,
+            requiredExp: 2600
         });
 
         this.addLevel({
             displayName: "Ladybug",
-            requiredExp: 2700,
+            requiredExp: 2700
         });
 
         this.addLevel({
             displayName: "Ant",
-            requiredExp: 2800,
+            requiredExp: 2800
         });
 
         this.addLevel({
             displayName: "Caterpillar",
-            requiredExp: 2900,
+            requiredExp: 2900
         });
 
         this.addLevel({
             displayName: "Butterfly",
-            requiredExp: 3000,
+            requiredExp: 3000
         });
 
         this.addLevel({
             displayName: "Bee",
-            requiredExp: 3100,
+            requiredExp: 3100
         });
 
         this.addLevel({
             displayName: "Hornet",
-            requiredExp: 3200,
+            requiredExp: 3200
         });
 
         this.addLevel({
             displayName: "Mantis",
-            requiredExp: 3300,
+            requiredExp: 3300
         });
 
         this.addLevel({
             displayName: "Mosquito",
-            requiredExp: 3400,
+            requiredExp: 3400
         });
 
         this.addLevel({
             displayName: "Moth",
-            requiredExp: 3500,
+            requiredExp: 3500
         });
 
         this.addLevel({
             displayName: "Mouse",
-            requiredExp: 3600,
+            requiredExp: 3600
         });
 
         this.addLevel({
             displayName: "Rat",
-            requiredExp: 3700,
+            requiredExp: 3700
         });
 
         this.addLevel({
             displayName: "Squirrel",
-            requiredExp: 3800,
+            requiredExp: 3800
         });
 
         this.addLevel({
             displayName: "Rabbit",
-            requiredExp: 3900,
+            requiredExp: 3900
         });
 
         this.addLevel({
             displayName: "House Cat",
-            requiredExp: 4000,
+            requiredExp: 4000
         });
 
         this.addLevel({
             displayName: "Pomeranian",
-            requiredExp: 4100,
+            requiredExp: 4100
         });
 
         this.addLevel({
             displayName: "Coyote",
-            requiredExp: 4200,
+            requiredExp: 4200
         });
 
         this.addLevel({
             displayName: "Wolf",
-            requiredExp: 4300,
+            requiredExp: 4300
         });
 
         this.addLevel({
             displayName: "Pony",
-            requiredExp: 4400,
+            requiredExp: 4400
         });
 
         this.addLevel({
             displayName: "Horse",
-            requiredExp: 4500,
+            requiredExp: 4500
         });
 
         this.addLevel({
             displayName: "The End",
-            requiredExp: 150000000,
+            requiredExp: 150000000
         });
     }
 }

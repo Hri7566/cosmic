@@ -36,7 +36,7 @@ CosmicCommandHandler.registerCommand(
                     `Cake?`,
                     `What cake?`,
                     `There is no cake for you to eat.`,
-                    `No cake.`,
+                    `No cake.`
                 ];
                 return await CosmicUtil.getRandomValueFromArray(sad_answers);
             }
@@ -77,7 +77,7 @@ CosmicCommandHandler.registerCommand(
                 `The cake eats you and you get `,
                 `There is cake all over your face and you get `,
                 `Your cake is `,
-                `Cake taste good become `,
+                `Cake taste good become `
             ];
 
             let randomMessage = await CosmicUtil.getRandomValueFromArray(

@@ -25,8 +25,8 @@ export class CosmicClientDiscord extends CosmicClientToken {
                 Discord.GatewayIntentBits.Guilds,
                 Discord.GatewayIntentBits.GuildMessages,
                 Discord.GatewayIntentBits.MessageContent,
-                Discord.GatewayIntentBits.GuildMembers,
-            ],
+                Discord.GatewayIntentBits.GuildMembers
+            ]
         });
 
         this.bindEventListeners();
@@ -106,12 +106,12 @@ export class CosmicClientDiscord extends CosmicClientToken {
                 p: {
                     name: msg.author.username,
                     _id: msg.author.id,
-                    color: msg.member.displayHexColor,
+                    color: msg.member.displayHexColor
                 },
                 original_channel: {
                     id: msg.channel.id,
-                    _id: (msg.channel as any).name,
-                },
+                    _id: (msg.channel as any).name
+                }
             });
 
             this.previousChannel = msg.channel.id;

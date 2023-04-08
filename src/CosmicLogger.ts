@@ -124,7 +124,7 @@ function log_full_info(method = "log", ...args: any[]) {
         `${hh.toString().padStart(2, "0")}:${mm
             .toString()
             .padStart(2, "0")}:${ss.toString().padStart(2, "0")} ${ampm}`,
-        ...args,
+        ...args
     ];
 }
 
@@ -243,5 +243,5 @@ export {
     magenta,
     cyan,
     white,
-    hex,
+    hex
 };

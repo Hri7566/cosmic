@@ -36,7 +36,7 @@ CosmicCommandHandler.registerCommand(
             if (!listing) {
                 let no_listing_answers = [
                     "That item is not in the shop.",
-                    `We don't sell '${search}' here.`,
+                    `We don't sell '${search}' here.`
                 ];
 
                 return CosmicUtil.getRandomValueFromArray(no_listing_answers);
@@ -83,7 +83,7 @@ CosmicCommandHandler.registerCommand(
                             listing.item.displayName,
                             listing.item.emoji,
                             listing.item.count
-                        )}. Wait, no. You can't afford that.`,
+                        )}. Wait, no. You can't afford that.`
                     ];
 
                     return CosmicUtil.getRandomValueFromArray(answers);
