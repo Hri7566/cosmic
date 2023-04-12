@@ -12,6 +12,7 @@ CosmicCommandHandler.registerCommand(
         false,
         "fun",
         async (msg, cl) => {
+            return;
             let sleeping = false;
 
             try {
