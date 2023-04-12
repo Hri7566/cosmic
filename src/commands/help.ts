@@ -39,7 +39,8 @@ CosmicCommandHandler.registerCommand(
 
                         if (cmd.commandGroup !== group.id) continue;
                         if (cmd.visible == false) continue;
-                        out += ` ${msg.prefix.prefix}${cmd.accessors[0]}, `;
+                        // out += ` ${msg.prefix.prefix}${cmd.accessors[0]}, `;
+                        out += ` ${cmd.accessors[0]}, `;
                     }
 
                     if (cl.platform == "mpp") {
