@@ -16,7 +16,7 @@ export const ITEMS: Record<string | symbol, AnyItem> = {
         value: 1000,
         sellable: false,
         cake_bonus: 1.05,
-        max_stack: 1,
+        max_stack: 1
     },
     BIGGER_BRAIN: {
         id: "upgrade_bigger_brain",
@@ -27,7 +27,7 @@ export const ITEMS: Record<string | symbol, AnyItem> = {
         value: 2000,
         sellable: false,
         cake_bonus: 1.15,
-        max_stack: 1,
+        max_stack: 1
     },
     GIANT_EGGS: {
         id: "upgrade_giant_eggs",
@@ -38,7 +38,7 @@ export const ITEMS: Record<string | symbol, AnyItem> = {
         value: 1500,
         sellable: false,
         cake_bonus: 1.1,
-        max_stack: 1,
+        max_stack: 1
     },
     CANDY: {
         id: "candy",
@@ -48,7 +48,7 @@ export const ITEMS: Record<string | symbol, AnyItem> = {
         description: `Yummy candy`,
         value: 100,
         sellable: true,
-        max_stack: 99,
+        max_stack: 99
     },
     ANONYPPLE: {
         id: "anonypple",
@@ -58,7 +58,7 @@ export const ITEMS: Record<string | symbol, AnyItem> = {
         description: "Why am I even making this stuff?",
         value: 25,
         sellable: true,
-        max_stack: 999,
+        max_stack: 999
     },
     SAND: {
         id: "sand",
@@ -67,7 +67,7 @@ export const ITEMS: Record<string | symbol, AnyItem> = {
         description: "No yeeting.",
         value: 0,
         sellable: true,
-        max_stack: 9999,
+        max_stack: 9999
     },
     DEKU_SHIELD: {
         id: "shield_deku",
@@ -76,7 +76,7 @@ export const ITEMS: Record<string | symbol, AnyItem> = {
         count: 1,
         value: 250,
         sellable: true,
-        max_stack: 1,
+        max_stack: 1
     },
     HYLIAN_SHIELD: {
         id: "shield_hylian",
@@ -85,7 +85,7 @@ export const ITEMS: Record<string | symbol, AnyItem> = {
         count: 1,
         value: 250,
         sellable: true,
-        max_stack: 1,
+        max_stack: 1
     },
     FAIRY_OCARINA: {
         id: "ocarina_fairy",
@@ -93,7 +93,7 @@ export const ITEMS: Record<string | symbol, AnyItem> = {
         count: 1,
         value: 1000,
         sellable: true,
-        max_stack: 1,
+        max_stack: 1
     },
     OCARINA_OF_TIME: {
         id: "ocarina_time",
@@ -101,7 +101,7 @@ export const ITEMS: Record<string | symbol, AnyItem> = {
         count: 1,
         value: 5000,
         sellable: true,
-        max_stack: 1,
+        max_stack: 1
     },
     DEKU_STICK: {
         id: "deku_stick",
@@ -109,7 +109,7 @@ export const ITEMS: Record<string | symbol, AnyItem> = {
         count: 1,
         value: 101,
         sellable: true,
-        max_stack: 10,
+        max_stack: 10
     },
     RED_POTION: {
         id: "potion_health",
@@ -117,7 +117,7 @@ export const ITEMS: Record<string | symbol, AnyItem> = {
         count: 1,
         value: 500,
         sellable: true,
-        max_stack: 1,
+        max_stack: 1
     },
     HOT_SAUCE: {
         id: "hot_sauce",
@@ -125,7 +125,7 @@ export const ITEMS: Record<string | symbol, AnyItem> = {
         count: 1,
         value: 500,
         sellable: false,
-        max_stack: 3,
+        max_stack: 3
     },
     CARE_A: {
         id: "care_a",
@@ -135,7 +135,7 @@ export const ITEMS: Record<string | symbol, AnyItem> = {
         count: 1,
         value: 0,
         sellable: false,
-        max_stack: 1,
+        max_stack: 1
     },
     CARE_B: {
         id: "care_b",
@@ -144,7 +144,7 @@ export const ITEMS: Record<string | symbol, AnyItem> = {
         count: 1,
         value: 0,
         sellable: false,
-        max_stack: 1,
+        max_stack: 1
     },
     CARE_NLM: {
         id: "care_nlm",
@@ -154,7 +154,7 @@ export const ITEMS: Record<string | symbol, AnyItem> = {
         count: 1,
         value: 0,
         sellable: false,
-        max_stack: 1,
+        max_stack: 1
     },
     HEROS_BOW: {
         id: "bow_hero",
@@ -162,7 +162,7 @@ export const ITEMS: Record<string | symbol, AnyItem> = {
         count: 1,
         value: 0,
         sellable: false,
-        max_stack: 1,
+        max_stack: 1
     },
     FIRE_ARROW: {
         id: "arrow_fire",
@@ -170,7 +170,7 @@ export const ITEMS: Record<string | symbol, AnyItem> = {
         count: 1,
         value: 0,
         sellable: false,
-        max_stack: 30,
+        max_stack: 30
     },
     ICE_ARROW: {
         id: "arrow_ice",
@@ -178,7 +178,7 @@ export const ITEMS: Record<string | symbol, AnyItem> = {
         count: 1,
         value: 0,
         sellable: false,
-        max_stack: 30,
+        max_stack: 30
     },
     LIGHT_ARROW: {
         id: "arrow_light",
@@ -186,7 +186,7 @@ export const ITEMS: Record<string | symbol, AnyItem> = {
         count: 1,
         value: 0,
         sellable: false,
-        max_stack: 30,
+        max_stack: 30
     },
     BOMB: {
         id: "bomb",
@@ -194,7 +194,7 @@ export const ITEMS: Record<string | symbol, AnyItem> = {
         count: 1,
         value: 0,
         sellable: false,
-        max_stack: 20,
+        max_stack: 20
     },
     LENS_OF_TRUTH: {
         id: "lens_of_truth",
@@ -202,7 +202,7 @@ export const ITEMS: Record<string | symbol, AnyItem> = {
         count: 1,
         value: 0,
         sellable: false,
-        max_stack: 1,
+        max_stack: 1
     },
     HOOKSHOT: {
         id: "hookshot",
@@ -210,7 +210,7 @@ export const ITEMS: Record<string | symbol, AnyItem> = {
         count: 1,
         value: 100000,
         sellable: false,
-        max_stack: 1,
+        max_stack: 1
     },
     GREAT_FAIRY_SWORD: {
         id: "sword_great_fairy",
@@ -218,7 +218,7 @@ export const ITEMS: Record<string | symbol, AnyItem> = {
         count: 1,
         value: 10_000_000,
         sellable: false,
-        max_stack: 1,
+        max_stack: 1
     },
     BOTTLE: {
         id: "bottle",
@@ -226,7 +226,7 @@ export const ITEMS: Record<string | symbol, AnyItem> = {
         count: 1,
         value: 500000,
         max_stack: 6,
-        sellable: false,
+        sellable: false
     },
     PICTOGRAPH_BOX: {
         id: "pictograph_box",
@@ -234,7 +234,7 @@ export const ITEMS: Record<string | symbol, AnyItem> = {
         count: 1,
         value: 250000,
         max_stack: 1,
-        sellable: false,
+        sellable: false
     },
     RECYCLE_BIN: {
         id: "recycle_bin",
@@ -242,7 +242,7 @@ export const ITEMS: Record<string | symbol, AnyItem> = {
         count: 1,
         value: 500,
         max_stack: 1,
-        sellable: false,
+        sellable: false
     },
     GOLD_SPRING: {
         id: "spring_gold",
@@ -250,7 +250,7 @@ export const ITEMS: Record<string | symbol, AnyItem> = {
         count: 1,
         value: 250,
         max_stack: 1,
-        sellable: false,
+        sellable: false
     },
     SILVER_SPRING: {
         id: "spring_silver",
@@ -258,7 +258,7 @@ export const ITEMS: Record<string | symbol, AnyItem> = {
         count: 1,
         value: 250,
         max_stack: 1,
-        sellable: false,
+        sellable: false
     },
     ROLLERCOASTER: {
         id: "rollercoaster",
@@ -267,7 +267,7 @@ export const ITEMS: Record<string | symbol, AnyItem> = {
         count: 1,
         value: 250,
         max_stack: 1,
-        sellable: false,
+        sellable: false
     },
     WD40: {
         id: "wd40",
@@ -276,7 +276,7 @@ export const ITEMS: Record<string | symbol, AnyItem> = {
         count: 1,
         value: 500,
         max_stack: 50,
-        sellable: true,
+        sellable: true
     },
     TURKEY: {
         id: "turkey",
@@ -286,7 +286,7 @@ export const ITEMS: Record<string | symbol, AnyItem> = {
         value: 0,
         max_stack: 50,
         sellable: true,
-        edible: true,
+        edible: true
     },
     CAKE_MIX: {
         id: "mix",
@@ -294,7 +294,7 @@ export const ITEMS: Record<string | symbol, AnyItem> = {
         emoji: "📦",
         count: 1,
         sellable: true,
-        value: 10,
+        value: 10
     },
     RICHER_CHOCOLATE: {
         id: "upgrade_richer_chocolate",
@@ -305,7 +305,7 @@ export const ITEMS: Record<string | symbol, AnyItem> = {
         value: 2000,
         sellable: false,
         cake_bonus: 1.05,
-        max_stack: 1,
+        max_stack: 1
     },
     HAMMER: {
         id: "hammer",
@@ -314,6 +314,6 @@ export const ITEMS: Record<string | symbol, AnyItem> = {
         count: 1,
         description: "A hammer to bonk with",
         value: 300,
-        sellable: true,
-    },
+        sellable: true
+    }
 };

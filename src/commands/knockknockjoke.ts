@@ -50,7 +50,7 @@ let knockKnockJokes = [
     { q: "Heather", a: "Heather Georgy girl." },
     {
         q: "Ira",
-        a: "Ira...gret that I have but one life to give for my country.",
+        a: "Ira...gret that I have but one life to give for my country."
     },
     { q: "Watson", a: "Not much. Watson who with you?" },
     { q: "Annie", a: "Annie thing you can do, I can do better..." },
@@ -65,7 +65,7 @@ let knockKnockJokes = [
     { q: "Philip", a: `Philip my glass, please. I'm thirsty.` },
     { q: "Pizza", a: "Pizza on earth, good will to men." },
     { q: "Atch", a: "Gesundheit!" },
-    { q: "Thad", a: `Thad's all, folks!` },
+    { q: "Thad", a: `Thad's all, folks!` }
 ];
 
 let knockKnocking = false;

@@ -52,14 +52,14 @@ export class Cursor {
         this.updateInterval = setInterval(() => {
             let followPos: Vector2 = {
                 x: 50,
-                y: 50,
+                y: 50
             };
 
             try {
                 if (this.cl.getPart(this.follow)) {
                     followPos = {
                         x: parseFloat(this.cl.getPart(this.follow).x),
-                        y: parseFloat(this.cl.getPart(this.follow).y),
+                        y: parseFloat(this.cl.getPart(this.follow).y)
                     };
                 }
             } finally {

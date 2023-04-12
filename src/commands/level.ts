@@ -17,6 +17,8 @@ CosmicCommandHandler.registerCommand(
             //     exp = parseInt(msg.argv[1]);
             // } catch (err) { exp = 0; }
 
+            if (!exp) exp = 0;
+
             let level = CosmicExperience.getLevelFromExperience(exp);
             let index = CosmicExperience.levels.indexOf(level);
             let nextLevel = CosmicExperience.levels[index + 1];

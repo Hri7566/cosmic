@@ -24,8 +24,9 @@ class CosmicFFI {
             // 'get_test_string': [ref.types.CString, [ref.types.void]],
             handleMessage: [
                 ref.types.CString,
-                [ref.types.int, ref.types.Object],
+                [ref.types.int, ref.types.Object]
             ],
+            testOutput: [ref.types.void, []]
         }
     );
 }

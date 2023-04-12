@@ -32,7 +32,7 @@ CosmicCommandHandler.registerCommand(
                 "My reply is no",
                 "My sources say no",
                 "Outlook not so good",
-                "Very doubtful",
+                "Very doubtful"
             ];
 
             let hash = crypto.createHash("sha256");

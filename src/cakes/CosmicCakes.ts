@@ -15,7 +15,7 @@ export const cakes: Array<Cake> = [
         edible: true,
         icing: "chocolate",
         filling: "chocolate",
-        value: 15,
+        value: 15
     },
     {
         id: "cake_vanilla",
@@ -26,7 +26,7 @@ export const cakes: Array<Cake> = [
         icing: "white",
         filling: "vanilla",
         topping: "cherry",
-        value: 18,
+        value: 18
     },
     {
         id: "cake_angel",
@@ -37,7 +37,7 @@ export const cakes: Array<Cake> = [
         icing: "white",
         filling: "vanilla",
         topping: "fruit",
-        value: 20,
+        value: 20
     },
     {
         id: "cake_carrot",
@@ -47,7 +47,7 @@ export const cakes: Array<Cake> = [
         edible: true,
         icing: "white",
         filling: "carrot",
-        value: 25,
+        value: 25
     },
     {
         id: "cake_velvet",
@@ -57,7 +57,7 @@ export const cakes: Array<Cake> = [
         edible: true,
         icing: "white",
         filling: "red",
-        value: 25,
+        value: 25
     },
     {
         id: "cake_sponge",
@@ -67,7 +67,7 @@ export const cakes: Array<Cake> = [
         edible: true,
         icing: "none",
         filling: "lemon",
-        value: 20,
+        value: 20
     },
     {
         id: "cake_pineapple",
@@ -78,7 +78,7 @@ export const cakes: Array<Cake> = [
         icing: "none",
         filling: "pineapple",
         topping: "pineapple",
-        value: 15,
+        value: 15
     },
     {
         id: "cake_fruit",
@@ -89,7 +89,7 @@ export const cakes: Array<Cake> = [
         icing: "none",
         filling: "fruit",
         topping: "nuts",
-        value: 5,
+        value: 5
     },
     {
         id: "cake_cheesecake",
@@ -100,8 +100,8 @@ export const cakes: Array<Cake> = [
         icing: "none",
         filling: "cream",
         topping: "graham",
-        value: 10,
-    },
+        value: 10
+    }
 ];
 
 export const uncommon_cakes: Array<Cake> = [
@@ -114,7 +114,7 @@ export const uncommon_cakes: Array<Cake> = [
         icing: "chocolate",
         filling: "chocolate",
         topping: "candle",
-        value: 30,
+        value: 30
     },
     {
         id: "cake_crab",
@@ -125,7 +125,7 @@ export const uncommon_cakes: Array<Cake> = [
         icing: "bread",
         filling: "crab",
         topping: "garlic",
-        value: 10,
+        value: 10
     },
     {
         id: "cake_party",
@@ -136,7 +136,7 @@ export const uncommon_cakes: Array<Cake> = [
         icing: "white",
         filling: "vanilla",
         topping: "cherries",
-        value: 25,
+        value: 25
     },
     {
         id: "cake_matcha",
@@ -146,7 +146,7 @@ export const uncommon_cakes: Array<Cake> = [
         edible: true,
         icing: "green",
         filling: "matcha",
-        value: 50,
+        value: 50
     },
     {
         id: "cake_oreo",
@@ -157,7 +157,7 @@ export const uncommon_cakes: Array<Cake> = [
         icing: "white",
         filling: "chocolate",
         topping: "oreos",
-        value: 50,
+        value: 50
     },
     {
         id: "cake_peanut_candy",
@@ -168,7 +168,7 @@ export const uncommon_cakes: Array<Cake> = [
         icing: "chocolate",
         filling: "peanut butter",
         topping: "reese's peanut butter cups",
-        value: 50,
+        value: 50
     },
     {
         id: "cake_ice_cream",
@@ -178,7 +178,7 @@ export const uncommon_cakes: Array<Cake> = [
         edible: true,
         icing: "ice cream",
         filling: "ice cream",
-        value: 50,
+        value: 50
     },
     {
         id: "cake_pound_cake",
@@ -188,7 +188,7 @@ export const uncommon_cakes: Array<Cake> = [
         edible: true,
         icing: "bri'ish",
         filling: "bri'ish",
-        value: 80,
+        value: 80
     },
     {
         id: "cake_dollar_cake",
@@ -198,7 +198,7 @@ export const uncommon_cakes: Array<Cake> = [
         edible: true,
         icing: "rich",
         filling: "green",
-        value: 80,
+        value: 80
     },
     {
         id: "cake_pizza",
@@ -209,7 +209,7 @@ export const uncommon_cakes: Array<Cake> = [
         icing: "cheesy",
         filling: "tomato sauce",
         topping: "pepperoni",
-        value: 75,
+        value: 75
     },
     {
         id: "cake_water",
@@ -219,7 +219,7 @@ export const uncommon_cakes: Array<Cake> = [
         edible: true,
         icing: "water",
         filling: "water",
-        value: 75,
+        value: 75
     },
     {
         id: "cake_fire",
@@ -229,7 +229,7 @@ export const uncommon_cakes: Array<Cake> = [
         edible: true,
         icing: "smokey",
         filling: "flame",
-        value: 80,
+        value: 80
     },
     {
         id: "cupcake_strawberry",
@@ -239,7 +239,7 @@ export const uncommon_cakes: Array<Cake> = [
         edible: true,
         icing: "strawberry",
         filling: "chocolate",
-        value: 10,
+        value: 10
     },
     {
         id: "cupcake_vanilla",
@@ -249,7 +249,7 @@ export const uncommon_cakes: Array<Cake> = [
         edible: true,
         icing: "white",
         filling: "vanilla",
-        value: 10,
+        value: 10
     },
     {
         id: "cupcake_Chocolate",
@@ -259,7 +259,7 @@ export const uncommon_cakes: Array<Cake> = [
         edible: true,
         icing: "chocolate",
         filling: "chocolate",
-        value: 10,
+        value: 10
     },
     {
         id: "cupcake_halloween",
@@ -270,7 +270,7 @@ export const uncommon_cakes: Array<Cake> = [
         icing: "purple",
         filling: "chocolate",
         topping: "plastic",
-        value: 12,
+        value: 12
     },
     {
         id: "cupcake_valentines",
@@ -281,28 +281,18 @@ export const uncommon_cakes: Array<Cake> = [
         icing: "pink",
         filling: "velvet",
         topping: "strawberries",
-        value: 12,
-    },
-    {
-        id: "cupcake_gender_boy",
-        displayName: "Gender Reveal Cupcake (Boy)",
-        emoji: "🧁",
-        count: 6,
-        edible: true,
-        icing: "blue",
-        filling: "chocolate",
-        value: 10,
+        value: 12
     },
     {
         id: "cupcake_gender_girl",
-        displayName: "Gender Reveal Cupcake (Girl)",
+        displayName: "Gender Reveal Cupcake",
         emoji: "🧁",
         count: 6,
         edible: true,
-        icing: "pink",
+        icing: " blue and pink",
         filling: "vanilla",
-        value: 10,
-    },
+        value: 10
+    }
 ];
 
 export const rare_cakes: Array<Cake> = [
@@ -315,7 +305,7 @@ export const rare_cakes: Array<Cake> = [
         icing: "white",
         filling: "vanilla",
         topping: "cherries",
-        value: 50,
+        value: 50
     },
     {
         id: "cake_cremeschnitte",
@@ -326,7 +316,7 @@ export const rare_cakes: Array<Cake> = [
         icing: "none",
         filling: "custard",
         topping: "powdered sugar",
-        value: 75,
+        value: 75
     },
     {
         id: "cake_flint",
@@ -336,7 +326,7 @@ export const rare_cakes: Array<Cake> = [
         edible: true,
         icing: "gravel",
         filling: "rock",
-        value: 100,
+        value: 100
     },
     {
         id: "cake_candy_cake",
@@ -346,7 +336,7 @@ export const rare_cakes: Array<Cake> = [
         edible: true,
         icing: "candy",
         filling: "peanut butter-lined",
-        value: 80,
+        value: 80
     },
     {
         id: "cake_clock",
@@ -356,7 +346,7 @@ export const rare_cakes: Array<Cake> = [
         edible: true,
         icing: "hourly",
         filling: "timey-wimey",
-        value: 100,
+        value: 100
     },
     {
         id: "cake_tardis",
@@ -365,7 +355,7 @@ export const rare_cakes: Array<Cake> = [
         edible: true,
         icing: "timey-wimey",
         filling: "wibbly-wobbly",
-        value: 125,
+        value: 125
     },
     {
         id: "cake_earth",
@@ -374,7 +364,7 @@ export const rare_cakes: Array<Cake> = [
         count: 1,
         edible: true,
         icing: "blue and green",
-        filling: "metal",
+        filling: "metal"
     },
     {
         id: "cake_mushroom",
@@ -384,7 +374,7 @@ export const rare_cakes: Array<Cake> = [
         edible: true,
         icing: "1-up",
         filling: "fungal",
-        value: 80,
+        value: 80
     },
     {
         id: "cake_pumpkin_pie_cake",
@@ -394,7 +384,7 @@ export const rare_cakes: Array<Cake> = [
         edible: true,
         icing: "cream",
         filling: "pumpkin",
-        value: 80,
+        value: 80
     },
     {
         id: "cake_apple",
@@ -404,7 +394,7 @@ export const rare_cakes: Array<Cake> = [
         edible: true,
         icing: "leaves",
         filling: "apple",
-        value: 80,
+        value: 80
     },
     {
         id: "cake_orange",
@@ -414,7 +404,7 @@ export const rare_cakes: Array<Cake> = [
         edible: true,
         icing: "leaves",
         filling: "orange",
-        value: 80,
+        value: 80
     },
     {
         id: "cake_banana",
@@ -424,7 +414,7 @@ export const rare_cakes: Array<Cake> = [
         edible: true,
         icing: "banana peel",
         filling: "banana",
-        value: 80,
+        value: 80
     },
     {
         id: "cake_raspberry",
@@ -434,7 +424,7 @@ export const rare_cakes: Array<Cake> = [
         edible: true,
         icing: "raspberry",
         filling: "raspberry",
-        value: 80,
+        value: 80
     },
     {
         id: "cake_blueberry",
@@ -444,7 +434,7 @@ export const rare_cakes: Array<Cake> = [
         edible: true,
         icing: "bluberry",
         filling: "blueberry",
-        value: 80,
+        value: 80
     },
     {
         id: "cake_meringue",
@@ -454,8 +444,8 @@ export const rare_cakes: Array<Cake> = [
         edible: true,
         icing: "white",
         filling: "cream",
-        topping: "strawberries",
-    },
+        topping: "strawberries"
+    }
 ];
 
 export const ultra_rare_cakes: Array<Cake> = [
@@ -467,7 +457,7 @@ export const ultra_rare_cakes: Array<Cake> = [
         edible: true,
         icing: "black",
         filling: "black velvet",
-        value: 200,
+        value: 200
     },
     {
         id: "cake_stone",
@@ -477,7 +467,7 @@ export const ultra_rare_cakes: Array<Cake> = [
         edible: true,
         icing: "pebbles",
         filling: "rocky",
-        value: 250,
+        value: 250
     },
     {
         id: "cake_shoe",
@@ -487,7 +477,7 @@ export const ultra_rare_cakes: Array<Cake> = [
         edible: true,
         icing: "laces",
         filling: "stinky",
-        value: 250,
+        value: 250
     },
     {
         id: "cake_glitter",
@@ -497,7 +487,7 @@ export const ultra_rare_cakes: Array<Cake> = [
         edible: true,
         icing: "shiny",
         filling: "reflective",
-        value: 275,
+        value: 275
     },
     {
         id: "cake_hologram",
@@ -507,7 +497,7 @@ export const ultra_rare_cakes: Array<Cake> = [
         edible: true,
         icing: "transparent",
         filling: "holographic",
-        value: 300,
+        value: 300
     },
     {
         id: "cake_saxophone",
@@ -517,7 +507,7 @@ export const ultra_rare_cakes: Array<Cake> = [
         edible: true,
         icing: "epic",
         filling: "epic",
-        value: 325,
+        value: 325
     },
     {
         id: "cake_trophy",
@@ -527,7 +517,7 @@ export const ultra_rare_cakes: Array<Cake> = [
         edible: true,
         icing: "winner",
         filling: "winner",
-        value: 500,
+        value: 500
     },
     {
         id: "cake_diamond",
@@ -537,7 +527,7 @@ export const ultra_rare_cakes: Array<Cake> = [
         edible: true,
         icing: "gem",
         filling: "gem",
-        value: 1000,
+        value: 1000
     },
     {
         id: "cake_gold",
@@ -546,8 +536,8 @@ export const ultra_rare_cakes: Array<Cake> = [
         edible: true,
         icing: "golden",
         filling: "golden",
-        value: 10000,
-    },
+        value: 10000
+    }
 ];
 
 export const secret_cakes: Array<Cake> = [
@@ -560,7 +550,7 @@ export const secret_cakes: Array<Cake> = [
         icing: "space",
         filling: "galaxies",
         topping: "stars",
-        value: 1_000_000,
+        value: 1_000_000
     },
     {
         id: "cake_nitsua",
@@ -570,7 +560,7 @@ export const secret_cakes: Array<Cake> = [
         icing: "austin",
         filling: "austin",
         topping: "austin",
-        value: 500_000,
+        value: 500_000
     },
     {
         id: "cake_khorne",
@@ -580,6 +570,15 @@ export const secret_cakes: Array<Cake> = [
         icing: "blood",
         filling: "khorne flakes",
         topping: "skulls",
-        value: 999_999,
+        value: 999_999
     },
+    {
+        id: "cake_foonix",
+        displayName: "Foonix Cake",
+        count: 1,
+        edible: true,
+        icing: "rainbows",
+        filling: "unicorns",
+        topping: "clouds"
+    }
 ];

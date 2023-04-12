@@ -70,7 +70,7 @@ class CosmicShop {
         this.list.push({
             item: it,
             overridePrice,
-            season,
+            season
         });
     }
 

@@ -62,7 +62,7 @@ export class CosmicAPIWebSocketClient extends EventEmitter {
                         if (!inventory) {
                             return this.send({
                                 m: "error",
-                                error: "inventory not found",
+                                error: "inventory not found"
                             });
                         }
 

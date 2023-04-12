@@ -28,7 +28,7 @@ export class CosmicWork {
             user_id: user._id,
             start_time: Date.now(),
             cl,
-            dm: isDM ? user._id : undefined,
+            dm: isDM ? user._id : undefined
         });
 
         return `You started working.`;

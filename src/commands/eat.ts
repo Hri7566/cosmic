@@ -55,7 +55,7 @@ CosmicCommandHandler.registerCommand(
                     `There is not ${
                         /^[aeiou]/.test(argcat) ? "an" : "a"
                     } '${argcat}' here.`,
-                    `You don't have any '${argcat}'.`,
+                    `You don't have any '${argcat}'.`
                 ];
                 return CosmicUtil.getRandomValueFromArray(no_item_answers);
             }
@@ -65,7 +65,7 @@ CosmicCommandHandler.registerCommand(
                     `You can't eat the ${mod_it.displayName}.`,
                     `The ${mod_it.displayName} hurts your teeth, and you decide not to eat it.`,
                     `Putting the ${mod_it.displayName} in your mouth, you realize that it is not edible, and decide to take it out.`,
-                    `Eating the ${mod_it.displayName} will yield no results.`,
+                    `Eating the ${mod_it.displayName} will yield no results.`
                 ];
                 return CosmicUtil.getRandomValueFromArray(not_edible_answers);
             }
@@ -83,7 +83,7 @@ CosmicCommandHandler.registerCommand(
                     `Sadly, you can't eat more than you have.`,
                     `It turns out you don't have that many.`,
                     `Did you want to eat less?`,
-                    `There is not ${amount_to_remove} of that here.`,
+                    `There is not ${amount_to_remove} of that here.`
                 ];
 
                 return CosmicUtil.getRandomValueFromArray(not_enough_answers);
