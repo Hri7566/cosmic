@@ -35,7 +35,7 @@ export class CosmicClientMPP extends CosmicClientToken {
     public client: typeof Client;
     public cursor: Cursor;
     public platform: string = "mpp";
-    public cmapi: typeof cmapi;
+    // public cmapi: typeof cmapi;
     public dmOnlyCommands: string[];
     public disabledCommands: string[];
 
@@ -47,7 +47,7 @@ export class CosmicClientMPP extends CosmicClientToken {
     ) {
         super();
         this.client = new ClientClass(uri, token);
-        this.cmapi = new cmapi(this.client);
+        // this.cmapi = new cmapi(this.client);
         this.desiredChannel = channel;
         this.cursor = new Cursor(this);
         this.bindEventListeners();
@@ -187,23 +187,23 @@ export class CosmicClientMPP extends CosmicClientToken {
             });
         });
 
-        this.cmapi.on("?hat", msg => {
-            // this.logger.debug('cmapi hat');
-            this.cmapi.sendArray(
-                [
-                    {
-                        m: "update hat",
-                        url: "minecraft/item/nether_star"
-                    }
-                ],
-                { mode: "id", id: msg._original_sender, global: false }
-            );
-        });
+        // this.cmapi.on("?hat", msg => {
+        //     // this.logger.debug('cmapi hat');
+        //     this.cmapi.sendArray(
+        //         [
+        //             {
+        //                 m: "update hat",
+        //                 url: "minecraft/item/nether_star"
+        //             }
+        //         ],
+        //         { mode: "id", id: msg._original_sender, global: false }
+        //     );
+        // });
 
-        this.cmapi.on("cosmic", msg => {
-            // TODO implement cosmic message
-            //? for userscript?
-        });
+        // this.cmapi.on("cosmic", msg => {
+        //     // TODO implement cosmic message
+        //     //? for userscript?
+        // });
     }
 
     /**

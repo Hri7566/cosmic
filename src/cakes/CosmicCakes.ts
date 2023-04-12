@@ -284,22 +284,12 @@ export const uncommon_cakes: Array<Cake> = [
         value: 12
     },
     {
-        id: "cupcake_gender_boy",
-        displayName: "Gender Reveal Cupcake (Boy)",
-        emoji: "🧁",
-        count: 6,
-        edible: true,
-        icing: "blue",
-        filling: "chocolate",
-        value: 10
-    },
-    {
         id: "cupcake_gender_girl",
-        displayName: "Gender Reveal Cupcake (Girl)",
+        displayName: "Gender Reveal Cupcake",
         emoji: "🧁",
         count: 6,
         edible: true,
-        icing: "pink",
+        icing: " blue and pink",
         filling: "vanilla",
         value: 10
     }
@@ -581,5 +571,14 @@ export const secret_cakes: Array<Cake> = [
         filling: "khorne flakes",
         topping: "skulls",
         value: 999_999
+    },
+    {
+        id: "cake_foonix",
+        displayName: "Foonix Cake",
+        count: 1,
+        edible: true,
+        icing: "rainbows",
+        filling: "unicorns",
+        topping: "clouds"
     }
 ];

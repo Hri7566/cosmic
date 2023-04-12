@@ -48,3 +48,4 @@ import "./screamdownears";
 import "./chandle";
 import "./work";
 import "./level";
+import "./sleep";
