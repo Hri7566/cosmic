@@ -7,6 +7,7 @@ This project was created on July 31, 2022.
 ## Contrubutors
 
 - Hri7566: Author & creator of Cosmic
+- yourfriend: Active maintainer
 
 ## Building
 
