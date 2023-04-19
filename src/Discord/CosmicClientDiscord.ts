@@ -5,6 +5,7 @@
  */
 
 import { CosmicClientToken } from "../CosmicClient";
+import { CosmicCommandHandler } from "../CosmicCommandHandler";
 import { CosmicForeignMessageHandler } from "../foreign/CosmicForeignMessageHandler";
 import * as Discord from "discord.js";
 
@@ -36,11 +37,12 @@ export class CosmicClientDiscord extends CosmicClientToken {
      * Start Discord client
      * @param token Discord token
      */
-    public start(token: string) {
-        this.client.login(token);
+    public async start(token: string) {
+        await this.client.login(token);
 
         // setup REST for slash commands
         this.rest = new Discord.REST({ version: "10" }).setToken(token);
+        await this.registerSlashCommands();
     }
 
     /**
@@ -125,5 +127,60 @@ export class CosmicClientDiscord extends CosmicClientToken {
             // console.log(msg);
             this.sendChat(msg.message, channel);
         });
+
+        this.client.on("interactionCreate", interaction => {
+            if (!interaction.isChatInputCommand()) return;
+
+            let newmsg = CosmicForeignMessageHandler.convertMessage(
+                "interaction",
+                {
+                    a:
+                        CosmicCommandHandler.prefixes[0].prefix +
+                        interaction.commandName,
+                    p: {
+                        name: interaction.user.username,
+                        _id: interaction.user.id,
+                        // color: interaction.user.hexAccentColor
+                        color: "#000000"
+                    },
+                    original_channel: {
+                        id: interaction.channelId,
+                        _id: interaction.channel.name
+                    },
+                    discordSlashCommandInteraction: interaction
+                }
+            );
+
+            this.previousChannel = interaction.channelId;
+            interaction.reply("Running command in chat mode...");
+            this.emit("chat", newmsg);
+        });
+    }
+
+    protected async registerSlashCommands() {
+        this.logger.debug("Registering slash commands...");
+
+        const commands = [];
+
+        for (const cmd of CosmicCommandHandler.commands) {
+            if (
+                cmd.platform == "all" ||
+                (cmd.platform == "discord" && cmd.visible)
+            ) {
+                commands.push(
+                    new Discord.SlashCommandBuilder()
+                        .setName(cmd.accessors[0])
+                        .setDescription(cmd.description)
+                        .toJSON()
+                );
+            }
+        }
+
+        await this.rest.put(
+            Discord.Routes.applicationCommands(this.client.user.id),
+            {
+                body: commands
+            }
+        );
     }
 }

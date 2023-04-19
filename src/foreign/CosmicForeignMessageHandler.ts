@@ -32,6 +32,18 @@ class CosmicForeignMessageHandler {
             };
 
             return msg;
+        } else if (type == "interaction") {
+            let msg: ChatMessage = {
+                type: "chat",
+                sender: omsg.p,
+                message: omsg.a,
+                timestamp: Date.now(),
+                original_channel: omsg.original_channel,
+                original_message: omsg,
+                platform: "internal"
+            };
+
+            return msg;
         }
     }
 }
