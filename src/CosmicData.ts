@@ -22,13 +22,13 @@ import { MongoClient, Document } from "mongodb";
 
 import { CosmicLogger, green } from "./CosmicLogger";
 import { APIKeyProfile, Inventory, User, Item } from "./util/CosmicTypes";
+import { env } from "./util/env";
 
 /**
  * Module-level declarations
  */
 
-const MONGODB_CONNECTION_URI = process.env.MONGODB_CONNECTION_URI;
-const MONGODB_DATABASE = process.env.MONGODB_DATABASE;
+const { MONGODB_CONNECTION_URI, MONGODB_DATABASE } = env;
 
 const DEFAULT_BALANCE = 10;
 const DEFAULT_EXPERIENCE = 0;

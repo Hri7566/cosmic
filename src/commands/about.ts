@@ -1,5 +1,8 @@
+import { env } from "process";
 import { CosmicCommandHandler, Command } from "../CosmicCommandHandler";
 import { CosmicUtil } from "../util/CosmicUtil";
+
+const { NODE_ENV } = env;
 
 CosmicCommandHandler.registerCommand(
     new Command(
@@ -16,7 +19,7 @@ CosmicCommandHandler.registerCommand(
             let mm = ss / 60;
             let hh = mm / 60;
             let dd = hh / 24;
-            let isProd = process.env.NODE_ENV == "production";
+            let isProd = NODE_ENV == "production";
             return `${
                 isProd ? "" : "[NON-PRODUCTION BUILD] "
             }✨ This outer space-themed bot was made by Hri7566#3409. This bot was created ${Math.floor(

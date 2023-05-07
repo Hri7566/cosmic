@@ -16,14 +16,14 @@ import { CosmicClientMPP } from "./MPP/CosmicClientMPP";
 import { CosmicClientDiscord } from "./Discord/CosmicClientDiscord";
 import { Cosmic } from "./Cosmic";
 import { CosmicClientStdin } from "./stdin/CosmicClientStdin";
+import { env } from "./util/env";
 
 /**
  * Module-level declarations
  */
 
-const MPP_HARD_CLIENT_LIMIT: number = 4;
-const MPPCLONE_TOKEN: string = process.env.MPPCLONE_TOKEN;
-const DISCORD_TOKEN: string = process.env.DISCORD_TOKEN;
+const MPP_HARD_CLIENT_LIMIT = 4;
+const { MPPCLONE_TOKEN, DISCORD_TOKEN } = env;
 
 type CosmicClientList = {
     [key: string]: typeof CosmicClient;

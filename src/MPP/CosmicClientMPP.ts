@@ -14,11 +14,13 @@ import { readFileSync } from "fs";
 import { ServicesConfig } from "../Cosmic";
 import * as YAML from "yaml";
 import { CosmicCustomMessageHandler } from "./CosmicCustomMessageHandler";
+import { env } from "process";
 const Client = require("mppclone-client");
 const cmapi = require("mppclone-cmapi");
 
 const servicesFile = readFileSync("config/services.yml").toString();
 const services: ServicesConfig = YAML.parse(servicesFile);
+const { NODE_ENV } = env;
 
 // ANCHOR MPP Client
 export class CosmicClientMPP extends CosmicClientToken {
@@ -29,7 +31,7 @@ export class CosmicClientMPP extends CosmicClientToken {
         name: `🟇 Cosmic (${CosmicCommandHandler.prefixes[0].prefix}${
             CosmicCommandHandler.commands.find(cmd => cmd.id == "help")
                 .accessors[0]
-        })${process.env.NODE_ENV == "production" ? "" : " [non-production]"}`,
+        })${NODE_ENV == "production" ? "" : " [non-production]"}`,
         color: "#1d0054"
     };
 

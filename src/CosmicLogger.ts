@@ -10,10 +10,13 @@
 
 // Local imports
 import { CosmicColor } from "./CosmicColor";
+import { env } from "process";
 
 /**
  * Module-level declarations
  */
+
+const { NODE_ENV } = env;
 
 const ANSIColors = new Map();
 
@@ -183,6 +186,7 @@ class CosmicLogger {
             `${blue("[INFO]")} ${this.color(`[${this.id}]`)}`,
             ...args
         );
+
         CosmicLogger.PAST_MESSAGES.push([str, ...pastArgs]);
     }
 
@@ -196,6 +200,7 @@ class CosmicLogger {
             `${red("[ERROR]")} ${this.color(`[${this.id}]`)}`,
             ...args
         );
+
         CosmicLogger.PAST_MESSAGES.push([str, ...pastArgs]);
     }
 
@@ -209,6 +214,7 @@ class CosmicLogger {
             `${yellow("[WARNING]")} ${this.color(`[${this.id}]`)}`,
             ...args
         );
+
         CosmicLogger.PAST_MESSAGES.push([str, ...pastArgs]);
     }
 
@@ -217,14 +223,16 @@ class CosmicLogger {
      * @param args Debug content to log
      */
     debug(...args: any[]) {
-        if (process.env.NODE_ENV) {
-            if (process.env.NODE_ENV == "production") return;
+        if (NODE_ENV) {
+            if (NODE_ENV == "production") return;
         }
+
         let [str, pastArgs] = log_full_info(
             "debug",
             `${blue("[DEBUG]")} ${this.color(`[${this.id}]`)}`,
             ...args
         );
+
         CosmicLogger.PAST_MESSAGES.push([str, ...pastArgs]);
     }
 }
