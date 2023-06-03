@@ -15,7 +15,7 @@ const Client = require("mppclone-client");
 // const cmapi = require("mppclone-cmapi");
 import * as YAML from "yaml";
 import { EventEmitter } from "events";
-import * as Discord from "discord.js";
+// import * as Discord from "discord.js";
 
 /**
  * Local module imports
@@ -26,7 +26,7 @@ import { CosmicCommandHandler } from "./CosmicCommandHandler";
 import { CosmicSeasonDetection } from "./util/CosmicSeasonDetection";
 import { Token, ChatMessage, Vector2, Participant } from "./util/CosmicTypes";
 import { CosmicClientMPP } from "./MPP/CosmicClientMPP";
-import { CosmicClientDiscord } from "./Discord/CosmicClientDiscord";
+// import { CosmicClientDiscord } from "./Discord/CosmicClientDiscord";
 import { CosmicFFI } from "./foreign/CosmicFFI";
 import { CosmicLogger, white, magenta, hex } from "./CosmicLogger";
 import { CosmicForeignMessageHandler } from "./foreign/CosmicForeignMessageHandler";
@@ -101,7 +101,5 @@ export abstract class CosmicClientToken extends CosmicClient {
     }
 }
 
-export type CosmicClientAny =
-    | CosmicClient
-    | CosmicClientMPP
-    | CosmicClientDiscord;
+export type CosmicClientAny = CosmicClient | CosmicClientMPP;
+// | CosmicClientDiscord;

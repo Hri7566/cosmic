@@ -6,7 +6,7 @@
  * Database connection loader and data interface
  */
 
-import { ObjectID } from "bson";
+import { ObjectId } from "bson";
 import { Collection, Db } from "mongodb";
 import { CosmicAPI } from "./api/CosmicAPI";
 
@@ -22,13 +22,13 @@ import { MongoClient, Document } from "mongodb";
 
 import { CosmicLogger, green } from "./CosmicLogger";
 import { APIKeyProfile, Inventory, User, Item } from "./util/CosmicTypes";
+import { env } from "./util/env";
 
 /**
  * Module-level declarations
  */
 
-const MONGODB_CONNECTION_URI = process.env.MONGODB_CONNECTION_URI;
-const MONGODB_DATABASE = process.env.MONGODB_DATABASE;
+const { MONGODB_CONNECTION_URI, MONGODB_DATABASE } = env;
 
 const DEFAULT_BALANCE = 10;
 const DEFAULT_EXPERIENCE = 0;
@@ -192,7 +192,8 @@ class CosmicData {
     public static async createGroupProfile(_id: string, groups?: string[]) {
         try {
             const result = await this.permissions.insertOne({
-                _id: _id as unknown as ObjectID,
+                // _id: _id as unknown as ObjectId,
+                _id: _id as any,
                 groups: groups || ["default"]
             });
 
@@ -598,7 +599,8 @@ class CosmicData {
         try {
             try {
                 await this.util.insertOne({
-                    _id: _id as unknown as ObjectID,
+                    // _id: _id as unknown as ObjectId,
+                    _id: _id as any,
                     [key]: value
                 });
             } catch (err) {}

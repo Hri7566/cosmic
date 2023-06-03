@@ -25,9 +25,11 @@ import * as express from "express";
 import * as path from "path";
 import { WebSocket, WebSocketServer } from "ws";
 import { CosmicLogger, yellow } from "../CosmicLogger";
+import { env } from "../util/env";
 
-const PORT = process.env.PORT || 3000;
-const SSL = process.env.SSL || "false";
+const PORT = env.PORT || "3000";
+const SSL = env.SSL || "false";
+const NODE_ENV = env.NODE_ENV;
 
 let cert;
 let key;
@@ -278,7 +280,7 @@ class CosmicAPI {
         this.api.get("/", async (req, res) => {
             res.json({
                 status: "online",
-                environment: process.env.NODE_ENV,
+                environment: NODE_ENV,
                 clients: CosmicClientHandler.getClientCount(),
                 uptime: Date.now() - Cosmic.startTime
             });

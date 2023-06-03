@@ -13,11 +13,14 @@ import { Cursor } from "./Cursor";
 import { readFileSync } from "fs";
 import { ServicesConfig } from "../Cosmic";
 import * as YAML from "yaml";
+import { CosmicCustomMessageHandler } from "./CosmicCustomMessageHandler";
+import { env } from "process";
 const Client = require("mppclone-client");
 const cmapi = require("mppclone-cmapi");
 
 const servicesFile = readFileSync("config/services.yml").toString();
 const services: ServicesConfig = YAML.parse(servicesFile);
+const { NODE_ENV } = env;
 
 // ANCHOR MPP Client
 export class CosmicClientMPP extends CosmicClientToken {
@@ -28,7 +31,7 @@ export class CosmicClientMPP extends CosmicClientToken {
         name: `🟇 Cosmic (${CosmicCommandHandler.prefixes[0].prefix}${
             CosmicCommandHandler.commands.find(cmd => cmd.id == "help")
                 .accessors[0]
-        })${process.env.NODE_ENV == "production" ? "" : " [non-production]"}`,
+        })${NODE_ENV == "production" ? "" : " [non-production]"}`,
         color: "#1d0054"
     };
 
@@ -76,6 +79,7 @@ export class CosmicClientMPP extends CosmicClientToken {
     }
 
     public last_dm: string;
+    public customMessageHandler = new CosmicCustomMessageHandler(this);
 
     protected bindEventListeners() {
         super.bindEventListeners();
@@ -124,6 +128,12 @@ export class CosmicClientMPP extends CosmicClientToken {
             this.client.ws.on("error", err => {
                 console.error(err);
             });
+
+            this.client.sendArray([
+                {
+                    m: "+custom"
+                }
+            ]);
         });
 
         // TODO maybe move this setInterval to somewhere else?
@@ -204,6 +214,22 @@ export class CosmicClientMPP extends CosmicClientToken {
         //     // TODO implement cosmic message
         //     //? for userscript?
         // });
+
+        this.client.on("custom", msg => {
+            this.customMessageHandler.handleCustomMessage(msg);
+        });
+
+        this.customMessageHandler.eventBus.on("?hat", (msg, p) => {
+            this.client.sendArray([
+                {
+                    m: "custom",
+                    data: {
+                        m: "hat",
+                        hat: "minecraft/item/nether_star"
+                    }
+                }
+            ]);
+        });
     }
 
     /**
