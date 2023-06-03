@@ -83,9 +83,9 @@ class Cosmic {
             this.startMPPClients();
         }
 
-        if (services.enableDiscord) {
-            CosmicClientHandler.startDiscordClient();
-        }
+        // if (services.enableDiscord) {
+        //     CosmicClientHandler.startDiscordClient();
+        // }
 
         CosmicAPI.start();
 

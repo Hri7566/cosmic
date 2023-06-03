@@ -28,20 +28,21 @@ CosmicCommandHandler.registerCommand(
                     // let out = '🌠 Commands:';
                     let out = `${group.displayName}:`;
 
-                    for (let cmd of CosmicCommandHandler.commands) {
+                    const list = CosmicCommandHandler.commands.flatMap(cmd => {
                         if (cmd.platform) {
                             if (
                                 cmd.platform !== cl.platform &&
                                 cmd.platform !== "all"
                             )
-                                continue;
+                                return [];
                         }
 
-                        if (cmd.commandGroup !== group.id) continue;
-                        if (cmd.visible == false) continue;
+                        if (cmd.commandGroup !== group.id) return [];
+                        if (cmd.visible == false) return [];
                         // out += ` ${msg.prefix.prefix}${cmd.accessors[0]}, `;
-                        out += ` ${cmd.accessors[0]}, `;
-                    }
+                        // out += ` ${cmd.accessors[0]}, `;
+                        return `${cmd.accessors[0]}`;
+                    });
 
                     if (cl.platform == "mpp") {
                         out = out.replace(/\*.*?(\*)/, "\\*");
@@ -50,7 +51,7 @@ CosmicCommandHandler.registerCommand(
                     out = CosmicUtil.trimListString(out);
                     cl.emit("send chat message", {
                         dm: isDM ? msg.sender._id : undefined,
-                        message: out
+                        message: `${out}: ${list.join(", ")}`
                     });
                 }
 

@@ -6,7 +6,7 @@
  * Database connection loader and data interface
  */
 
-import { ObjectID } from "bson";
+import { ObjectId } from "bson";
 import { Collection, Db } from "mongodb";
 import { CosmicAPI } from "./api/CosmicAPI";
 
@@ -192,7 +192,8 @@ class CosmicData {
     public static async createGroupProfile(_id: string, groups?: string[]) {
         try {
             const result = await this.permissions.insertOne({
-                _id: _id as unknown as ObjectID,
+                // _id: _id as unknown as ObjectId,
+                _id: _id as any,
                 groups: groups || ["default"]
             });
 
@@ -598,7 +599,8 @@ class CosmicData {
         try {
             try {
                 await this.util.insertOne({
-                    _id: _id as unknown as ObjectID,
+                    // _id: _id as unknown as ObjectId,
+                    _id: _id as any,
                     [key]: value
                 });
             } catch (err) {}

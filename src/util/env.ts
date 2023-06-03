@@ -18,7 +18,8 @@ export const env = createEnv({
         MONGODB_CONNECTION_URI: z.string().url(),
         MONGODB_DATABASE: z.string(),
         NODE_ENV: z.string(),
-        PORT: z.string()
+        PORT: z.string(),
+        SSL: z.string()
     },
     client: {},
     runtimeEnv: process.env

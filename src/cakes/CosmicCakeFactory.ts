@@ -7,7 +7,7 @@
  */
 
 import { CosmicClient } from "../CosmicClient";
-import { CosmicClientDiscord } from "../Discord/CosmicClientDiscord";
+// import { CosmicClientDiscord } from "../Discord/CosmicClientDiscord";
 import { CosmicData } from "../CosmicData";
 import { ITEMS } from "../CosmicItems";
 import { CosmicLogger, red } from "../CosmicLogger";
@@ -20,7 +20,7 @@ import {
     uncommon_cakes,
     rare_cakes,
     ultra_rare_cakes,
-    secret_cakes,
+    secret_cakes
 } from "./CosmicCakes";
 
 const CHECK_INTERVAL = 25000;
@@ -66,7 +66,7 @@ export class CosmicCakeFactory {
                 `The oven is already full.`,
                 `The oven has cake in it already.`,
                 `The oven is full of cake.`,
-                `You can't bake more, the oven still has cake.`,
+                `You can't bake more, the oven still has cake.`
             ];
 
             return already_answers[
@@ -85,11 +85,11 @@ export class CosmicCakeFactory {
             name: user.name,
             start: Date.now(),
             cl: cl,
-            channel:
-                cl.platform == "discord"
-                    ? (cl as CosmicClientDiscord).previousChannel
-                    : undefined,
-            dm: isDM,
+            channel: undefined,
+            // cl.platform == "discord"
+            // ? (cl as CosmicClientDiscord).previousChannel
+            // : undefined,
+            dm: isDM
         });
 
         return response;
@@ -108,7 +108,7 @@ export class CosmicCakeFactory {
                 `Maybe starting is a good thing to do before you stop.`,
                 `Stopping... wait, you haven't started.`,
                 `Error: start baking first`,
-                `Have you ever even baked before?`,
+                `Have you ever even baked before?`
             ];
 
             return replies[Math.floor(Math.random() * replies.length)];
@@ -138,7 +138,7 @@ export class CosmicCakeFactory {
                 )} finished baking and got: ${cakeMessage}`,
                 `${CosmicUtil.formatUserString(
                     user
-                )} took the cake out of the oven and got: ${cakeMessage}`,
+                )} took the cake out of the oven and got: ${cakeMessage}`
             ];
 
             let answer = await CosmicUtil.getRandomValueFromArray(
@@ -153,11 +153,11 @@ export class CosmicCakeFactory {
                     sender: {
                         name: "internal",
                         _id: "internal",
-                        color: "#ffffff",
+                        color: "#ffffff"
                     },
                     dm: user._id,
                     timestamp: Date.now(),
-                    message: answer,
+                    message: answer
                 });
             } else {
                 user.cl.emit("send chat message", {
@@ -165,10 +165,10 @@ export class CosmicCakeFactory {
                     sender: {
                         name: "internal",
                         _id: "internal",
-                        color: "#ffffff",
+                        color: "#ffffff"
                     },
                     timestamp: Date.now(),
-                    message: answer,
+                    message: answer
                 });
             }
         }
