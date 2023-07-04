@@ -550,7 +550,7 @@ export const secret_cakes: Array<Cake> = [
         icing: "space",
         filling: "galaxies",
         topping: "stars",
-        value: 1_000_000
+        value: 100_000_000
     },
     {
         id: "cake_nitsua",
@@ -579,6 +579,7 @@ export const secret_cakes: Array<Cake> = [
         edible: true,
         icing: "rainbows",
         filling: "unicorns",
-        topping: "clouds"
+        topping: "clouds",
+        value: 10_000_000
     }
 ];
