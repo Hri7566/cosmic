@@ -1,9 +1,7 @@
 /**
  * COSMIC PROJECT
  *
- * Cosmic commands
- *
- * Command imports
+ * Command import module
  */
 
 import "./help";
@@ -51,3 +49,4 @@ import "./level";
 import "./sleep";
 import "./bonk";
 import "./aliases";
+import "./cat";
