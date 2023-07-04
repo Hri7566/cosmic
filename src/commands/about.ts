@@ -22,7 +22,7 @@ CosmicCommandHandler.registerCommand(
             let isProd = NODE_ENV == "production";
             return `${
                 isProd ? "" : "[NON-PRODUCTION BUILD] "
-            }✨ This outer space-themed bot was made by Hri7566#3409. This bot was created ${Math.floor(
+            }✨ This outer space-themed bot was made by @hri7566. This bot was created ${Math.floor(
                 dd
             )} days, ${Math.floor(hh % 24)} hours, ${Math.floor(
                 mm % 60
