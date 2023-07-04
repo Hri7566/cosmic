@@ -78,7 +78,10 @@ export abstract class CosmicClient {
 
             // log messages to console
             this.logger.log(
-                `[${msg.sender._id.substring(0, 6)}] <${hex(
+                `[${msg.original_channel}] [${msg.sender._id.substring(
+                    0,
+                    6
+                )}] <${hex(
                     msg.sender.color,
                     `${normalize(msg.sender.name)}`
                 )}> ${normalize(msg.message)}`
