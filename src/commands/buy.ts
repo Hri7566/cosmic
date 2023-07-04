@@ -83,7 +83,9 @@ CosmicCommandHandler.registerCommand(
                             listing.item.displayName,
                             listing.item.emoji,
                             listing.item.count
-                        )}. Wait, no. You can't afford that.`
+                        )}. Wait, no. You can't afford that.`,
+                        `You tried to buy ${listing.item.displayName}, but your card was declined.`,
+                        ``
                     ];
 
                     return CosmicUtil.getRandomValueFromArray(answers);

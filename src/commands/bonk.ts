@@ -19,6 +19,10 @@ CosmicCommandHandler.registerCommand(
                 return `You have no hammer.`;
             }
 
+            if (!msg.argv[1]) {
+                return `Who do you want to bonk?`;
+            }
+
             let p = (cl as CosmicClientMPP).getPart(msg.argv[1]);
 
             if (p) {
