@@ -132,7 +132,7 @@ class CosmicUtil {
      * @param user User to pull data from
      */
     public static formatUserString(user: User) {
-        return `[${user._id.substring(0, 6)}] ${user.name}`;
+        return `\`${user._id.substring(0, 6)}\` ${user.name}`;
     }
 
     // migrated from main class
