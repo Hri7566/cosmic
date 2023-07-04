@@ -49,3 +49,5 @@ import "./chandle";
 import "./work";
 import "./level";
 import "./sleep";
+import "./bonk";
+import "./aliases";
