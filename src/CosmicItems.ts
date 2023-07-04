@@ -315,5 +315,33 @@ export const ITEMS: Record<string | symbol, AnyItem> = {
         description: "A hammer to bonk with",
         value: 300,
         sellable: true
+    },
+    POTATO: {
+        id: "potato",
+        displayName: "Potato",
+        emoji: "🥔",
+        count: 1,
+        description: "Use with caution.",
+        value: 50,
+        sellable: true
+    },
+    FROG: {
+        id: "frog",
+        displayName: "Frog",
+        emoji: "🐸",
+        count: 1,
+        description: "A nice, slimy pet.",
+        value: 100
+    },
+    CAKE_MACHINE: {
+        id: "upgrade_cake_machine",
+        displayName: "Cake Machine",
+        description: "A machine that makes cake faster than an oven",
+        emoji: "📠",
+        count: 1,
+        value: 5000,
+        max_stack: 1,
+        cake_bonus: 3,
+        cake_multiply: 2
     }
 };
