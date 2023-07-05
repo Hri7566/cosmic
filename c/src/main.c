@@ -17,7 +17,7 @@ const char *get_test_string(void)
 
 const char *handleMessage(int argc, char **argv)
 {
-    const char *output = "";
+    const char *output = malloc(512);
 
     return output;
 }
