@@ -24,7 +24,13 @@ import { EventEmitter } from "events";
 import { Cosmic } from "./Cosmic";
 import { CosmicCommandHandler } from "./CosmicCommandHandler";
 import { CosmicSeasonDetection } from "./util/CosmicSeasonDetection";
-import { Token, ChatMessage, Vector2, Participant } from "./util/CosmicTypes";
+import {
+    Token,
+    ChatMessage,
+    Vector2,
+    Participant,
+    Message
+} from "./util/CosmicTypes";
 import { CosmicClientMPP } from "./MPP/CosmicClientMPP";
 // import { CosmicClientDiscord } from "./Discord/CosmicClientDiscord";
 import { CosmicFFI } from "./foreign/CosmicFFI";
@@ -39,6 +45,12 @@ import { CosmicData } from "./CosmicData";
 export interface ChannelConstructionPreset {
     _id: string;
     set: {
+        [key: string]: any;
+    };
+    disable: {
+        [key: string]: any;
+    };
+    dmOnly: {
         [key: string]: any;
     };
 }
@@ -91,7 +103,7 @@ export abstract class CosmicClient {
 
     public abstract sendChat(str: string): void;
 
-    public emitMessage(msg): void {
+    public emitMessage(msg: Message): void {
         this.emit(msg.type, msg);
     }
 }

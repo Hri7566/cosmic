@@ -1,4 +1,4 @@
-#include "color_log.h"
+#include "color_log.hpp"
 
 int getStringSize(BYTE *arr, int max)
 {
@@ -19,7 +19,7 @@ int getStringSize(BYTE *arr, int max)
 char *red(char *txt)
 {
     int size = getStringSize(txt, 2048) + 5 + 4;
-    char *newStr = malloc(size);
+    char *newStr = (char *)malloc(size);
 
     newStr[0] = '\x1b';
     newStr[1] = '[';

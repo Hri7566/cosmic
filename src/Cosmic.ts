@@ -35,11 +35,15 @@ const channelsFile = fs.readFileSync("config/mpp_channels.yml").toString();
 const channels = YAML.parse(channelsFile);
 
 export interface ServicesConfig {
-    enablestdin: boolean;
-    enableDiscord: boolean;
-    enableMPP: boolean;
+    discord: {
+        enable: boolean;
+    };
     mpp: {
+        enable: boolean;
         userset: boolean;
+    };
+    stdin: {
+        enable: boolean;
     };
 }
 
@@ -79,7 +83,7 @@ class Cosmic {
 
         this.logger.log("Starting clients...");
 
-        if (services.enableMPP) {
+        if (services.mpp.enable) {
             this.startMPPClients();
         }
 
@@ -89,7 +93,7 @@ class Cosmic {
 
         CosmicAPI.start();
 
-        if (services.enablestdin) {
+        if (services.stdin.enable) {
             CosmicClientHandler.startStdinClient();
         }
 

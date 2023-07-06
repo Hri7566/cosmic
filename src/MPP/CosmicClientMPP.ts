@@ -80,6 +80,7 @@ export class CosmicClientMPP extends CosmicClientToken {
 
     public last_dm: string;
     public customMessageHandler = new CosmicCustomMessageHandler(this);
+    public intervals = new Set<NodeJS.Timer>();
 
     protected bindEventListeners() {
         super.bindEventListeners();
@@ -137,38 +138,40 @@ export class CosmicClientMPP extends CosmicClientToken {
         });
 
         // TODO maybe move this setInterval to somewhere else?
-        setInterval(() => {
-            if (!this.client.isConnected()) return;
+        this.intervals.add(
+            setInterval(() => {
+                if (!this.client.isConnected()) return;
 
-            this.setSeasonalInfo();
+                this.setSeasonalInfo();
 
-            let set = this.client.getOwnParticipant();
+                let set = this.client.getOwnParticipant();
 
-            if (
-                set.name !== this.desiredUser.name ||
-                set.color !== this.desiredUser.color
-            ) {
-                // this.logger.debug('sending userset');
-                if (services.mpp.userset) {
-                    this.client.sendArray([
-                        {
-                            m: "userset",
-                            set: this.desiredUser
-                        }
-                    ]);
+                if (
+                    set.name !== this.desiredUser.name ||
+                    set.color !== this.desiredUser.color
+                ) {
+                    // this.logger.debug('sending userset');
+                    if (services.mpp.userset) {
+                        this.client.sendArray([
+                            {
+                                m: "userset",
+                                set: this.desiredUser
+                            }
+                        ]);
+                    }
                 }
-            }
 
-            let ch = this.client.channel;
+                let ch = this.client.channel;
 
-            if (ch) {
-                if (ch._id !== this.desiredChannel._id) {
+                if (ch) {
+                    if (ch._id !== this.desiredChannel._id) {
+                        this.client.setChannel(this.desiredChannel._id);
+                    }
+                } else {
                     this.client.setChannel(this.desiredChannel._id);
                 }
-            } else {
-                this.client.setChannel(this.desiredChannel._id);
-            }
-        }, 5000);
+            }, 5000)
+        );
 
         this.on("send chat message", msg => {
             if (!msg.dm) {
