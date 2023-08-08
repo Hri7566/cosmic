@@ -3,5 +3,7 @@ stdin:
 discord:
     enable: false
 mpp:
-    userset: false
+    enable: false
+    userset: true
+switchchat:
     enable: true

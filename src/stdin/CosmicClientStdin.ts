@@ -22,15 +22,21 @@ export class CosmicClientStdin extends CosmicClient {
         this.bindEventListeners();
     }
 
+    protected started: boolean = false;
+
     /**
      * Start stdin client
      */
-    public start() {}
+    public start() {
+        this.started = true;
+    }
 
     /**
      * Stop stdin client
      */
-    public stop() {}
+    public stop() {
+        this.started = false;
+    }
 
     /**
      * Send a chat message in the last channel (or desired channel by passing an ID)
@@ -47,6 +53,7 @@ export class CosmicClientStdin extends CosmicClient {
         super.bindEventListeners();
 
         this.rl.on("line", data => {
+            if (!this.started) return;
             let str = data.toString();
 
             this.emit("chat", {

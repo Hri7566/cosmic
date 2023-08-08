@@ -17,13 +17,14 @@ import { CosmicClientMPP } from "./MPP/CosmicClientMPP";
 import { Cosmic } from "./Cosmic";
 import { CosmicClientStdin } from "./stdin/CosmicClientStdin";
 import { env } from "./util/env";
+import { CosmicClientSC } from "./switchchat/CosmicClientSC";
 
 /**
  * Module-level declarations
  */
 
 const MPP_HARD_CLIENT_LIMIT = 4;
-const { MPPCLONE_TOKEN, DISCORD_TOKEN } = env;
+const { MPPCLONE_TOKEN, DISCORD_TOKEN, SWITCHCHAT_TOKEN } = env;
 
 type CosmicClientList = {
     [key: string]: typeof CosmicClient;
@@ -74,6 +75,15 @@ class CosmicClientHandler {
 
     public static getClientCount(): number {
         return this.clients.length;
+    }
+
+    public static startSwitchChatClient(): void {
+        let cl = new CosmicClientSC(SWITCHCHAT_TOKEN);
+
+        cl.start();
+
+        this.clients.push(cl);
+        Cosmic.emit("client started", cl);
     }
 }
 

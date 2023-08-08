@@ -40,6 +40,7 @@
         "normalize-strings": "^1.1.1",
         "react-router-dom": "^6.11.2",
         "ref-napi": "^3.0.3",
+        "switchchat": "^3.2.1",
         "terminal-kit": "^3.0.0",
         "ws": "^8.13.0",
         "yaml": "^2.3.1",

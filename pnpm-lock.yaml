@@ -65,6 +65,9 @@ dependencies:
   ref-napi:
     specifier: ^3.0.3
     version: 3.0.3
+  switchchat:
+    specifier: ^3.2.1
+    version: 3.2.1
   terminal-kit:
     specifier: ^3.0.0
     version: 3.0.0
@@ -5133,6 +5136,16 @@ packages:
   /supports-preserve-symlinks-flag@1.0.0:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
+
+  /switchchat@3.2.1:
+    resolution: {integrity: sha512-rYWUnlxa7PGRocs2yePs0TE/sDmoglU/mj4wRbarOmkLUfEH6rL+oLx7P4YTW2YWe9NlGXKpYVUgUhB3X0d1tA==}
+    dependencies:
+      '@types/ws': 8.5.4
+      ws: 8.13.0
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
+    dev: false
 
   /terminal-kit@3.0.0:
     resolution: {integrity: sha512-GSJGYF0+hoFylKJXmq0ntE42b4S7zUkxFpf7FqHGwKFPCNeGkuv3jV0tmGquZkmfh5mYb/B2xoPJiP40mJsQrg==}

@@ -15,6 +15,7 @@ export const env = createEnv({
     server: {
         DISCORD_TOKEN: z.string(),
         MPPCLONE_TOKEN: z.string(),
+        SWITCHCHAT_TOKEN: z.string(),
         MONGODB_CONNECTION_URI: z.string().url(),
         MONGODB_DATABASE: z.string(),
         NODE_ENV: z.string(),
