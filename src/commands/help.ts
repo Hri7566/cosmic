@@ -41,7 +41,7 @@ CosmicCommandHandler.registerCommand(
                         if (cmd.visible == false) return [];
                         // out += ` ${msg.prefix.prefix}${cmd.accessors[0]}, `;
                         // out += ` ${cmd.accessors[0]}, `;
-                        return `${cmd.accessors[0]}`;
+                        return `${cmd.aliases[0]}`;
                     });
 
                     if (cl.platform == "mpp") {
@@ -68,7 +68,7 @@ CosmicCommandHandler.registerCommand(
                             continue;
                     }
 
-                    littleLoop: for (let acc of cmd.accessors) {
+                    littleLoop: for (let acc of cmd.aliases) {
                         if (msg.argv[1] == acc) {
                             out = `Description: ${
                                 cmd.description

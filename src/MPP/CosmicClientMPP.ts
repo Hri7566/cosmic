@@ -30,7 +30,7 @@ export class CosmicClientMPP extends CosmicClientToken {
     protected desiredUser = {
         name: `🟇 Cosmic (${CosmicCommandHandler.prefixes[0].prefix}${
             CosmicCommandHandler.commands.find(cmd => cmd.id == "help")
-                .accessors[0]
+                .aliases[0]
         })${NODE_ENV == "production" ? "" : " [non-production]"}`,
         color: "#1d0054"
     };

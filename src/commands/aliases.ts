@@ -18,7 +18,7 @@ CosmicCommandHandler.registerCommand(
             let foundCommand: Command;
 
             for (const command of CosmicCommandHandler.commands) {
-                for (const alias of command.accessors) {
+                for (const alias of command.aliases) {
                     if (alias == msg.argv[1]) {
                         foundCommand = command;
                     }
@@ -28,7 +28,7 @@ CosmicCommandHandler.registerCommand(
             if (!foundCommand) {
                 return "No command found.";
             } else {
-                return `Aliases: ${foundCommand.accessors.join(", ")}`;
+                return `Aliases: ${foundCommand.aliases.join(", ")}`;
             }
         }
     )

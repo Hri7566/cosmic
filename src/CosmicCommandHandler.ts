@@ -47,7 +47,7 @@ export type CommandCallback = (
 export class Command {
     constructor(
         public id: string,
-        public accessors: string[],
+        public aliases: string[],
         public usage: string = "No usage",
         public description: string = "No description",
         public permissionGroups: string[],
@@ -119,7 +119,7 @@ class CosmicCommandHandler {
             let enteredCommand = msg.argv[0].substring(prefix.prefix.length);
             let pass = false;
 
-            accessorLoop: for (let acc of cmd.accessors) {
+            accessorLoop: for (let acc of cmd.aliases) {
                 if (acc == enteredCommand) {
                     pass = true;
                     break accessorLoop;
