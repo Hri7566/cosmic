@@ -26,7 +26,8 @@ class CosmicFFI {
                 ref.types.CString,
                 [ref.types.int, ref.types.Object]
             ],
-            testOutput: [ref.types.void, []]
+            testOutput: [ref.types.void, []],
+            randomWhitespace: [ref.types.CString, [ref.types.CString]]
         }
     );
 }

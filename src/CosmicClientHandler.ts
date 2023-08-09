@@ -79,6 +79,7 @@ class CosmicClientHandler {
 
     public static startSwitchChatClient(): void {
         let cl = new CosmicClientSC(SWITCHCHAT_TOKEN);
+        console.log("starting switchchat lol");
 
         cl.start();
 

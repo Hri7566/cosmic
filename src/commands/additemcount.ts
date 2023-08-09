@@ -6,11 +6,12 @@ CosmicCommandHandler.registerCommand(
         "additemcount",
         ["additemcount"],
         "%PREFIX%additemcount [user_id] [item_id] [count]",
-        undefined,
-        ["default"],
+        "Add a specific amount of items to an inventory (user must already have the item)",
+        ["admin"],
         false,
         "info",
         async (msg, cl) => {
+            // Add a specific amount of items to an inventory (admin only)
             const userID = msg.argv[1];
             const itemID: string = msg.argv[2];
             let countStr = msg.argv[3];

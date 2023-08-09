@@ -5,51 +5,51 @@ import { CosmicUtil } from "../util/CosmicUtil";
 
 const CHECK_INTERVAL = 15000;
 
-export interface WorkingUser {
+export interface loiteringUser {
     user_id: string;
     start_time: number;
     cl: CosmicClient;
     dm: string | undefined;
 }
 
-export class CosmicWork {
-    public static workingUsers: WorkingUser[] = [];
+export class CosmicLoitering {
+    public static loiteringUsers: loiteringUser[] = [];
 
-    public static startWorking(
+    public static startLoitering(
         cl: CosmicClient,
         user: User,
         isDM: boolean
     ): string {
-        if (this.isWorking(user._id)) {
-            return `You are already working.`;
+        if (this.isLoitering(user._id)) {
+            return `You are already loitering.`;
         }
 
-        this.workingUsers.push({
+        this.loiteringUsers.push({
             user_id: user._id,
             start_time: Date.now(),
             cl,
             dm: isDM ? user._id : undefined
         });
 
-        return `You started working.`;
+        return `You started loitering.`;
     }
 
-    public static isWorking(user_id: string) {
+    public static isLoitering(user_id: string) {
         return (
-            this.workingUsers.find(wu => wu.user_id == user_id) !== undefined
+            this.loiteringUsers.find(wu => wu.user_id == user_id) !== undefined
         );
     }
 
-    public static async finishWorking(wu: WorkingUser) {
+    public static async finishLoitering(wu: loiteringUser) {
         let user = await CosmicData.getUser(wu.user_id);
         let amount = Math.random() * 50 + 50;
         await CosmicData.addBalance(user._id, amount);
         let message = `${CosmicUtil.formatUserString(
             user
-        )} finished working and earned ${CosmicData.formatBalance(amount)}`;
+        )} finished loitering and earned ${CosmicData.formatBalance(amount)}`;
         wu.cl.emit("send chat message", { dm: wu.dm, message });
         try {
-            this.workingUsers.splice(this.workingUsers.indexOf(wu), 1);
+            this.loiteringUsers.splice(this.loiteringUsers.indexOf(wu), 1);
         } catch (err) {}
     }
 }
@@ -57,11 +57,11 @@ export class CosmicWork {
 setInterval(async () => {
     let r = Math.random();
     let wu =
-        CosmicWork.workingUsers[
-            Math.floor(Math.random() * CosmicWork.workingUsers.length)
+        CosmicLoitering.loiteringUsers[
+            Math.floor(Math.random() * CosmicLoitering.loiteringUsers.length)
         ];
 
     if (wu && r < 0.1) {
-        CosmicWork.finishWorking(wu);
+        CosmicLoitering.finishLoitering(wu);
     }
 }, CHECK_INTERVAL);

@@ -45,6 +45,9 @@ export interface ServicesConfig {
     stdin: {
         enable: boolean;
     };
+    switchchat: {
+        enable: boolean;
+    };
 }
 
 const servicesFile = fs.readFileSync("config/services.yml").toString();
@@ -95,6 +98,10 @@ class Cosmic {
 
         if (services.stdin.enable) {
             CosmicClientHandler.startStdinClient();
+        }
+
+        if (services.switchchat.enable) {
+            CosmicClientHandler.startSwitchChatClient();
         }
 
         this.emit("ready");

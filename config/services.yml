@@ -1,9 +1,12 @@
 stdin:
     enable: true
+
 discord:
     enable: false
+
 mpp:
     enable: false
     userset: true
+
 switchchat:
-    enable: true
+    enable: false

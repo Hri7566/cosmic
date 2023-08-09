@@ -1,13 +1,13 @@
 import { CosmicCommandHandler, Command } from "../CosmicCommandHandler";
 import { CosmicData } from "../CosmicData";
-import { CosmicWork } from "../work";
+import { CosmicLoitering } from "../loitering";
 
 CosmicCommandHandler.registerCommand(
     new Command(
-        "work",
-        ["work"],
-        "%PREFIX%work",
-        undefined,
+        "loiter",
+        ["loiter"],
+        "%PREFIX%loiter",
+        "This command exists for broke people.",
         ["default"],
         false,
         "fun",
@@ -25,7 +25,7 @@ CosmicCommandHandler.registerCommand(
             }
 
             let user = await CosmicData.getUser(msg.sender._id);
-            return await CosmicWork.startWorking(cl, user, isDM);
+            return CosmicLoitering.startLoitering(cl, user, isDM);
         }
     )
 );

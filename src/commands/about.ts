@@ -14,6 +14,7 @@ CosmicCommandHandler.registerCommand(
         true, // visible,
         "info",
         (msg, cl) => {
+            // Return the author and creation date
             let ms = CosmicUtil.getTimeSinceProjectCreation();
             let ss = ms / 1000;
             let mm = ss / 60;

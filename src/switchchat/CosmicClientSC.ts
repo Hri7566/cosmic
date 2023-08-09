@@ -66,10 +66,24 @@ export class CosmicClientSC extends CosmicClientToken {
             // ffi broke :(
             // console.log(CosmicFFI.clib.red(msg.a));
 
+            let understandable = {
+                m: "a",
+                a: msg.rawText,
+                p: {
+                    name: msg.user.displayName,
+                    _id: msg.user.uuid,
+                    color: "#000000"
+                },
+                t: Date.now()
+            };
+
             let newmsg = CosmicForeignMessageHandler.convertMessage(
                 "chat",
                 msg
             );
+
+            console.log(newmsg);
+
             this.emit("chat", newmsg);
         });
 

@@ -11,6 +11,7 @@ CosmicCommandHandler.registerCommand(
         false,
         "info",
         async (msg, cl) => {
+            // Add a user to a group (admin only)
             const userID = msg.argv[1];
             const groupID = msg.argv[2];
 

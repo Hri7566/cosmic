@@ -11,6 +11,7 @@ CosmicCommandHandler.registerCommand(
         false,
         "cake",
         async (msg, cl) => {
+            // Add to an account's balance (admin only)
             if (msg.argv[2]) {
                 try {
                     await CosmicData.addBalance(
