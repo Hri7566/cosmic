@@ -45,37 +45,37 @@ extern "C"
         free(thing);
     }
 
-    EXPORT char *randomWhitespace(char *str, int size)
-    {
-        // Add random invisible whitespace characters to string
+    // EXPORT char *randomWhitespace(char *str, int size)
+    // {
+    //     // Add random invisible whitespace characters to string
 
-        char *newstr = (char *)malloc(size * 2);
-        float x;
+    //     char *newstr = (char *)malloc(size * 2);
+    //     float x;
 
-        for (int i = 0; i < size; i++)
-        {
-            x = (float)rand() / (float)(RAND_MAX / 1);
-            newstr[i] = str[i];
+    //     for (int i = 0; i < size; i++)
+    //     {
+    //         x = (float)rand() / (float)(RAND_MAX / 1);
+    //         newstr[i] = str[i];
 
-            if (x <= 0.2)
-            {
-                newstr[i + 1] = '\u034f';
-                i++;
-            }
-            else if (x <= 0.4)
-            {
-                newstr[i + 1] = '\u200b';
-                i++;
-            }
-            else if (x <= 0.8)
-            {
-                newstr[i + 1] = '\u2006';
-                i++;
-            }
-        }
+    //         if (x <= 0.2)
+    //         {
+    //             newstr[i + 1] = '\u034f';
+    //             i++;
+    //         }
+    //         else if (x <= 0.4)
+    //         {
+    //             newstr[i + 1] = '\u200b';
+    //             i++;
+    //         }
+    //         else if (x <= 0.8)
+    //         {
+    //             newstr[i + 1] = '\u2006';
+    //             i++;
+    //         }
+    //     }
 
-        return newstr;
-    }
+    //     return newstr;
+    // }
 #ifdef __cplusplus
 }
 #endif
