@@ -7,7 +7,7 @@ This project was created on July 31, 2022.
 ## Contrubutors
 
 - Hri7566: Author & creator of Cosmic
-- yourfriend: Active maintainer
+- yourfriend: Various contributions
 
 ## Building
 
@@ -16,21 +16,21 @@ This project was created on July 31, 2022.
 This project uses TypeScript, esbuild, and the GNU Compiler Collection.
 
 ```sh
-$ yarn
+$ pnpm
 # Install all required packages
 ```
 
 ```sh
-$ yarn build
+$ pnpm build
 # Build everything
 ```
 
 ```sh
-$ yarn start
+$ pnpm start
 # Start the program
 ```
 
 ```sh
-$ yarn dev
+$ pnpm dev
 # Build everything and start
 ```
