@@ -14,7 +14,7 @@ import { CosmicAPI } from "../api/CosmicAPI";
  * Global module imports
  */
 
-import { MongoClient, Document } from "mongodb";
+import prisma from "./prisma";
 
 /**
  * Local module imports
@@ -27,8 +27,6 @@ import { env } from "../util/env";
 /**
  * Module-level declarations
  */
-
-const { MONGODB_CONNECTION_URI, MONGODB_DATABASE } = env;
 
 const DEFAULT_BALANCE = 10;
 const DEFAULT_EXPERIENCE = 0;
