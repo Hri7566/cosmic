@@ -1,2 +1,2 @@
 #!/bin/bash
-npx tsc --build tsconfig.json --verbose
+bunx tsc --build tsconfig.json --verbose

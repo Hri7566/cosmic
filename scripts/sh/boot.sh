@@ -4,10 +4,10 @@ echo "Enabling all scripts"
 scripts/sh/chmod.sh
 
 echo "Installing packages"
-pnpm i
+bun i
 
 echo "Building Cosmic"
-pnpm build
+bun build
 
 echo "Starting Cosmic"
-pnpm start
+bun start
