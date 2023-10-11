@@ -28,7 +28,7 @@ import type {
 import { CosmicClient } from "./CosmicClient";
 import { CosmicUtil } from "./util/CosmicUtil";
 import { CosmicLogger, magenta } from "./CosmicLogger";
-import { CosmicData } from "./CosmicData";
+import { CosmicData } from "./data";
 
 /**
  * Module-level declarations

@@ -19,7 +19,7 @@ import * as YAML from "yaml";
 import { EventEmitter } from "events";
 import * as crypto from "crypto";
 import { CosmicAPIWebSocketClient } from "./CosmicAPIWebSocketClient";
-import { CosmicData } from "../CosmicData";
+import { CosmicData } from "../data";
 
 import * as express from "express";
 import * as path from "path";

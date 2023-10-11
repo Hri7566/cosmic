@@ -12,7 +12,7 @@ import { User } from "./CosmicTypes";
  * Local module imports
  */
 
-import { CosmicData } from "../CosmicData";
+import { CosmicData } from "../data";
 
 /**
  * Module-level declarations

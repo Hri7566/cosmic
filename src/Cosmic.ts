@@ -20,7 +20,7 @@ const { EventEmitter } = require("events");
  */
 
 import { CosmicClientHandler } from "./CosmicClientHandler";
-import { CosmicData } from "./CosmicData";
+import { CosmicData } from "./data";
 import { CosmicLogger, magenta } from "./CosmicLogger";
 import { CosmicAPI } from "./api/CosmicAPI";
 

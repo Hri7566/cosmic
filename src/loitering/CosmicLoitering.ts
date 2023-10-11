@@ -1,5 +1,5 @@
 import { CosmicClient } from "../CosmicClient";
-import { CosmicData } from "../CosmicData";
+import { CosmicData } from "../data";
 import { User } from "../util/CosmicTypes";
 import { CosmicUtil } from "../util/CosmicUtil";
 

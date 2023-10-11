@@ -8,7 +8,7 @@
 
 import { CosmicClient } from "../CosmicClient";
 // import { CosmicClientDiscord } from "../Discord/CosmicClientDiscord";
-import { CosmicData } from "../CosmicData";
+import { CosmicData } from "../data";
 import { ITEMS } from "../CosmicItems";
 import { CosmicLogger, red } from "../CosmicLogger";
 import { Cake, User } from "../util/CosmicTypes";

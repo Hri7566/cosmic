@@ -1,5 +1,5 @@
 import { CosmicCommandHandler, Command } from "../CosmicCommandHandler";
-import { CosmicData } from "../CosmicData";
+import { CosmicData } from "../data";
 import { CosmicExperience } from "../exp/CosmicExperience";
 
 CosmicCommandHandler.registerCommand(

@@ -36,7 +36,7 @@ import { CosmicClientMPP } from "./MPP/CosmicClientMPP";
 import { CosmicFFI } from "./foreign/CosmicFFI";
 import { CosmicLogger, white, magenta, hex } from "./CosmicLogger";
 import { CosmicForeignMessageHandler } from "./foreign/CosmicForeignMessageHandler";
-import { CosmicData } from "./CosmicData";
+import { CosmicData } from "./data";
 
 /**
  * Module-level declarations

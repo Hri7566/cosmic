@@ -1,6 +1,6 @@
 import { CosmicClient } from "../CosmicClient";
 import { CosmicCommandHandler, Command } from "../CosmicCommandHandler";
-import { CosmicData } from "../CosmicData";
+import { CosmicData } from "../data";
 import { CommandMessage, Inventory, Item } from "../util/CosmicTypes";
 import { CosmicUtil } from "../util/CosmicUtil";
 

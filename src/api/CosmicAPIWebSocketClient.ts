@@ -7,7 +7,7 @@
 import { EventEmitter } from "ws";
 import * as http from "http";
 import { CosmicAPI } from "./CosmicAPI";
-import { CosmicData } from "../CosmicData";
+import { CosmicData } from "../data";
 import type { WebSocket } from "ws";
 
 export class CosmicAPIWebSocketClient extends EventEmitter {
